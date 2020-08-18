@@ -117,7 +117,7 @@ class LocationMarkerLayerWidget extends StatelessWidget {
     LocationMarkerLayerOptions options,
   })  : options = options ?? LocationMarkerLayerOptions(),
         super(
-          key: options.key,
+          key: options?.key,
         );
 
   @override
