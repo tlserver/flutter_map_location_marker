@@ -1,5 +1,8 @@
 # flutter_map_location_marker
 
+[![pub package](https://img.shields.io/pub/v/flutter_map_location_marker.svg)](https://pub.dartlang.org/packages/flutter_map_location_marker)
+[![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/master/LICENSE)
+
 A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying device current location.
 ![Interface preview](https://github.com/tlserver/flutter_map_location_marker/raw/master/assets/interface.jpg)
 
