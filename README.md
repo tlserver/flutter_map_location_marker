@@ -19,7 +19,25 @@ dependencies:
   flutter_map_location_marker: any // or latest verion
 ```
 
-Add the plugin and the layer option into `FlutterMap`:
+Add the layer widget into `FlutterMap`:
+
+```dart
+Widget build(BuildContext context) {
+  return FlutterMap(
+    children: [
+      TileLayerWidget(
+        options: TileLayerOptions(
+          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          subdomains: ['a', 'b', 'c'],
+        ),
+      ),
+      LocationMarkerLayerWidget(), // <-- add layer widget here
+    ],
+  );
+}
+```
+
+Alternatively, you can use the old style to create the layer:
 
 ```dart
 Widget build(BuildContext context) {
@@ -33,7 +51,6 @@ Widget build(BuildContext context) {
       TileLayerOptions(
         urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         subdomains: ['a', 'b', 'c'],
-        maxZoom: 19,
       ),
       LocationMarkerLayerOptions(), // <-- add layer options here
     ],
