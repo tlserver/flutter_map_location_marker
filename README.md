@@ -1,6 +1,13 @@
 # flutter_map_location_marker
 
-A flutter map plugin for displaying device current location.
+A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying device current location.
+
+## Features
+
+* **Customization**: The location marker can be fully customized. The colors of accuracy circle and
+header are also customizable.
+
+* **Simple**: Not depend on other layer. No `MapController` or `MarkerLayer` are needed.
 
 ## Usage
 
@@ -35,10 +42,8 @@ Widget build(BuildContext context) {
 
 ## Examples
 
-1. Marker Customization
+1. [Marker Customization](./example/lib/page/customize_marker_example.dart)  
 Change the marker to any widget you want.
-[example/lib/page/customize_marker_example.dart](./example/lib/page/customize_marker_example.dart)
 
-2. Floating Action Button for Center Current Location
-Use a floating Action Button to move and zoom the map to current location. 
-[example/lib/page/center_fab_example.dart](./example/lib/page/center_fab_example.dart)
+2. [Floating Action Button for Centering Current Location](./example/lib/page/center_fab_example.dart)  
+Use a floating action button to move and zoom the map to current location.
