@@ -1,3 +1,7 @@
+## [0.0.2+1] - Improve ReadMe
+
+* Add a screenshot into [README.md](./README.md)
+
 ## [0.0.2] - Update Dependencies
 
 * Improve [README.md](./README.md)
