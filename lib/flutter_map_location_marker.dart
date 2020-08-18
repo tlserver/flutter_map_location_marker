@@ -33,7 +33,7 @@ class LocationMarkerPlugin implements MapPlugin {
   /// The duration of the animation of centering the current location.
   final Duration centerAnimationDuration;
 
-  LocationMarkerPlugin({
+  const LocationMarkerPlugin({
     this.locationOptions = const LocationOptions(),
     this.geolocationPermissions = GeolocationPermission.locationWhenInUse,
     this.centerCurrentLocationStream,
@@ -113,9 +113,10 @@ class LocationMarkerLayerWidget extends StatelessWidget {
   final LocationMarkerLayerOptions options;
 
   LocationMarkerLayerWidget({
-    @required this.plugin,
-    @required this.options,
-  }) : super(
+    this.plugin = const LocationMarkerPlugin(),
+    LocationMarkerLayerOptions options,
+  })  : options = options ?? LocationMarkerLayerOptions(),
+        super(
           key: options.key,
         );
 
