@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'page/center_fab_example.dart';
 import 'page/customize_marker_example.dart';
 import 'page/minimum_example.dart';
+import 'page/old_style_example.dart';
 
 void main() {
   runApp(
@@ -47,6 +48,17 @@ class Home extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => MinimumExample(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('Old Style Example'),
+            onTap: () {
+              return Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => OldStyleExample(),
                 ),
               );
             },

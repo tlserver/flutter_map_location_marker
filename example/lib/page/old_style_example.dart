@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong/latlong.dart';
 
-class MinimumExample extends StatelessWidget {
+class OldStyleExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -11,16 +11,17 @@ class MinimumExample extends StatelessWidget {
         center: LatLng(0, 0),
         zoom: 1,
         maxZoom: 19,
+        plugins: [
+          LocationMarkerPlugin(),
+        ],
       ),
-      children: [
-        TileLayerWidget(
-          options: TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
-            maxZoom: 19,
-          ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          subdomains: ['a', 'b', 'c'],
+          maxZoom: 19,
         ),
-        LocationMarkerLayerWidget(),
+        LocationMarkerLayerOptions(),
       ],
     );
   }
