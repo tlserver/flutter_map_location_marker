@@ -17,7 +17,8 @@ class PositionTween extends Tween<Position> {
     return Position(
       latitude: doubleLerp(begin.latitude, end.latitude, t),
       longitude: doubleLerp(begin.longitude, end.longitude, t),
-      timestamp: begin.timestamp.add(end.timestamp.difference(begin.timestamp) * t),
+      timestamp:
+          begin.timestamp.add(end.timestamp.difference(begin.timestamp) * t),
       mocked: t < 0.5 ? begin.mocked : end.mocked,
       accuracy: doubleLerp(begin.accuracy, end.accuracy, t),
       altitude: doubleLerp(begin.altitude, end.altitude, t),
@@ -27,14 +28,16 @@ class PositionTween extends Tween<Position> {
     );
   }
 
-  double doubleLerp(double begin, double end, double t) => begin + (end - begin) * t;
+  double doubleLerp(double begin, double end, double t) =>
+      begin + (end - begin) * t;
 
   double degreeLerp(double begin, double end, double t) {
     begin = begin % 360;
     end = end % 360;
 
     final compareResult = (end - begin).abs().compareTo(360 / 2);
-    final crossZero = compareResult == -1 || (compareResult == 0 && begin != end && begin >= 180);
+    final crossZero = compareResult == -1 ||
+        (compareResult == 0 && begin != end && begin >= 180);
     if (crossZero) {
       double shift(double value) {
         return (value + 180) % 360;
