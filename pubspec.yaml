@@ -5,15 +5,15 @@ author: tlsv6y <tlserver6y@gmail.com>
 homepage: https://github.com/tlserver/flutter_map_location_marker
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_compass: ^0.4.3
+  flutter_compass: ^0.5.0
   flutter_map: ^0.10.1+1
-  geolocator: ^5.3.2+2
+  geolocator: ^6.1.6
   latlong: ^0.6.1
 
 dev_dependencies:

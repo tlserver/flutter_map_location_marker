@@ -18,9 +18,6 @@ class LocationMarkerPlugin implements MapPlugin {
   /// of location updates.
   final LocationOptions locationOptions;
 
-  /// The options passed to [Geolocator].
-  final GeolocationPermission geolocationPermissions;
-
   /// The event stream for center current location. Add a zoom level into this
   /// stream to center the current location at the provided zoom level.
   ///
@@ -35,7 +32,8 @@ class LocationMarkerPlugin implements MapPlugin {
 
   const LocationMarkerPlugin({
     this.locationOptions = const LocationOptions(),
-    this.geolocationPermissions = GeolocationPermission.locationWhenInUse,
+    @Deprecated('Do not need to specify permission type anymore, just delete it')
+        geolocationPermissions,
     this.centerCurrentLocationStream,
     this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
     this.centerAnimationDuration = const Duration(milliseconds: 500),
@@ -158,10 +156,13 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   void initState() {
     super.initState();
     _isFirstLocationUpdate = true;
-    _positionStreamSubscription = Geolocator()
-        .getPositionStream(
-            widget.plugin.locationOptions, widget.plugin.geolocationPermissions)
-        .listen((position) {
+    _positionStreamSubscription = Geolocator.getPositionStream(
+      desiredAccuracy: widget.plugin.locationOptions.accuracy,
+      distanceFilter: widget.plugin.locationOptions.distanceFilter,
+      forceAndroidLocationManager:
+          widget.plugin.locationOptions.forceAndroidLocationManager,
+      timeInterval: widget.plugin.locationOptions.timeInterval,
+    ).listen((position) {
       setState(() => _currentPosition = position);
 
       bool centerCurrentLocation;
@@ -248,10 +249,10 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                     return StreamBuilder(
                       stream: FlutterCompass.events,
                       builder: (BuildContext context,
-                          AsyncSnapshot<double> snapshot) {
+                          AsyncSnapshot<CompassEvent> snapshot) {
                         if (snapshot.hasData) {
                           return Transform.rotate(
-                            angle: degToRadian(snapshot.data),
+                            angle: degToRadian(snapshot.data.heading),
                             child: CustomPaint(
                               size: Size.fromRadius(widget
                                   .locationMarkerOpts.headingSectorRadius),

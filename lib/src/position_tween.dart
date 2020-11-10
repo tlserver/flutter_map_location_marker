@@ -19,7 +19,7 @@ class PositionTween extends Tween<Position> {
       longitude: doubleLerp(begin.longitude, end.longitude, t),
       timestamp:
           begin.timestamp.add(end.timestamp.difference(begin.timestamp) * t),
-      mocked: t < 0.5 ? begin.mocked : end.mocked,
+      isMocked: t < 0.5 ? begin.isMocked : end.isMocked,
       accuracy: doubleLerp(begin.accuracy, end.accuracy, t),
       altitude: doubleLerp(begin.altitude, end.altitude, t),
       heading: degreeLerp(begin.heading, end.heading, t),

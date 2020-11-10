@@ -5,17 +5,9 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - "geolocator (5.3.2+2)":
-    - Flutter
-  - google_api_availability (2.0.4):
-    - Flutter
-  - "location_permissions (3.0.0+1)":
+  - "geolocator (6.0.0+4)":
     - Flutter
   - path_provider (0.0.1):
-    - Flutter
-  - path_provider_linux (0.0.1):
-    - Flutter
-  - path_provider_macos (0.0.1):
     - Flutter
   - sqflite (0.0.1):
     - Flutter
@@ -25,11 +17,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_compass (from `.symlinks/plugins/flutter_compass/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
-  - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
-  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
-  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
@@ -43,16 +31,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_compass/ios"
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
-  google_api_availability:
-    :path: ".symlinks/plugins/google_api_availability/ios"
-  location_permissions:
-    :path: ".symlinks/plugins/location_permissions/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  path_provider_linux:
-    :path: ".symlinks/plugins/path_provider_linux/ios"
-  path_provider_macos:
-    :path: ".symlinks/plugins/path_provider_macos/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
 
@@ -60,14 +40,10 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_compass: cbbd285cea1584c7ac9c4e0c3e1f17cbea55e855
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  geolocator: f7622e0e7e2a24718285b73916d60c4a54b9f5b6
-  google_api_availability: 15fa42a8cd83c0a6738507ffe6e87096f12abcb8
-  location_permissions: 7e0f9aa0f60deb8ff93ddf0e2a164c7e8197bc94
+  geolocator: 1ae40084cc6c1586ce5ad12cfc3fd38c64d05f2f
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
-  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
 
-PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
 COCOAPODS: 1.8.4
