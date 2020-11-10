@@ -1,6 +1,11 @@
+## [0.0.5] - Update Dependencies
+
+* Update dependencies
+* [LocationMarkerPlugin()] do not need to specify permissions anymore.
+
 ## [0.0.4] - Fix Bug
 
-* fix [NoSuchMethodError] when calling `LocationMarkerLayerWidget(options: null)`
+* Fix [NoSuchMethodError] when calling `LocationMarkerLayerWidget(options: null)`
 
 ## [0.0.3] - New Style
 
@@ -25,5 +30,6 @@
 * Initial release.
 
 [LocationMarkerLayerWidget()]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerWidget/LocationMarkerLayerWidget.html
-[NoSuchMethodError]: https://api.dart.dev/stable/2.9.1/dart-core/NoSuchMethodError-class.html
+[LocationMarkerPlugin()]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerPlugin/LocationMarkerPlugin.html
+[NoSuchMethodError]: https://api.dart.dev/stable/dart-core/NoSuchMethodError-class.html
 [README.md]: https://github.com/tlserver/flutter_map_location_marker/blob/master/README.md
