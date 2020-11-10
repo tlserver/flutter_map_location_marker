@@ -22,6 +22,8 @@ dependencies:
   flutter_map_location_marker: any // or latest verion
 ```
 
+Add permission, please follow the instruction from [geolocation](https://pub.dev/packages/geolocator) package.
+
 Add the layer widget into `FlutterMap`:
 
 ```dart
