@@ -1,3 +1,7 @@
+## [0.0.7] - Update Dependencies
+
+* Update dependencies
+
 ## [0.0.6] - Fix Bug
 
 * fix possible null error
