@@ -250,24 +250,27 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                   width: widget.locationMarkerOpts.headingSectorRadius * 2,
                   height: widget.locationMarkerOpts.headingSectorRadius * 2,
                   builder: (_) {
-                    return StreamBuilder(
-                      stream: FlutterCompass.events,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<CompassEvent> snapshot) {
-                        if (snapshot.hasData) {
-                          return Transform.rotate(
-                            angle: degToRadian(snapshot.data.heading),
-                            child: CustomPaint(
-                              size: Size.fromRadius(widget
-                                  .locationMarkerOpts.headingSectorRadius),
-                              painter: HeadingSector(
-                                  widget.locationMarkerOpts.headingSectorColor),
-                            ),
-                          );
-                        } else {
-                          return SizedBox.shrink();
-                        }
-                      },
+                    return IgnorePointer(
+                      ignoring: true,
+                      child: StreamBuilder(
+                        stream: FlutterCompass.events,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<CompassEvent> snapshot) {
+                          if (snapshot.hasData) {
+                            return Transform.rotate(
+                              angle: degToRadian(snapshot.data.heading),
+                              child: CustomPaint(
+                                size: Size.fromRadius(widget
+                                    .locationMarkerOpts.headingSectorRadius),
+                                painter: HeadingSector(widget
+                                    .locationMarkerOpts.headingSectorColor),
+                              ),
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      ),
                     );
                   },
                 ),
