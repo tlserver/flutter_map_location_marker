@@ -196,6 +196,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   void dispose() {
     _positionStreamSubscription.cancel();
     _moveToCurrentStreamSubscription?.cancel();
+    _animationController?.dispose();
     super.dispose();
   }
 
@@ -285,9 +286,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   }
 
   void _moveMap(LatLng latLng, double zoom) {
-    if (_animationController != null) {
-      _animationController.dispose();
-    }
+    _animationController?.dispose();
     _animationController = AnimationController(
       duration: widget.plugin.centerAnimationDuration,
       vsync: this,
