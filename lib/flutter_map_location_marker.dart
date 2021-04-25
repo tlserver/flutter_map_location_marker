@@ -161,7 +161,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
       distanceFilter: widget.plugin.locationOptions.distanceFilter,
       forceAndroidLocationManager:
           widget.plugin.locationOptions.forceAndroidLocationManager,
-      timeInterval: widget.plugin.locationOptions.timeInterval,
+      intervalDuration:
+          Duration(milliseconds: widget.plugin.locationOptions.timeInterval),
     ).listen((position) {
       setState(() => _currentPosition = position);
 

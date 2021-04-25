@@ -1,3 +1,8 @@
+## [0.0.8] - Fix Bug
+
+* Dispose internal animation controller on map layer dispose
+* Update dependencies
+
 ## [0.0.7] - Update Dependencies
 
 * Update dependencies
