@@ -4,16 +4,21 @@ version: 0.0.5
 homepage: https://github.com/tlserver/flutter_map_location_marker
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_compass: ^0.5.0
-  flutter_map: ^0.10.1+1
-  geolocator: ^6.1.6
-  latlong: ^0.6.1
+  flutter_compass: ^0.6.0
+  flutter_map: ^0.12.0
+  geolocator: ^7.0.3
+  latlong2: ^0.8.0
+
+dependency_overrides:
+ flutter_map:
+   git:
+     url: https://github.com/fleaflet/flutter_map
+     ref: issues/829-nullsafety
 
 dev_dependencies:
   flutter_test:

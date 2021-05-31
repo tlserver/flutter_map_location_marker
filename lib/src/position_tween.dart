@@ -3,8 +3,8 @@ import 'package:geolocator/geolocator.dart';
 
 class PositionTween extends Tween<Position> {
   PositionTween({
-    @required Position begin,
-    @required Position end,
+    required Position? begin,
+    required Position? end,
   }) : super(
           begin: begin,
           end: end,
@@ -15,16 +15,16 @@ class PositionTween extends Tween<Position> {
     assert(begin != null);
     assert(end != null);
     return Position(
-      latitude: doubleLerp(begin.latitude, end.latitude, t),
-      longitude: doubleLerp(begin.longitude, end.longitude, t),
+      latitude: doubleLerp(begin!.latitude, end!.latitude, t),
+      longitude: doubleLerp(begin!.longitude, end!.longitude, t),
       timestamp:
-          begin.timestamp.add(end.timestamp.difference(begin.timestamp) * t),
-      isMocked: t < 0.5 ? begin.isMocked : end.isMocked,
-      accuracy: doubleLerp(begin.accuracy, end.accuracy, t),
-      altitude: doubleLerp(begin.altitude, end.altitude, t),
-      heading: degreeLerp(begin.heading, end.heading, t),
-      speed: doubleLerp(begin.speed, end.speed, t),
-      speedAccuracy: doubleLerp(begin.speedAccuracy, end.speedAccuracy, t),
+          begin!.timestamp!.add(end!.timestamp!.difference(begin!.timestamp!) * t),
+      isMocked: t < 0.5 ? begin!.isMocked : end!.isMocked,
+      accuracy: doubleLerp(begin!.accuracy, end!.accuracy, t),
+      altitude: doubleLerp(begin!.altitude, end!.altitude, t),
+      heading: degreeLerp(begin!.heading, end!.heading, t),
+      speed: doubleLerp(begin!.speed, end!.speed, t),
+      speedAccuracy: doubleLerp(begin!.speedAccuracy, end!.speedAccuracy, t),
     );
   }
 

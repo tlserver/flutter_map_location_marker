@@ -1,17 +1,27 @@
 name: location_marker_example
 description: Example of FlutterMapLocationMarkerPlugin
 
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.3
   flutter_map_location_marker:
     path: ../
+
+dependency_overrides:
+ flutter_map:
+   git:
+     url: https://github.com/fleaflet/flutter_map
+     ref: issues/829-nullsafety
 
 dev_dependencies:
   flutter_test:

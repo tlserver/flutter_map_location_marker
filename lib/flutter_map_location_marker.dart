@@ -8,7 +8,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'src/position_tween.dart';
 
@@ -22,7 +22,7 @@ class LocationMarkerPlugin implements MapPlugin {
   /// stream to center the current location at the provided zoom level.
   ///
   /// For more details, see CenterFabExample.
-  final Stream<double> centerCurrentLocationStream;
+  final Stream<double>? centerCurrentLocationStream;
 
   /// When should the plugin center the current location to the map.
   final CenterOnLocationUpdate centerOnLocationUpdate;
@@ -42,7 +42,7 @@ class LocationMarkerPlugin implements MapPlugin {
   @override
   Widget createLayer(
       LayerOptions options, MapState mapState, Stream<Null> stream) {
-    return LocationMarkerLayer(this, options, mapState, stream);
+    return LocationMarkerLayer(this, options as LocationMarkerLayerOptions, mapState, stream);
   }
 
   @override
@@ -84,7 +84,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
   final Duration markerAnimationDuration;
 
   LocationMarkerLayerOptions({
-    Key key,
+    Key? key,
     this.marker = const DefaultLocationMarker(),
     this.markerSize = const Size(20, 20),
     this.showAccuracyCircle = true,
@@ -93,7 +93,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
     this.headingSectorRadius = 60,
     this.headingSectorColor = const Color.fromARGB(0xCC, 0x21, 0x96, 0xF3),
     this.markerAnimationDuration = const Duration(milliseconds: 200),
-    Stream<Null> rebuild,
+    Stream<Null>? rebuild,
   }) : super(
           key: key,
           rebuild: rebuild,
@@ -112,7 +112,7 @@ class LocationMarkerLayerWidget extends StatelessWidget {
 
   LocationMarkerLayerWidget({
     this.plugin = const LocationMarkerPlugin(),
-    LocationMarkerLayerOptions options,
+    LocationMarkerLayerOptions? options,
   })  : options = options ?? LocationMarkerLayerOptions(),
         super(
           key: options?.key,
@@ -120,7 +120,7 @@ class LocationMarkerLayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mapState = MapState.of(context);
+    final mapState = MapState.maybeOf(context)!;
     return LocationMarkerLayer(plugin, options, mapState, mapState.onMoved);
   }
 }
@@ -146,11 +146,12 @@ class LocationMarkerLayer extends StatefulWidget {
 
 class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     with TickerProviderStateMixin {
-  bool _isFirstLocationUpdate;
-  Position _currentPosition;
-  StreamSubscription<Position> _positionStreamSubscription;
-  StreamSubscription<double> _moveToCurrentStreamSubscription;
-  AnimationController _animationController;
+  bool? _isFirstLocationUpdate;
+  Position? _currentPosition;
+  late StreamSubscription<Position> _positionStreamSubscription;
+  StreamSubscription<double>? _moveToCurrentStreamSubscription;
+  AnimationController? _animationController;
+  Widget _lastHeadingWidget = SizedBox.shrink();
 
   @override
   void initState() {
@@ -161,11 +162,11 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
       distanceFilter: widget.plugin.locationOptions.distanceFilter,
       forceAndroidLocationManager:
           widget.plugin.locationOptions.forceAndroidLocationManager,
-      timeInterval: widget.plugin.locationOptions.timeInterval,
+      intervalDuration: Duration(milliseconds: widget.plugin.locationOptions.timeInterval),
     ).listen((position) {
       setState(() => _currentPosition = position);
 
-      bool centerCurrentLocation;
+      bool? centerCurrentLocation;
       switch (widget.plugin.centerOnLocationUpdate) {
         case CenterOnLocationUpdate.always:
           centerCurrentLocation = true;
@@ -178,15 +179,15 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
           centerCurrentLocation = false;
           break;
       }
-      if (centerCurrentLocation) {
-        _moveMap(LatLng(_currentPosition.latitude, _currentPosition.longitude),
+      if (centerCurrentLocation!) {
+        _moveMap(LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
             widget.map.zoom);
       }
     });
     _moveToCurrentStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
       _moveMap(
-          LatLng(_currentPosition.latitude, _currentPosition.longitude), zoom);
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude), zoom);
     });
   }
 
@@ -201,12 +202,12 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   Widget build(BuildContext context) {
     if (_currentPosition != null) {
       if (widget.locationMarkerOpts.markerAnimationDuration == Duration.zero) {
-        return _buildLocationMarker(_currentPosition);
+        return _buildLocationMarker(_currentPosition!);
       } else {
         return TweenAnimationBuilder(
           tween: PositionTween(begin: _currentPosition, end: _currentPosition),
           duration: widget.locationMarkerOpts.markerAnimationDuration,
-          builder: (BuildContext context, Position position, Widget child) {
+          builder: (BuildContext context, Position position, Widget? child) {
             return _buildLocationMarker(position);
           },
         );
@@ -226,13 +227,15 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     );
     return GroupLayer(
       GroupLayerOptions(
+        key: widget.locationMarkerOpts.key  ?? GlobalKey<_LocationMarkerLayerState>(),
+        rebuild: widget.stream,
         group: [
           if (widget.locationMarkerOpts.showAccuracyCircle)
             CircleLayerOptions(
               circles: [
                 CircleMarker(
                   point: latLng,
-                  radius: position.accuracy ?? 0,
+                  radius: position.accuracy,
                   useRadiusInMeter: true,
                   color: widget.locationMarkerOpts.accuracyCircleColor,
                 ),
@@ -251,8 +254,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                       builder: (BuildContext context,
                           AsyncSnapshot<CompassEvent> snapshot) {
                         if (snapshot.hasData) {
-                          return Transform.rotate(
-                            angle: degToRadian(snapshot.data.heading),
+                          this._lastHeadingWidget = Transform.rotate(
+                            angle: degToRadian(snapshot.data!.heading!),
                             child: CustomPaint(
                               size: Size.fromRadius(widget
                                   .locationMarkerOpts.headingSectorRadius),
@@ -260,9 +263,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                                   widget.locationMarkerOpts.headingSectorColor),
                             ),
                           );
-                        } else {
-                          return SizedBox.shrink();
                         }
+                        return this._lastHeadingWidget;
                       },
                     );
                   },
@@ -284,14 +286,14 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
 
   void _moveMap(LatLng latLng, double zoom) {
     if (_animationController != null) {
-      _animationController.dispose();
+      _animationController!.dispose();
     }
     _animationController = AnimationController(
       duration: widget.plugin.centerAnimationDuration,
       vsync: this,
     );
     final animation = CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.fastOutSlowIn,
     );
     final latTween = Tween(
@@ -307,34 +309,35 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
       end: zoom,
     );
 
-    _animationController.addListener(() {
+    _animationController!.addListener(() {
       widget.map.move(
         LatLng(
           latTween.evaluate(animation),
           lngTween.evaluate(animation),
         ),
         zoomTween.evaluate(animation),
+        source: MapEventSource.mapController
       );
     });
 
-    _animationController.addStatusListener((AnimationStatus status) {
+    _animationController!.addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed ||
           status == AnimationStatus.dismissed) {
-        _animationController.dispose();
+        _animationController!.dispose();
         _animationController = null;
       }
     });
 
-    _animationController.forward();
+    _animationController!.forward();
   }
 }
 
 class DefaultLocationMarker extends StatelessWidget {
   final Color color;
-  final Widget child;
+  final Widget? child;
 
   const DefaultLocationMarker({
-    Key key,
+    Key? key,
     this.color = const Color.fromARGB(0xFF, 0x21, 0x96, 0xF3),
     this.child,
   }) : super(
