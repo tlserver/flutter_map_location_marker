@@ -32,8 +32,6 @@ class LocationMarkerPlugin implements MapPlugin {
 
   const LocationMarkerPlugin({
     this.locationOptions = const LocationOptions(),
-    @Deprecated('Do not need to specify permission type anymore, just delete it')
-        geolocationPermissions,
     this.centerCurrentLocationStream,
     this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
     this.centerAnimationDuration = const Duration(milliseconds: 500),
