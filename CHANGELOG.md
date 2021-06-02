@@ -1,3 +1,9 @@
+## [1.0.0-nullsafety.0] - Migrate to Null-Safety
+
+* Migrate to null-safety
+* __BRAKING CHANGE__ Remove deprecated code
+  * [LocationMarkerPlugin()] do not accept `geolocationPermissions` parameter anymore
+
 ## [0.0.9] - Improve User Experience
 
 * Wrap direction indicator into an IgnorePointer widget
