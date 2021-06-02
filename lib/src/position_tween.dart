@@ -15,23 +15,22 @@ class PositionTween extends Tween<Position> {
     assert(begin != null);
     assert(end != null);
     return Position(
-      latitude: doubleLerp(begin.latitude, end.latitude, t),
-      longitude: doubleLerp(begin.longitude, end.longitude, t),
-      timestamp:
-          begin.timestamp.add(end.timestamp.difference(begin.timestamp) * t),
-      isMocked: t < 0.5 ? begin.isMocked : end.isMocked,
-      accuracy: doubleLerp(begin.accuracy, end.accuracy, t),
-      altitude: doubleLerp(begin.altitude, end.altitude, t),
-      heading: degreeLerp(begin.heading, end.heading, t),
-      speed: doubleLerp(begin.speed, end.speed, t),
-      speedAccuracy: doubleLerp(begin.speedAccuracy, end.speedAccuracy, t),
+      latitude: _doubleLerp(begin.latitude, end.latitude, t),
+      longitude: _doubleLerp(begin.longitude, end.longitude, t),
+      timestamp: _timestampLerp(begin.timestamp, end.timestamp, t),
+      isMocked: _nearest(begin.isMocked, end.isMocked, t),
+      accuracy: _doubleLerp(begin.accuracy, end.accuracy, t),
+      altitude: _doubleLerp(begin.altitude, end.altitude, t),
+      heading: _degreeLerp(begin.heading, end.heading, t),
+      speed: _doubleLerp(begin.speed, end.speed, t),
+      speedAccuracy: _doubleLerp(begin.speedAccuracy, end.speedAccuracy, t),
     );
   }
 
-  double doubleLerp(double begin, double end, double t) =>
+  double _doubleLerp(double begin, double end, double t) =>
       begin + (end - begin) * t;
 
-  double degreeLerp(double begin, double end, double t) {
+  double _degreeLerp(double begin, double end, double t) {
     begin = begin % 360;
     end = end % 360;
 
@@ -43,9 +42,21 @@ class PositionTween extends Tween<Position> {
         return (value + 180) % 360;
       }
 
-      return shift(doubleLerp(shift(begin), shift(end), t));
+      return shift(_doubleLerp(shift(begin), shift(end), t));
     } else {
-      return doubleLerp(begin, end, t);
+      return _doubleLerp(begin, end, t);
     }
+  }
+
+  DateTime _timestampLerp(DateTime begin, DateTime end, double t) {
+    if (begin != null && end != null) {
+      return begin.add(end.difference(begin) * t);
+    } else {
+      return _nearest(begin, end, t);
+    }
+  }
+
+  T _nearest<T>(T begin, T end, double t) {
+    return t < 0.5 ? begin : end;
   }
 }
