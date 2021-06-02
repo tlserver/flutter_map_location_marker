@@ -1,3 +1,7 @@
+## [0.0.9] - Improve User Experience
+
+* Wrap direction indicator into an IgnorePointer widget
+
 ## [0.0.8] - Fix Bug
 
 * Dispose internal animation controller on map layer dispose
