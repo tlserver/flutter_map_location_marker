@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 class CenterFabExample extends StatefulWidget {
   @override
@@ -11,8 +11,8 @@ class CenterFabExample extends StatefulWidget {
 }
 
 class _CenterFabExampleState extends State<CenterFabExample> {
-  CenterOnLocationUpdate _centerOnLocationUpdate;
-  StreamController<double> _centerCurrentLocationStreamController;
+  late CenterOnLocationUpdate _centerOnLocationUpdate;
+  late StreamController<double> _centerCurrentLocationStreamController;
 
   @override
   void initState() {

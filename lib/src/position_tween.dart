@@ -3,8 +3,8 @@ import 'package:geolocator/geolocator.dart';
 
 class PositionTween extends Tween<Position> {
   PositionTween({
-    @required Position begin,
-    @required Position end,
+    required Position begin,
+    required Position end,
   }) : super(
           begin: begin,
           end: end,
@@ -12,8 +12,8 @@ class PositionTween extends Tween<Position> {
 
   @override
   Position lerp(double t) {
-    assert(begin != null);
-    assert(end != null);
+    final begin = super.begin!;
+    final end = super.end!;
     return Position(
       latitude: _doubleLerp(begin.latitude, end.latitude, t),
       longitude: _doubleLerp(begin.longitude, end.longitude, t),
@@ -48,7 +48,7 @@ class PositionTween extends Tween<Position> {
     }
   }
 
-  DateTime _timestampLerp(DateTime begin, DateTime end, double t) {
+  DateTime? _timestampLerp(DateTime? begin, DateTime? end, double t) {
     if (begin != null && end != null) {
       return begin.add(end.difference(begin) * t);
     } else {

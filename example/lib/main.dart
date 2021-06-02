@@ -22,7 +22,7 @@ class Home extends StatelessWidget {
           ListTile(
             title: Text('Center Fab Example'),
             onTap: () {
-              return Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => CenterFabExample(),
@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
           ListTile(
             title: Text('Customize Marker Example'),
             onTap: () {
-              return Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => CustomizeMarkerExample(),
@@ -44,7 +44,7 @@ class Home extends StatelessWidget {
           ListTile(
             title: Text('Minimum Example'),
             onTap: () {
-              return Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => MinimumExample(),
@@ -55,7 +55,7 @@ class Home extends StatelessWidget {
           ListTile(
             title: Text('Old Style Example'),
             onTap: () {
-              return Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => OldStyleExample(),

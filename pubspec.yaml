@@ -4,16 +4,15 @@ version: 0.0.9
 homepage: https://github.com/tlserver/flutter_map_location_marker
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_compass: ^0.6.0
-  flutter_map: ^0.12.0
-  geolocator: ^7.0.3
-  latlong: ^0.6.1
+  flutter_map: ^0.13.1
+  geolocator: ^7.1.0
+  latlong2: ^0.8.0
 
 dev_dependencies:
   flutter_test:
