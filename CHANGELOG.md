@@ -1,3 +1,7 @@
+## [1.0.0] - Update Dependencies
+
+* Update dependencies
+
 ## [1.0.0-nullsafety.0] - Migrate to Null-Safety
 
 * Migrate to null-safety
