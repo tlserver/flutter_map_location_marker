@@ -13,10 +13,10 @@ import 'package:latlong2/latlong.dart';
 import 'src/position_tween.dart';
 
 class LocationMarkerPlugin implements MapPlugin {
-  /// The options passed to [Geolocator].
-  /// Represents different options to configure the quality and frequency
+  /// The settings passed to [Geolocator].
+  /// Represents different settings to configure the quality and frequency
   /// of location updates.
-  final LocationOptions locationOptions;
+  final LocationSettings locationSettings;
 
   /// The event stream for center current location. Add a zoom level into this
   /// stream to center the current location at the provided zoom level.
@@ -31,7 +31,7 @@ class LocationMarkerPlugin implements MapPlugin {
   final Duration centerAnimationDuration;
 
   const LocationMarkerPlugin({
-    this.locationOptions = const LocationOptions(),
+    this.locationSettings = const LocationSettings(),
     this.centerCurrentLocationStream,
     this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
     this.centerAnimationDuration = const Duration(milliseconds: 500),
@@ -156,12 +156,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     super.initState();
     _isFirstLocationUpdate = true;
     _positionStreamSubscription = Geolocator.getPositionStream(
-      desiredAccuracy: widget.plugin.locationOptions.accuracy,
-      distanceFilter: widget.plugin.locationOptions.distanceFilter,
-      forceAndroidLocationManager:
-          widget.plugin.locationOptions.forceAndroidLocationManager,
-      intervalDuration:
-          Duration(milliseconds: widget.plugin.locationOptions.timeInterval),
+      locationSettings: widget.plugin.locationSettings,
     ).listen((position) {
       setState(() => _currentPosition = position);
 
