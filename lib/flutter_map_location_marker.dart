@@ -149,7 +149,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     with TickerProviderStateMixin {
   late bool _isFirstLocationUpdate;
   Position? _currentPosition;
-  late StreamSubscription<Position> _positionStreamSubscription;
+  StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<double>? _moveToCurrentStreamSubscription;
   AnimationController? _animationController;
 
@@ -157,32 +157,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   void initState() {
     super.initState();
     _isFirstLocationUpdate = true;
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: widget.plugin.locationSettings,
-    ).listen((position) {
-      setState(() => _currentPosition = position);
-
-      bool centerCurrentLocation;
-      switch (widget.plugin.centerOnLocationUpdate) {
-        case CenterOnLocationUpdate.always:
-          centerCurrentLocation = true;
-          break;
-        case CenterOnLocationUpdate.once:
-        // ignore: deprecated_member_use_from_same_package
-        case CenterOnLocationUpdate.first:
-          centerCurrentLocation = _isFirstLocationUpdate;
-          _isFirstLocationUpdate = false;
-          break;
-        case CenterOnLocationUpdate.never:
-          centerCurrentLocation = false;
-          break;
-      }
-      if (centerCurrentLocation) {
-        _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            widget.map.zoom);
-      }
-    });
+    _positionStreamSubscription = _subscribePositionStream();
     _moveToCurrentStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
       if (_currentPosition != null) {
@@ -194,11 +169,54 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   }
 
   @override
+  void didUpdateWidget(covariant LocationMarkerLayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.plugin.locationSettings != widget.plugin.locationSettings) {
+      _positionStreamSubscription?.cancel().then((_) {
+        if (mounted) {
+          _positionStreamSubscription = _subscribePositionStream();
+        }
+      });
+      _positionStreamSubscription = null;
+    }
+  }
+
+  @override
   void dispose() {
-    _positionStreamSubscription.cancel();
+    _positionStreamSubscription?.cancel();
     _moveToCurrentStreamSubscription?.cancel();
     _animationController?.dispose();
     super.dispose();
+  }
+
+  StreamSubscription<Position> _subscribePositionStream() {
+    return Geolocator.getPositionStream(
+            locationSettings: widget.plugin.locationSettings)
+        .listen(_handlePositionUpdate);
+  }
+
+  void _handlePositionUpdate(Position position) {
+    setState(() => _currentPosition = position);
+
+    bool centerCurrentLocation;
+    switch (widget.plugin.centerOnLocationUpdate) {
+      case CenterOnLocationUpdate.always:
+        centerCurrentLocation = true;
+        break;
+      case CenterOnLocationUpdate.once:
+      // ignore: deprecated_member_use_from_same_package
+      case CenterOnLocationUpdate.first:
+        centerCurrentLocation = _isFirstLocationUpdate;
+        _isFirstLocationUpdate = false;
+        break;
+      case CenterOnLocationUpdate.never:
+        centerCurrentLocation = false;
+        break;
+    }
+    if (centerCurrentLocation) {
+      _moveMap(LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          widget.map.zoom);
+    }
   }
 
   @override
