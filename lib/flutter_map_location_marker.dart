@@ -154,31 +154,11 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   @override
   void initState() {
     super.initState();
-    _isFirstLocationUpdate = true;
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: widget.plugin.locationSettings,
-    ).listen((position) {
-      setState(() => _currentPosition = position);
 
-      bool centerCurrentLocation;
-      switch (widget.plugin.centerOnLocationUpdate) {
-        case CenterOnLocationUpdate.always:
-          centerCurrentLocation = true;
-          break;
-        case CenterOnLocationUpdate.first:
-          centerCurrentLocation = _isFirstLocationUpdate;
-          _isFirstLocationUpdate = false;
-          break;
-        case CenterOnLocationUpdate.never:
-          centerCurrentLocation = false;
-          break;
-      }
-      if (centerCurrentLocation) {
-        _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            widget.map.zoom);
-      }
-    });
+    _isFirstLocationUpdate = true;
+    _positionStreamSubscription =
+        _createPositionStream(widget.plugin.locationSettings)
+            .listen(_handlePositionUpdate);
     _moveToCurrentStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
       if (_currentPosition != null) {
@@ -195,6 +175,32 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     _moveToCurrentStreamSubscription?.cancel();
     _animationController?.dispose();
     super.dispose();
+  }
+
+  Stream<Position> _createPositionStream(LocationSettings locationSettings) {
+    return Geolocator.getPositionStream(locationSettings: locationSettings);
+  }
+
+  void _handlePositionUpdate(Position position) {
+    setState(() => _currentPosition = position);
+
+    bool centerCurrentLocation;
+    switch (widget.plugin.centerOnLocationUpdate) {
+      case CenterOnLocationUpdate.always:
+        centerCurrentLocation = true;
+        break;
+      case CenterOnLocationUpdate.first:
+        centerCurrentLocation = _isFirstLocationUpdate;
+        _isFirstLocationUpdate = false;
+        break;
+      case CenterOnLocationUpdate.never:
+        centerCurrentLocation = false;
+        break;
+    }
+    if (centerCurrentLocation) {
+      _moveMap(LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          widget.map.zoom);
+    }
   }
 
   @override
