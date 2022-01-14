@@ -71,3 +71,6 @@ Change the marker to any widget you want.
 
 2. [Floating Action Button for Centering Current Location](./example/lib/page/center_fab_example.dart)  
 Use a floating action button to move and zoom the map to current location.
+
+3. [Provide Device Location from Your App](./example/lib/page/provided_position_example.dart)  
+When you want full control over the position of the marker.

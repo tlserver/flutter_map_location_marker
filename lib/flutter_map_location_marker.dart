@@ -30,11 +30,17 @@ class LocationMarkerPlugin implements MapPlugin {
   /// The duration of the animation of centering the current location.
   final Duration centerAnimationDuration;
 
+  /// Position object obtained by [Geolocator] outside of the plugin.
+  /// This option skips creation of the position stream and plugin will
+  /// only facilitate rendering of the location of the marker
+  final Position? position;
+
   const LocationMarkerPlugin({
     this.locationSettings = const LocationSettings(),
     this.centerCurrentLocationStream,
     this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
     this.centerAnimationDuration = const Duration(milliseconds: 500),
+    this.position,
   });
 
   @override
@@ -147,7 +153,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     with TickerProviderStateMixin {
   late bool _isFirstLocationUpdate;
   Position? _currentPosition;
-  late StreamSubscription<Position> _positionStreamSubscription;
+  late StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<double>? _moveToCurrentStreamSubscription;
   AnimationController? _animationController;
 
@@ -156,9 +162,15 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     super.initState();
 
     _isFirstLocationUpdate = true;
-    _positionStreamSubscription =
-        _createPositionStream(widget.plugin.locationSettings)
-            .listen(_handlePositionUpdate);
+    _positionStreamSubscription = widget.plugin.position == null
+        ? _createPositionStream(widget.plugin.locationSettings)
+            .listen(_handlePositionUpdate)
+        : null;
+
+    if (widget.plugin.position != null) {
+      _handlePositionUpdate(widget.plugin.position!);
+    }
+
     _moveToCurrentStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
       if (_currentPosition != null) {
@@ -171,10 +183,19 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
 
   @override
   void dispose() {
-    _positionStreamSubscription.cancel();
+    _positionStreamSubscription?.cancel();
     _moveToCurrentStreamSubscription?.cancel();
     _animationController?.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant LocationMarkerLayer oldWidget) {
+    if ((oldWidget.plugin.position != widget.plugin.position) && widget.plugin.position != null) {
+      _handlePositionUpdate(widget.plugin.position!);
+    }
+
+    return super.didUpdateWidget(oldWidget);
   }
 
   Stream<Position> _createPositionStream(LocationSettings locationSettings) {

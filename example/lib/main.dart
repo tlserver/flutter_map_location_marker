@@ -4,6 +4,7 @@ import 'page/center_fab_example.dart';
 import 'page/customize_marker_example.dart';
 import 'page/minimum_example.dart';
 import 'page/old_style_example.dart';
+import 'page/provided_position_example.dart';
 
 void main() {
   runApp(
@@ -52,6 +53,14 @@ class Home extends StatelessWidget {
               );
             },
           ),
+          ListTile(
+              title: Text('Provided Position Example'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ProvidedPositionExample()),
+                );
+              }),
           ListTile(
             title: Text('Old Style Example'),
             onTap: () {
