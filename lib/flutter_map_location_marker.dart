@@ -101,6 +101,8 @@ class LocationMarkerLayerOptions extends LayerOptions {
 
 enum CenterOnLocationUpdate {
   never,
+  once,
+  @Deprecated('Use `once` instead')
   first,
   always,
 }
@@ -165,6 +167,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
         case CenterOnLocationUpdate.always:
           centerCurrentLocation = true;
           break;
+        case CenterOnLocationUpdate.once:
+        // ignore: deprecated_member_use_from_same_package
         case CenterOnLocationUpdate.first:
           centerCurrentLocation = _isFirstLocationUpdate;
           _isFirstLocationUpdate = false;
