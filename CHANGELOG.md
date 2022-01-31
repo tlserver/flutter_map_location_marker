@@ -1,3 +1,7 @@
+## [2.0.2] - Improve naming
+
+* Rename [CenterOnLocationUpdate.first] to [CenterOnLocationUpdate.once]
+
 ## [2.0.1] - Update Dependencies
 
 * Update dependencies
@@ -65,6 +69,8 @@
 
 * Initial release.
 
+[CenterOnLocationUpdate.first]: https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html
+[CenterOnLocationUpdate.once]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CenterOnLocationUpdate.html
 [LocationMarkerLayerWidget()]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerWidget/LocationMarkerLayerWidget.html
 [LocationMarkerPlugin()]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerPlugin/LocationMarkerPlugin.html
 [NoSuchMethodError]: https://api.dart.dev/stable/dart-core/NoSuchMethodError-class.html
