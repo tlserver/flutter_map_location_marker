@@ -1,3 +1,7 @@
+## [2.0.1] - Update Dependencies
+
+* Update dependencies
+
 ## [2.0.0] - Update Dependencies
 
 * __BRAKING CHANGE__ [LocationMarkerPlugin()] parameter is renamed from `locationOptions` to `locationSettings` and its type is changed to `LocationSettings`
