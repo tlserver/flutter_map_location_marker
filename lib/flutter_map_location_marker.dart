@@ -1,3 +1,4 @@
+/// A flutter_map plugin for displaying device current location.
 library flutter_map_location_marker;
 
 import 'dart:async';
