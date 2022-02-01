@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class HeadingSector extends CustomPainter {
   final Color color;
+  final double heading;
+  final double accuracy;
 
-  HeadingSector(this.color);
+  HeadingSector(this.color, this.heading, this.accuracy);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -16,8 +18,8 @@ class HeadingSector extends CustomPainter {
     );
     canvas.drawArc(
       rect,
-      Math.pi * 6 / 5,
-      Math.pi * 3 / 5,
+      Math.pi * 3 / 2 + heading - accuracy,
+      accuracy * 2,
       true,
       Paint()
         ..shader = RadialGradient(

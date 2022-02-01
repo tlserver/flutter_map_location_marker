@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'center_on_location_update.dart';
+import 'data.dart';
 import 'drawing/heading_sector.dart';
 import 'layer_options.dart';
 import 'plugin.dart';
@@ -34,42 +33,20 @@ class LocationMarkerLayer extends StatefulWidget {
 class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     with TickerProviderStateMixin {
   late bool _isFirstLocationUpdate;
-  Position? _currentPosition;
-  late StreamSubscription<Position> _positionStreamSubscription;
-  StreamSubscription<double>? _moveToCurrentStreamSubscription;
+  LocationMarkerPosition? _currentPosition;
+  late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
+
+  /// A stream for centering single that also include a zoom level
+  StreamSubscription<double>? _centerCurrentLocationStreamSubscription;
   AnimationController? _animationController;
 
   @override
   void initState() {
     super.initState();
     _isFirstLocationUpdate = true;
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: widget.plugin.locationSettings,
-    ).listen((position) {
-      setState(() => _currentPosition = position);
-
-      bool centerCurrentLocation;
-      switch (widget.plugin.centerOnLocationUpdate) {
-        case CenterOnLocationUpdate.always:
-          centerCurrentLocation = true;
-          break;
-        case CenterOnLocationUpdate.once:
-        // ignore: deprecated_member_use_from_same_package
-        case CenterOnLocationUpdate.first:
-          centerCurrentLocation = _isFirstLocationUpdate;
-          _isFirstLocationUpdate = false;
-          break;
-        case CenterOnLocationUpdate.never:
-          centerCurrentLocation = false;
-          break;
-      }
-      if (centerCurrentLocation) {
-        _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            widget.map.zoom);
-      }
-    });
-    _moveToCurrentStreamSubscription =
+    _positionStreamSubscription =
+        widget.locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
+    _centerCurrentLocationStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
       if (_currentPosition != null) {
         _moveMap(
@@ -80,11 +57,44 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   }
 
   @override
+  void didUpdateWidget(LocationMarkerLayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.locationMarkerOpts.positionStream !=
+        oldWidget.locationMarkerOpts.positionStream) {
+      _positionStreamSubscription.cancel();
+      _positionStreamSubscription = widget.locationMarkerOpts.positionStream
+          .listen(_handlePositionUpdate);
+    }
+  }
+
+  @override
   void dispose() {
     _positionStreamSubscription.cancel();
-    _moveToCurrentStreamSubscription?.cancel();
+    _centerCurrentLocationStreamSubscription?.cancel();
     _animationController?.dispose();
     super.dispose();
+  }
+
+  void _handlePositionUpdate(LocationMarkerPosition position) {
+    setState(() => _currentPosition = position);
+
+    bool centerCurrentLocation;
+    switch (widget.plugin.centerOnLocationUpdate) {
+      case CenterOnLocationUpdate.always:
+        centerCurrentLocation = true;
+        break;
+      case CenterOnLocationUpdate.once:
+        centerCurrentLocation = _isFirstLocationUpdate;
+        _isFirstLocationUpdate = false;
+        break;
+      case CenterOnLocationUpdate.never:
+        centerCurrentLocation = false;
+        break;
+    }
+    if (centerCurrentLocation) {
+      _moveMap(LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          widget.map.zoom);
+    }
   }
 
   @override
@@ -94,10 +104,11 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
         return _buildLocationMarker(_currentPosition!);
       } else {
         return TweenAnimationBuilder(
-          tween:
-              PositionTween(begin: _currentPosition!, end: _currentPosition!),
+          tween: LocationMarkerPositionTween(
+              begin: _currentPosition!, end: _currentPosition!),
           duration: widget.locationMarkerOpts.markerAnimationDuration,
-          builder: (BuildContext context, Position position, Widget? child) {
+          builder: (BuildContext context, LocationMarkerPosition position,
+              Widget? child) {
             return _buildLocationMarker(position);
           },
         );
@@ -107,11 +118,9 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     }
   }
 
-  Widget _buildLocationMarker(Position position) {
-    final latLng = LatLng(
-      position.latitude,
-      position.longitude,
-    );
+  Widget _buildLocationMarker(LocationMarkerPosition position) {
+    final latLng = position.latLng;
+    final diameter = widget.locationMarkerOpts.headingSectorRadius * 2;
     return GroupLayer(
       GroupLayerOptions(
         group: [
@@ -131,25 +140,38 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
               if (widget.locationMarkerOpts.showHeadingSector)
                 Marker(
                   point: latLng,
-                  width: widget.locationMarkerOpts.headingSectorRadius * 2,
-                  height: widget.locationMarkerOpts.headingSectorRadius * 2,
+                  width: diameter,
+                  height: diameter,
                   builder: (_) {
                     return IgnorePointer(
                       ignoring: true,
                       child: StreamBuilder(
-                        stream: FlutterCompass.events,
+                        stream: widget.locationMarkerOpts.headingStream,
                         builder: (BuildContext context,
-                            AsyncSnapshot<CompassEvent> snapshot) {
-                          if (snapshot.data?.heading != null) {
-                            return Transform.rotate(
-                              angle: degToRadian(snapshot.data!.heading!),
-                              child: CustomPaint(
-                                size: Size.fromRadius(widget
-                                    .locationMarkerOpts.headingSectorRadius),
-                                painter: HeadingSector(widget
-                                    .locationMarkerOpts.headingSectorColor),
-                              ),
-                            );
+                            AsyncSnapshot<LocationMarkerHeading> snapshot) {
+                          if (snapshot.hasData) {
+                            return TweenAnimationBuilder(
+                                tween: LocationMarkerHeadingTween(
+                                  begin: snapshot.data!,
+                                  end: snapshot.data!,
+                                ),
+                                duration: widget
+                                    .locationMarkerOpts.markerAnimationDuration,
+                                builder: (BuildContext context,
+                                    LocationMarkerHeading heading,
+                                    Widget? child) {
+                                  return CustomPaint(
+                                    size: Size.fromRadius(widget
+                                        .locationMarkerOpts
+                                        .headingSectorRadius),
+                                    painter: HeadingSector(
+                                      widget.locationMarkerOpts
+                                          .headingSectorColor,
+                                      snapshot.data!.heading,
+                                      snapshot.data!.accuracy,
+                                    ),
+                                  );
+                                });
                           } else {
                             return SizedBox.shrink();
                           }

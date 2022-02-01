@@ -2,6 +2,8 @@
 library flutter_map_location_marker;
 
 export 'src/center_on_location_update.dart';
+export 'src/data.dart';
+export 'src/data_stream_factory.dart';
 export 'src/drawing/default_location_marker.dart';
 export 'src/drawing/heading_sector.dart';
 export 'src/layer.dart';

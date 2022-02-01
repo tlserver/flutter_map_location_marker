@@ -62,6 +62,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.0"
+  flutter_joystick:
+    dependency: "direct dev"
+    description:
+      name: flutter_joystick
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_map:
     dependency: "direct main"
     description:

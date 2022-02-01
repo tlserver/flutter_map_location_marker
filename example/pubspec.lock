@@ -69,6 +69,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.0"
+  flutter_joystick:
+    dependency: "direct main"
+    description:
+      name: flutter_joystick
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_map:
     dependency: transitive
     description:
@@ -94,7 +101,7 @@ packages:
     source: sdk
     version: "0.0.0"
   geolocator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: geolocator
       url: "https://pub.dartlang.org"

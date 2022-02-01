@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map_location_marker/src/data_stream_factory.dart';
 
+import 'data.dart';
 import 'drawing/default_location_marker.dart';
 
 /// Describes the needed properties to create a location marker layer. Location
@@ -11,6 +13,12 @@ import 'drawing/default_location_marker.dart';
 /// 2) a heading sector (in a marker layer) and
 /// 3) a marker (in the same marker layer).
 class LocationMarkerLayerOptions extends LayerOptions {
+  /// A Stream that provide position data for this marker.
+  final Stream<LocationMarkerPosition> positionStream;
+
+  /// A Stream that provide heading data for this marker.
+  final Stream<LocationMarkerHeading> headingStream;
+
   /// The main marker widget.
   final Widget marker;
 
@@ -39,6 +47,8 @@ class LocationMarkerLayerOptions extends LayerOptions {
 
   LocationMarkerLayerOptions({
     Key? key,
+    Stream<LocationMarkerPosition>? positionStream,
+    Stream<LocationMarkerHeading>? headingStream,
     this.marker = const DefaultLocationMarker(),
     this.markerSize = const Size(20, 20),
     this.showAccuracyCircle = true,
@@ -48,7 +58,11 @@ class LocationMarkerLayerOptions extends LayerOptions {
     this.headingSectorColor = const Color.fromARGB(0xCC, 0x21, 0x96, 0xF3),
     this.markerAnimationDuration = const Duration(milliseconds: 200),
     Stream<Null>? rebuild,
-  }) : super(
+  })  : positionStream = positionStream ??
+            LocationMarkerDataStreamFactory().geolocatorPositionStream(),
+        headingStream = headingStream ??
+            LocationMarkerDataStreamFactory().compassHeadingStream(),
+        super(
           key: key,
           rebuild: rebuild,
         );
