@@ -1,3 +1,11 @@
+## [3.0.0] - Expose Position and Heading Streams
+
+* __BRAKING CHANGE__ Remove deprecated code
+* [LocationMarkerPlugin()] do not accept `locationSettings` parameters anymore. If this settings need to be changed, see [this example](../example/lib/page/geolocator_settings_example.dart)
+* [LocationMarkerLayerOptions()] now accept `positionStream` and `headingStream` parameters so the application have more control of these streams.
+
+Thank to Ondřej Synáček
+
 ## [2.0.2] - Improve naming
 
 * Rename [CenterOnLocationUpdate.first] to [CenterOnLocationUpdate.once]
@@ -69,6 +77,7 @@
 
 * Initial release.
 
+[LocationMarkerPlugin()]: https://pub.dev/documentation/flutter_map_location_marker/2.0.1/flutter_map_location_marker/LocationMarkerPlugin/LocationMarkerPlugin.html
 [CenterOnLocationUpdate.first]: https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html
 [CenterOnLocationUpdate.once]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CenterOnLocationUpdate.html
 [LocationMarkerLayerWidget()]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerWidget/LocationMarkerLayerWidget.html
