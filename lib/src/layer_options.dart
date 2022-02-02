@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:flutter_map_location_marker/src/data_stream_factory.dart';
 
-import 'data.dart';
-import 'drawing/default_location_marker.dart';
+import '../flutter_map_location_marker.dart';
 
 /// Describes the needed properties to create a location marker layer. Location
 /// marker layer is a compose layer, containing 3 widgets which are
