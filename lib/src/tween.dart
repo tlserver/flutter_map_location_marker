@@ -1,3 +1,5 @@
+import 'dart:math' as Math;
+
 import 'package:flutter/material.dart';
 
 import 'data.dart';
@@ -37,8 +39,8 @@ class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
     final begin = super.begin!;
     final end = super.end!;
     return LocationMarkerHeading(
-      heading: _degreeLerp(begin.heading, end.heading, t),
-      accuracy: _degreeLerp(begin.accuracy, end.accuracy, t),
+      heading: _radiusLerp(begin.heading, end.heading, t),
+      accuracy: _radiusLerp(begin.accuracy, end.accuracy, t),
     );
   }
 }
@@ -46,16 +48,17 @@ class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
 double _doubleLerp(double begin, double end, double t) =>
     begin + (end - begin) * t;
 
-double _degreeLerp(double begin, double end, double t) {
-  begin = begin % 360;
-  end = end % 360;
+double _radiusLerp(double begin, double end, double t) {
+  final twoPi = 2 * Math.pi;
+  begin = begin % twoPi;
+  end = end % twoPi;
 
-  final compareResult = (end - begin).abs().compareTo(360 / 2);
-  final crossZero = compareResult == -1 ||
-      (compareResult == 0 && begin != end && begin >= 180);
+  final compareResult = (end - begin).abs().compareTo(Math.pi);
+  final crossZero = compareResult == 1 ||
+      (compareResult == 0 && begin != end && begin >= Math.pi);
   if (crossZero) {
     double shift(double value) {
-      return (value + 180) % 360;
+      return (value + Math.pi) % twoPi;
     }
 
     return shift(_doubleLerp(shift(begin), shift(end), t));
