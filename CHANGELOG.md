@@ -1,3 +1,11 @@
+## [3.0.1] - Fix Bug
+
+* Fix heading sector spin unexpectedly
+* Add heading sector animation
+* Improve stability by caching options in widget state to prevent re-subscripting to position stream thousand times in a second
+* [LocationMarkerPlugin.centerCurrentLocationStream] accept null zoom level which indicate remaining the zoom level unchanged
+* Improve user experience, auto center current location action does not stop zooming setting through [LocationMarkerPlugin.centerCurrentLocationStream] now
+
 ## [3.0.0] - Expose Position and Heading Streams
 
 * __BRAKING CHANGE__ Remove deprecated code
@@ -75,6 +83,7 @@
 
 * Initial release.
 
+[LocationMarkerPlugin.centerCurrentLocationStream]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerPlugin/centerCurrentLocationStream.html
 [LocationMarkerPlugin()]: https://pub.dev/documentation/flutter_map_location_marker/2.0.1/flutter_map_location_marker/LocationMarkerPlugin/LocationMarkerPlugin.html
 [CenterOnLocationUpdate.first]: https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html
 [CenterOnLocationUpdate.once]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CenterOnLocationUpdate.html
