@@ -48,8 +48,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     _locationMarkerOpts =
         widget.locationMarkerOpts ?? LocationMarkerLayerOptions();
     _isFirstLocationUpdate = true;
-    _positionStreamSubscription =
-        _locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
+    _positionStreamSubscription = _subscriptPositionStream();
     _centerCurrentLocationStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
@@ -71,8 +70,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
           widget.locationMarkerOpts ?? LocationMarkerLayerOptions();
       if (_locationMarkerOpts.positionStream != previousPositionStream) {
         _positionStreamSubscription.cancel();
-        _positionStreamSubscription =
-            _locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
+        _positionStreamSubscription = _subscriptPositionStream();
       }
     }
   }
@@ -85,26 +83,30 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     super.dispose();
   }
 
-  void _handlePositionUpdate(LocationMarkerPosition position) {
-    setState(() => _currentPosition = position);
+  StreamSubscription<LocationMarkerPosition> _subscriptPositionStream() {
+    return _locationMarkerOpts.positionStream.listen((position) {
+      setState(() => _currentPosition = position);
 
-    bool centerCurrentLocation;
-    switch (widget.plugin.centerOnLocationUpdate) {
-      case CenterOnLocationUpdate.always:
-        centerCurrentLocation = true;
-        break;
-      case CenterOnLocationUpdate.once:
-        centerCurrentLocation = _isFirstLocationUpdate;
-        _isFirstLocationUpdate = false;
-        break;
-      case CenterOnLocationUpdate.never:
-        centerCurrentLocation = false;
-        break;
-    }
-    if (centerCurrentLocation) {
-      _moveMap(LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-          _centeringZoom);
-    }
+      bool centerCurrentLocation;
+      switch (widget.plugin.centerOnLocationUpdate) {
+        case CenterOnLocationUpdate.always:
+          centerCurrentLocation = true;
+          break;
+        case CenterOnLocationUpdate.once:
+          centerCurrentLocation = _isFirstLocationUpdate;
+          _isFirstLocationUpdate = false;
+          break;
+        case CenterOnLocationUpdate.never:
+          centerCurrentLocation = false;
+          break;
+      }
+      if (centerCurrentLocation) {
+        _moveMap(
+            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+            _centeringZoom);
+      }
+    })
+      ..onError((_) => setState(() => _currentPosition = null));
   }
 
   @override
