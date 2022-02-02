@@ -35,7 +35,7 @@ class PositionTween extends Tween<Position> {
     end = end % 360;
 
     final compareResult = (end - begin).abs().compareTo(360 / 2);
-    final crossZero = compareResult == -1 ||
+    final crossZero = compareResult == 1 ||
         (compareResult == 0 && begin != end && begin >= 180);
     if (crossZero) {
       double shift(double value) {
