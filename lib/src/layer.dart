@@ -167,8 +167,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                                     painter: HeadingSector(
                                       widget.locationMarkerOpts
                                           .headingSectorColor,
-                                      snapshot.data!.heading,
-                                      snapshot.data!.accuracy,
+                                      heading.heading,
+                                      heading.accuracy,
                                     ),
                                   );
                                 });
