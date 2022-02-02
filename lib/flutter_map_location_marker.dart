@@ -82,6 +82,10 @@ class LocationMarkerLayerOptions extends LayerOptions {
   /// The duration of the animation of location update.
   final Duration markerAnimationDuration;
 
+  /// The error handling function, called when received a error event from
+  /// position stream
+  final void Function(Object error)? errorHandler;
+
   LocationMarkerLayerOptions({
     Key? key,
     this.marker = const DefaultLocationMarker(),
@@ -92,6 +96,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
     this.headingSectorRadius = 60,
     this.headingSectorColor = const Color.fromARGB(0xCC, 0x21, 0x96, 0xF3),
     this.markerAnimationDuration = const Duration(milliseconds: 200),
+    this.errorHandler,
     Stream<Null>? rebuild,
   }) : super(
           key: key,
@@ -192,7 +197,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   StreamSubscription<Position> _subscribePositionStream() {
     return Geolocator.getPositionStream(
             locationSettings: widget.plugin.locationSettings)
-        .listen(_handlePositionUpdate);
+        .listen(_handlePositionUpdate,
+            onError: widget.locationMarkerOpts.errorHandler ?? (_) {});
   }
 
   void _handlePositionUpdate(Position position) {
