@@ -29,32 +29,37 @@ class _CenterFabExampleState extends State<CenterFabExample> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-          center: LatLng(0, 0),
-          zoom: 1,
-          maxZoom: 19,
-          // Stop centering the location marker on the map if user interacted with the map.
-          onPositionChanged: (MapPosition position, bool hasGesture) {
-            if (hasGesture) {
-              setState(
-                  () => _centerOnLocationUpdate = CenterOnLocationUpdate.never);
-            }
-          }),
+    return Stack(
       children: [
-        TileLayerWidget(
-          options: TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
-            maxZoom: 19,
-          ),
-        ),
-        LocationMarkerLayerWidget(
-          plugin: LocationMarkerPlugin(
-            centerCurrentLocationStream:
-                _centerCurrentLocationStreamController.stream,
-            centerOnLocationUpdate: _centerOnLocationUpdate,
-          ),
+        FlutterMap(
+          options: MapOptions(
+              center: LatLng(0, 0),
+              zoom: 1,
+              maxZoom: 19,
+              // Stop centering the location marker on the map if user interacted with the map.
+              onPositionChanged: (MapPosition position, bool hasGesture) {
+                if (hasGesture) {
+                  setState(() =>
+                      _centerOnLocationUpdate = CenterOnLocationUpdate.never);
+                }
+              }),
+          children: [
+            TileLayerWidget(
+              options: TileLayerOptions(
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+                maxZoom: 19,
+              ),
+            ),
+            LocationMarkerLayerWidget(
+              plugin: LocationMarkerPlugin(
+                centerCurrentLocationStream:
+                    _centerCurrentLocationStreamController.stream,
+                centerOnLocationUpdate: _centerOnLocationUpdate,
+              ),
+            ),
+          ],
         ),
         Positioned(
           right: 20,
