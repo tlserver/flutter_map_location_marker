@@ -4,6 +4,7 @@ import 'dart:math' as Math;
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map_location_marker/src/data.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 class LocationMarkerDataStreamFactory {
   const LocationMarkerDataStreamFactory();
@@ -30,7 +31,7 @@ class LocationMarkerDataStreamFactory {
         .where((CompassEvent compassEvent) => compassEvent.heading != null)
         .map((CompassEvent compassEvent) {
       return LocationMarkerHeading(
-        heading: compassEvent.heading!,
+        heading: degToRadian(compassEvent.heading!),
         accuracy: (compassEvent.accuracy ?? defAccuracy).clamp(
           minAccuracy,
           maxAccuracy,
