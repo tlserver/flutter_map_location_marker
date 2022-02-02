@@ -1,6 +1,6 @@
 name: flutter_map_location_marker
 description: A flutter map plugin for displaying device current location.
-version: 3.0.0
+version: 3.0.1
 homepage: https://github.com/tlserver/flutter_map_location_marker
 
 environment:
