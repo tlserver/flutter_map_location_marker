@@ -13,7 +13,7 @@ import 'tween.dart';
 
 class LocationMarkerLayer extends StatefulWidget {
   final LocationMarkerPlugin plugin;
-  final LocationMarkerLayerOptions locationMarkerOpts;
+  final LocationMarkerLayerOptions? locationMarkerOpts;
   final MapState map;
   final Stream<Null> stream;
 
@@ -23,7 +23,7 @@ class LocationMarkerLayer extends StatefulWidget {
     this.map,
     this.stream,
   ) : super(
-          key: locationMarkerOpts.key,
+          key: locationMarkerOpts?.key,
         );
 
   @override
@@ -32,6 +32,7 @@ class LocationMarkerLayer extends StatefulWidget {
 
 class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     with TickerProviderStateMixin {
+  late LocationMarkerLayerOptions _locationMarkerOpts;
   late bool _isFirstLocationUpdate;
   LocationMarkerPosition? _currentPosition;
   late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
@@ -43,9 +44,11 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   @override
   void initState() {
     super.initState();
+    _locationMarkerOpts =
+        widget.locationMarkerOpts ?? LocationMarkerLayerOptions();
     _isFirstLocationUpdate = true;
     _positionStreamSubscription =
-        widget.locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
+        _locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
     _centerCurrentLocationStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
       if (_currentPosition != null) {
@@ -59,11 +62,15 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   @override
   void didUpdateWidget(LocationMarkerLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.locationMarkerOpts.positionStream !=
-        oldWidget.locationMarkerOpts.positionStream) {
-      _positionStreamSubscription.cancel();
-      _positionStreamSubscription = widget.locationMarkerOpts.positionStream
-          .listen(_handlePositionUpdate);
+    final previousPositionStream = _locationMarkerOpts.positionStream;
+    if (widget.locationMarkerOpts != oldWidget.locationMarkerOpts) {
+      _locationMarkerOpts =
+          widget.locationMarkerOpts ?? LocationMarkerLayerOptions();
+      if (_locationMarkerOpts.positionStream != previousPositionStream) {
+        _positionStreamSubscription.cancel();
+        _positionStreamSubscription =
+            _locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
+      }
     }
   }
 
@@ -100,13 +107,13 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   @override
   Widget build(BuildContext context) {
     if (_currentPosition != null) {
-      if (widget.locationMarkerOpts.markerAnimationDuration == Duration.zero) {
+      if (_locationMarkerOpts.markerAnimationDuration == Duration.zero) {
         return _buildLocationMarker(_currentPosition!);
       } else {
         return TweenAnimationBuilder(
           tween: LocationMarkerPositionTween(
               begin: _currentPosition!, end: _currentPosition!),
-          duration: widget.locationMarkerOpts.markerAnimationDuration,
+          duration: _locationMarkerOpts.markerAnimationDuration,
           builder: (BuildContext context, LocationMarkerPosition position,
               Widget? child) {
             return _buildLocationMarker(position);
@@ -120,24 +127,24 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
 
   Widget _buildLocationMarker(LocationMarkerPosition position) {
     final latLng = position.latLng;
-    final diameter = widget.locationMarkerOpts.headingSectorRadius * 2;
+    final diameter = _locationMarkerOpts.headingSectorRadius * 2;
     return GroupLayer(
       GroupLayerOptions(
         group: [
-          if (widget.locationMarkerOpts.showAccuracyCircle)
+          if (_locationMarkerOpts.showAccuracyCircle)
             CircleLayerOptions(
               circles: [
                 CircleMarker(
                   point: latLng,
                   radius: position.accuracy,
                   useRadiusInMeter: true,
-                  color: widget.locationMarkerOpts.accuracyCircleColor,
+                  color: _locationMarkerOpts.accuracyCircleColor,
                 ),
               ],
             ),
           MarkerLayerOptions(
             markers: [
-              if (widget.locationMarkerOpts.showHeadingSector)
+              if (_locationMarkerOpts.showHeadingSector)
                 Marker(
                   point: latLng,
                   width: diameter,
@@ -146,7 +153,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                     return IgnorePointer(
                       ignoring: true,
                       child: StreamBuilder(
-                        stream: widget.locationMarkerOpts.headingStream,
+                        stream: _locationMarkerOpts.headingStream,
                         builder: (BuildContext context,
                             AsyncSnapshot<LocationMarkerHeading> snapshot) {
                           if (snapshot.hasData) {
@@ -155,18 +162,16 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                                   begin: snapshot.data!,
                                   end: snapshot.data!,
                                 ),
-                                duration: widget
-                                    .locationMarkerOpts.markerAnimationDuration,
+                                duration:
+                                    _locationMarkerOpts.markerAnimationDuration,
                                 builder: (BuildContext context,
                                     LocationMarkerHeading heading,
                                     Widget? child) {
                                   return CustomPaint(
-                                    size: Size.fromRadius(widget
-                                        .locationMarkerOpts
+                                    size: Size.fromRadius(_locationMarkerOpts
                                         .headingSectorRadius),
                                     painter: HeadingSector(
-                                      widget.locationMarkerOpts
-                                          .headingSectorColor,
+                                      _locationMarkerOpts.headingSectorColor,
                                       heading.heading,
                                       heading.accuracy,
                                     ),
@@ -182,9 +187,9 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                 ),
               Marker(
                 point: latLng,
-                width: widget.locationMarkerOpts.markerSize.width,
-                height: widget.locationMarkerOpts.markerSize.height,
-                builder: (_) => widget.locationMarkerOpts.marker,
+                width: _locationMarkerOpts.markerSize.width,
+                height: _locationMarkerOpts.markerSize.height,
+                builder: (_) => _locationMarkerOpts.marker,
               ),
             ],
           ),

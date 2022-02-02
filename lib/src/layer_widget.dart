@@ -7,13 +7,12 @@ import 'plugin.dart';
 
 class LocationMarkerLayerWidget extends StatelessWidget {
   final LocationMarkerPlugin plugin;
-  final LocationMarkerLayerOptions options;
+  final LocationMarkerLayerOptions? options;
 
   LocationMarkerLayerWidget({
     this.plugin = const LocationMarkerPlugin(),
-    LocationMarkerLayerOptions? options,
-  })  : options = options ?? LocationMarkerLayerOptions(),
-        super(
+    this.options,
+  }) : super(
           key: options?.key,
         );
 
