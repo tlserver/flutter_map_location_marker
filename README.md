@@ -17,7 +17,7 @@ header are also customizable.
 ## Usage
 
 Add flutter_map_location_marker to your pubspec.yaml:
- 
+
 ```yaml
 dependencies:
   flutter_map_location_marker: any // or latest verion
@@ -66,8 +66,17 @@ Widget build(BuildContext context) {
 
 ## Examples
 
-1. [Marker Customization](./example/lib/page/customize_marker_example.dart)  
+1. [Marker Customization](./example/lib/page/customize_marker_example.dart)
 Change the marker to any widget you want.
 
-2. [Floating Action Button for Centering Current Location](./example/lib/page/center_fab_example.dart)  
+2. [Floating Action Button for Centering Current Location](./example/lib/page/center_fab_example.dart)
 Use a floating action button to move and zoom the map to current location.
+
+3. [Change Geolocator Settings](./example/lib/page/geolocator_settings_example.dart)
+Define Geolocator settings yourself.
+
+4. [Selectable Distance Filter](./example/lib/page/selectable_distance_filter_example.dart)
+Change Geolocator settings at the runtime.
+
+5. [Custom Stream](./example/lib/page/custom_stream_example.dart)
+Use your own stream, such as position stream from other library or predefined route, as the source.
