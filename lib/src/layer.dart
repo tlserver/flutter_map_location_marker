@@ -36,6 +36,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   late bool _isFirstLocationUpdate;
   LocationMarkerPosition? _currentPosition;
   late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
+  double? _centeringZoom = null;
 
   /// A stream for centering single that also include a zoom level
   StreamSubscription<double?>? _centerCurrentLocationStreamSubscription;
@@ -53,8 +54,10 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
         widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
         _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            zoom);
+                LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+                zoom)
+            .whenComplete(() => _centeringZoom = null);
+        _centeringZoom = zoom;
       }
     });
   }
@@ -100,7 +103,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     }
     if (centerCurrentLocation) {
       _moveMap(LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-          widget.map.zoom);
+          _centeringZoom);
     }
   }
 
@@ -200,7 +203,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     );
   }
 
-  void _moveMap(LatLng latLng, [double? zoom]) {
+  TickerFuture _moveMap(LatLng latLng, [double? zoom]) {
     zoom ??= widget.map.zoom;
     _animationController?.dispose();
     _animationController = AnimationController(
@@ -243,6 +246,6 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
       }
     });
 
-    _animationController!.forward();
+    return _animationController!.forward();
   }
 }
