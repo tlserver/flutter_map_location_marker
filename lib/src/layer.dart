@@ -38,7 +38,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
 
   /// A stream for centering single that also include a zoom level
-  StreamSubscription<double>? _centerCurrentLocationStreamSubscription;
+  StreamSubscription<double?>? _centerCurrentLocationStreamSubscription;
   AnimationController? _animationController;
 
   @override
@@ -50,7 +50,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     _positionStreamSubscription =
         _locationMarkerOpts.positionStream.listen(_handlePositionUpdate);
     _centerCurrentLocationStreamSubscription =
-        widget.plugin.centerCurrentLocationStream?.listen((double zoom) {
+        widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
         _moveMap(
             LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
@@ -200,7 +200,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     );
   }
 
-  void _moveMap(LatLng latLng, double zoom) {
+  void _moveMap(LatLng latLng, [double? zoom]) {
+    zoom ??= widget.map.zoom;
     _animationController?.dispose();
     _animationController = AnimationController(
       duration: widget.plugin.centerAnimationDuration,

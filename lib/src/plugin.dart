@@ -9,10 +9,11 @@ import 'layer_options.dart';
 
 class LocationMarkerPlugin implements MapPlugin {
   /// The event stream for center current location. Add a zoom level into this
-  /// stream to center the current location at the provided zoom level.
+  /// stream to center the current location at the provided zoom level or a null
+  /// if the zoom level should be unchanged.
   ///
   /// For more details, see CenterFabExample.
-  final Stream<double>? centerCurrentLocationStream;
+  final Stream<double?>? centerCurrentLocationStream;
 
   /// When should the plugin center the current location to the map.
   final CenterOnLocationUpdate centerOnLocationUpdate;

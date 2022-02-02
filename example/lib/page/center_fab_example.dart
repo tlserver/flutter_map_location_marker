@@ -12,13 +12,13 @@ class CenterFabExample extends StatefulWidget {
 
 class _CenterFabExampleState extends State<CenterFabExample> {
   late CenterOnLocationUpdate _centerOnLocationUpdate;
-  late StreamController<double> _centerCurrentLocationStreamController;
+  late StreamController<double?> _centerCurrentLocationStreamController;
 
   @override
   void initState() {
     super.initState();
     _centerOnLocationUpdate = CenterOnLocationUpdate.always;
-    _centerCurrentLocationStreamController = StreamController<double>();
+    _centerCurrentLocationStreamController = StreamController<double?>();
   }
 
   @override
