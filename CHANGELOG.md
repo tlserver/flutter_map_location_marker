@@ -13,6 +13,11 @@
 * [LocationMarkerPlugin()] do not accept `locationSettings` parameters anymore. If this settings need to be changed, see [this example](../example/lib/page/geolocator_settings_example.dart)
 * [LocationMarkerLayerOptions()] now accept `positionStream` and `headingStream` parameters so the application have more control of these streams.
 
+## [2.1.0] - Improve behavior
+
+* Accept callback for handling geolocator error
+* Resubscribe position stream on location settings change
+
 ## [2.0.2] - Improve naming
 
 * Rename [CenterOnLocationUpdate.first] to [CenterOnLocationUpdate.once]
