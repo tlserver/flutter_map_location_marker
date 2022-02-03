@@ -18,7 +18,7 @@ class _SelectableDistanceFilterExampleState
   int _selectedIndex = 0;
 
   late StreamController<LocationMarkerPosition> positionStream;
-  late StreamSubscription<LocationMarkerPosition> streamSubscription;
+  late StreamSubscription<LocationMarkerPosition?> streamSubscription;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _SelectableDistanceFilterExampleState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Distance Filter:"),
+                  Text('Distance Filter:'),
                   ToggleButtons(
                     children: distanceFilters
                         .map((distance) => Text(distance.toString()))

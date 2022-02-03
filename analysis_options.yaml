@@ -1,0 +1,57 @@
+include: package:lint/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "example/**"
+
+linter:
+  rules:
+    # ------ Disable individual rules ----- #
+    #                 ---                   #
+    # Turn off what you don't like.         #
+    # ------------------------------------- #
+
+    # Use parameter order as in json response
+    always_put_required_named_parameters_first: true
+
+    # Util classes are awesome!
+    avoid_classes_with_only_static_members: false
+
+    # ------ Enable individual rules ------ #
+    #                 ---                   #
+    # These rules here are good but too     #
+    # opinionated to enable them by default #
+    # ------------------------------------- #
+
+    # Make constructors the first thing in every class
+    sort_constructors_first: true
+
+    sort_pub_dependencies: false
+
+    # Good packages document everything
+    public_member_api_docs: true
+
+    # Blindly follow the Flutter code style, which prefers types everywhere
+    always_specify_types: false
+
+    prefer_single_quotes: true
+
+    # Back to the 80s
+    lines_longer_than_80_chars: true
+
+    always_declare_return_types: true
+    avoid_annotating_with_dynamic: true
+    annotate_overrides: true
+    avoid_unused_constructor_parameters: true
+    avoid_empty_else: true
+    avoid_print: true
+    unnecessary_parenthesis: true
+    curly_braces_in_flow_control_structures: false
+    avoid_function_literals_in_foreach_calls: false
+    empty_catches: true
+    always_use_package_imports: true
+    no_logic_in_create_state: false
+    avoid_setters_without_getters: false
+    use_key_in_widget_constructors: true

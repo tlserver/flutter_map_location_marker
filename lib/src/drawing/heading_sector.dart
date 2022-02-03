@@ -1,24 +1,31 @@
-import 'dart:math' as Math;
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+/// [CustomPainter] that draws the heading of the device
 class HeadingSector extends CustomPainter {
-  final Color color;
-  final double heading;
-  final double accuracy;
-
+  /// [CustomPainter] that draws the heading of the device
   HeadingSector(this.color, this.heading, this.accuracy);
+
+  /// The color of the heading
+  final Color color;
+
+  /// Where the heading is pointing
+  final double heading;
+
+  /// The accuracy of the position
+  final double accuracy;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final radius = Math.min(size.width, size.height) / 2;
+    final radius = math.min(size.width, size.height) / 2;
     final rect = Rect.fromCircle(
       center: Offset(radius, radius),
       radius: radius,
     );
     canvas.drawArc(
       rect,
-      Math.pi * 3 / 2 + heading - accuracy,
+      math.pi * 3 / 2 + heading - accuracy,
       accuracy * 2,
       true,
       Paint()

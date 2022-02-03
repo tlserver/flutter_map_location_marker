@@ -1,30 +1,35 @@
+// ignore_for_file: prefer_void_to_null
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map_location_marker/src/center_on_location_update.dart';
+import 'package:flutter_map_location_marker/src/data.dart';
+import 'package:flutter_map_location_marker/src/drawing/heading_sector.dart';
+import 'package:flutter_map_location_marker/src/layer_options.dart';
+import 'package:flutter_map_location_marker/src/plugin.dart';
+import 'package:flutter_map_location_marker/src/tween.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'center_on_location_update.dart';
-import 'data.dart';
-import 'drawing/heading_sector.dart';
-import 'layer_options.dart';
-import 'plugin.dart';
-import 'tween.dart';
-
+/// The layer [FlutterMap] will build
 class LocationMarkerLayer extends StatefulWidget {
-  final LocationMarkerPlugin plugin;
-  final LocationMarkerLayerOptions? locationMarkerOpts;
-  final MapState map;
-  final Stream<Null> stream;
-
+  /// The layer [FlutterMap] will build
   LocationMarkerLayer(
     this.plugin,
     this.locationMarkerOpts,
     this.map,
     this.stream,
-  ) : super(
-          key: locationMarkerOpts?.key,
-        );
+  ) : super(key: locationMarkerOpts?.key);
+
+  // ignore: public_member_api_docs
+  final LocationMarkerPlugin plugin;
+  // ignore: public_member_api_docs
+  final LocationMarkerLayerOptions? locationMarkerOpts;
+  // ignore: public_member_api_docs
+  final MapState map;
+  // ignore: public_member_api_docs
+  final Stream<Null> stream;
 
   @override
   _LocationMarkerLayerState createState() => _LocationMarkerLayerState();
@@ -35,7 +40,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   late LocationMarkerLayerOptions _locationMarkerOpts;
   late bool _isFirstLocationUpdate;
   LocationMarkerPosition? _currentPosition;
-  late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
+  late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
   double? _centeringZoom;
 
   /// A stream for centering single that also include a zoom level
@@ -47,15 +52,16 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     super.initState();
     _locationMarkerOpts =
         widget.locationMarkerOpts ?? LocationMarkerLayerOptions();
+
     _isFirstLocationUpdate = true;
     _positionStreamSubscription = _subscriptPositionStream();
     _centerCurrentLocationStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
         _moveMap(
-                LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                zoom)
-            .whenComplete(() => _centeringZoom = null);
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          zoom,
+        ).whenComplete(() => _centeringZoom = null);
         _centeringZoom = zoom;
       }
     });
@@ -83,7 +89,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     super.dispose();
   }
 
-  StreamSubscription<LocationMarkerPosition> _subscriptPositionStream() {
+  StreamSubscription<LocationMarkerPosition?> _subscriptPositionStream() {
     return _locationMarkerOpts.positionStream.listen((position) {
       setState(() => _currentPosition = position);
 
@@ -100,10 +106,12 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
           centerCurrentLocation = false;
           break;
       }
+
       if (centerCurrentLocation) {
         _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            _centeringZoom);
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          _centeringZoom,
+        );
       }
     })
       ..onError((_) => setState(() => _currentPosition = null));
@@ -111,25 +119,23 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
 
   @override
   Widget build(BuildContext context) {
-    if (_currentPosition != null) {
-      if (_locationMarkerOpts.markerAnimationDuration == Duration.zero) {
-        return _buildLocationMarker(_currentPosition!);
-      } else {
-        return TweenAnimationBuilder(
-          tween: LocationMarkerPositionTween(
-              begin: _currentPosition!, end: _currentPosition!),
-          duration: _locationMarkerOpts.markerAnimationDuration,
-          builder: (BuildContext context, LocationMarkerPosition position,
-              Widget? child) {
-            return _buildLocationMarker(position);
-          },
-        );
-      }
-    } else {
-      return SizedBox.shrink();
+    if (_currentPosition == null) return const SizedBox.shrink();
+
+    if (_locationMarkerOpts.markerAnimationDuration != Duration.zero) {
+      return TweenAnimationBuilder<LocationMarkerPosition>(
+        tween: LocationMarkerPositionTween(
+          begin: _currentPosition!,
+          end: _currentPosition!,
+        ),
+        duration: _locationMarkerOpts.markerAnimationDuration,
+        builder: (context, position, child) => _buildLocationMarker(position),
+      );
     }
+
+    return _buildLocationMarker(_currentPosition!);
   }
 
+  /// Builds the location marker with a valorized [position]
   Widget _buildLocationMarker(LocationMarkerPosition position) {
     final latLng = position.latLng;
     final diameter = _locationMarkerOpts.headingSectorRadius * 2;
@@ -154,41 +160,32 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                   point: latLng,
                   width: diameter,
                   height: diameter,
-                  builder: (_) {
-                    return IgnorePointer(
-                      ignoring: true,
-                      child: StreamBuilder(
-                        stream: _locationMarkerOpts.headingStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<LocationMarkerHeading> snapshot) {
-                          if (snapshot.hasData) {
-                            return TweenAnimationBuilder(
-                                tween: LocationMarkerHeadingTween(
-                                  begin: snapshot.data!,
-                                  end: snapshot.data!,
-                                ),
-                                duration:
-                                    _locationMarkerOpts.markerAnimationDuration,
-                                builder: (BuildContext context,
-                                    LocationMarkerHeading heading,
-                                    Widget? child) {
-                                  return CustomPaint(
-                                    size: Size.fromRadius(_locationMarkerOpts
-                                        .headingSectorRadius),
-                                    painter: HeadingSector(
-                                      _locationMarkerOpts.headingSectorColor,
-                                      heading.heading,
-                                      heading.accuracy,
-                                    ),
-                                  );
-                                });
-                          } else {
-                            return SizedBox.shrink();
-                          }
-                        },
-                      ),
-                    );
-                  },
+                  builder: (_) => IgnorePointer(
+                    child: StreamBuilder<LocationMarkerHeading>(
+                      stream: _locationMarkerOpts.headingStream,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return const SizedBox.shrink();
+
+                        return TweenAnimationBuilder<LocationMarkerHeading>(
+                          tween: LocationMarkerHeadingTween(
+                            begin: snapshot.data!,
+                            end: snapshot.data!,
+                          ),
+                          duration: _locationMarkerOpts.markerAnimationDuration,
+                          builder: (context, heading, child) => CustomPaint(
+                            size: Size.fromRadius(
+                              _locationMarkerOpts.headingSectorRadius,
+                            ),
+                            painter: HeadingSector(
+                              _locationMarkerOpts.headingSectorColor,
+                              heading.heading,
+                              heading.accuracy,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
               Marker(
                 point: latLng,
