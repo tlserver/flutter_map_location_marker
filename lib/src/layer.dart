@@ -94,26 +94,27 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   StreamSubscription<LocationMarkerPosition?> _subscriptPositionStream() {
     return _locationMarkerOpts.positionStream.listen((position) {
       setState(() => _currentPosition = position);
+      if (position != null) {
+        bool centerCurrentLocation;
+        switch (widget.plugin.centerOnLocationUpdate) {
+          case CenterOnLocationUpdate.always:
+            centerCurrentLocation = true;
+            break;
+          case CenterOnLocationUpdate.once:
+            centerCurrentLocation = _isFirstLocationUpdate;
+            _isFirstLocationUpdate = false;
+            break;
+          case CenterOnLocationUpdate.never:
+            centerCurrentLocation = false;
+            break;
+        }
 
-      bool centerCurrentLocation;
-      switch (widget.plugin.centerOnLocationUpdate) {
-        case CenterOnLocationUpdate.always:
-          centerCurrentLocation = true;
-          break;
-        case CenterOnLocationUpdate.once:
-          centerCurrentLocation = _isFirstLocationUpdate;
-          _isFirstLocationUpdate = false;
-          break;
-        case CenterOnLocationUpdate.never:
-          centerCurrentLocation = false;
-          break;
-      }
-
-      if (centerCurrentLocation) {
-        _moveMap(
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-          _centeringZoom,
-        );
+        if (centerCurrentLocation) {
+          _moveMap(
+            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+            _centeringZoom,
+          );
+        }
       }
     })
       ..onError((_) => setState(() => _currentPosition = null));
