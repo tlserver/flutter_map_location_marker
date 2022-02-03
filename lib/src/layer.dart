@@ -89,6 +89,8 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
     super.dispose();
   }
 
+  /// Registers a listener to the position stream of the
+  /// [LocationMarkerLayerOptions] given
   StreamSubscription<LocationMarkerPosition?> _subscriptPositionStream() {
     return _locationMarkerOpts.positionStream.listen((position) {
       setState(() => _currentPosition = position);
