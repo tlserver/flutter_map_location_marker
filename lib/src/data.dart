@@ -33,7 +33,9 @@ class LocationMarkerPosition {
   LatLng get latLng => LatLng(latitude, longitude);
 
   @override
-  String toString() => "LocationMarkerPosition(lat: $latitude, lng: $longitude, accuracy: $accuracy)";
+  String toString() =>
+      // ignore: lines_longer_than_80_chars
+      'LocationMarkerPosition(lat: $latitude, lng: $longitude, accuracy: $accuracy)';
 }
 
 /// The Heading of the device
