@@ -63,7 +63,7 @@ class _SelectableDistanceFilterExampleState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Distance Filter:"),
+                  Text('Distance Filter:'),
                   ToggleButtons(
                     children: distanceFilters
                         .map((distance) => Text(distance.toString()))

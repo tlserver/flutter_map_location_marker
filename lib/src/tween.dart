@@ -49,7 +49,7 @@ double _doubleLerp(double begin, double end, double t) =>
     begin + (end - begin) * t;
 
 double _radiusLerp(double begin, double end, double t) {
-  final twoPi = 2 * Math.pi;
+  const twoPi = 2 * Math.pi;
   begin = begin % twoPi;
   end = end % twoPi;
 
