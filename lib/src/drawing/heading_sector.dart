@@ -36,6 +36,8 @@ class HeadingSector extends CustomPainter {
 
   @override
   bool shouldRepaint(HeadingSector oldDelegate) {
-    return oldDelegate.color == color;
+    return oldDelegate.color != color ||
+        oldDelegate.heading != heading ||
+        oldDelegate.accuracy != accuracy;
   }
 }
