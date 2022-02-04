@@ -1,14 +1,19 @@
 import 'dart:async';
-import 'dart:math' as Math;
 
 import 'package:flutter_compass/flutter_compass.dart';
-import 'package:flutter_map_location_marker/src/data.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'data.dart';
+
+/// Helper class for converting the data stream which provide data in required
+/// format from stream created by some existing plugin.
 class LocationMarkerDataStreamFactory {
+  /// Create a LocationMarkerDataStreamFactory.
   const LocationMarkerDataStreamFactory();
 
+  /// Create a position stream from
+  /// [geolocator](https://pub.dev/packages/geolocator).
   Stream<LocationMarkerPosition> geolocatorPositionStream({
     Stream<Position>? stream,
   }) {
@@ -21,13 +26,15 @@ class LocationMarkerDataStreamFactory {
     });
   }
 
+  /// Create a heading stream from
+  /// [flutter_compass](https://pub.dev/packages/flutter_compass).
   Stream<LocationMarkerHeading> compassHeadingStream({
     Stream<CompassEvent>? stream,
-    double minAccuracy = Math.pi * 0.1,
-    double defAccuracy = Math.pi * 0.3,
-    double maxAccuracy = Math.pi * 0.4,
+    double minAccuracy = pi * 0.1,
+    double defAccuracy = pi * 0.3,
+    double maxAccuracy = pi * 0.4,
   }) {
-    return (stream ?? FlutterCompass.events ?? Stream.empty())
+    return (stream ?? FlutterCompass.events ?? const Stream.empty())
         .where((CompassEvent compassEvent) => compassEvent.heading != null)
         .map((CompassEvent compassEvent) {
       return LocationMarkerHeading(

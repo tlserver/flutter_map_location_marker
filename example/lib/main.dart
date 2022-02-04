@@ -23,7 +23,7 @@ class Home extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            title: Text('Center Fab Example'),
+            title: const Text('Center Fab Example'),
             onTap: () {
               Navigator.push(
                 context,
@@ -34,7 +34,7 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Customize Marker Example'),
+            title: const Text('Customize Marker Example'),
             onTap: () {
               Navigator.push(
                 context,
@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Geolocator Settings Example'),
+            title: const Text('Geolocator Settings Example'),
             onTap: () {
               Navigator.push(
                 context,
@@ -57,7 +57,7 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Selectable Distance Filter Example'),
+            title: const Text('Selectable Distance Filter Example'),
             onTap: () {
               Navigator.push(
                 context,
@@ -69,7 +69,7 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Custom Stream Example'),
+            title: const Text('Custom Stream Example'),
             onTap: () {
               Navigator.push(
                 context,
@@ -80,7 +80,7 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Minimum Example'),
+            title: const Text('Minimum Example'),
             onTap: () {
               Navigator.push(
                 context,
@@ -91,7 +91,7 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Old Style Example'),
+            title: const Text('Old Style Example'),
             onTap: () {
               Navigator.push(
                 context,

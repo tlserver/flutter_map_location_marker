@@ -43,6 +43,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
   /// The duration of the animation of location update.
   final Duration markerAnimationDuration;
 
+  /// Create a LocationMarkerLayerOptions.
   LocationMarkerLayerOptions({
     Key? key,
     Stream<LocationMarkerPosition>? positionStream,
@@ -57,9 +58,9 @@ class LocationMarkerLayerOptions extends LayerOptions {
     this.markerAnimationDuration = const Duration(milliseconds: 200),
     Stream<Null>? rebuild,
   })  : positionStream = positionStream ??
-            LocationMarkerDataStreamFactory().geolocatorPositionStream(),
+            const LocationMarkerDataStreamFactory().geolocatorPositionStream(),
         headingStream = headingStream ??
-            LocationMarkerDataStreamFactory().compassHeadingStream(),
+            const LocationMarkerDataStreamFactory().compassHeadingStream(),
         super(
           key: key,
           rebuild: rebuild,

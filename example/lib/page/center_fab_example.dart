@@ -33,16 +33,18 @@ class _CenterFabExampleState extends State<CenterFabExample> {
       children: [
         FlutterMap(
           options: MapOptions(
-              center: LatLng(0, 0),
-              zoom: 1,
-              maxZoom: 19,
-              // Stop centering the location marker on the map if user interacted with the map.
-              onPositionChanged: (MapPosition position, bool hasGesture) {
-                if (hasGesture) {
-                  setState(() =>
-                      _centerOnLocationUpdate = CenterOnLocationUpdate.never);
-                }
-              }),
+            center: LatLng(0, 0),
+            zoom: 1,
+            maxZoom: 19,
+            // Stop centering the location marker on the map if user interacted with the map.
+            onPositionChanged: (MapPosition position, bool hasGesture) {
+              if (hasGesture) {
+                setState(
+                  () => _centerOnLocationUpdate = CenterOnLocationUpdate.never,
+                );
+              }
+            },
+          ),
           children: [
             TileLayerWidget(
               options: TileLayerOptions(
@@ -67,12 +69,13 @@ class _CenterFabExampleState extends State<CenterFabExample> {
           child: FloatingActionButton(
             onPressed: () {
               // Automatically center the location marker on the map when location updated until user interact with the map.
-              setState(() =>
-                  _centerOnLocationUpdate = CenterOnLocationUpdate.always);
+              setState(
+                () => _centerOnLocationUpdate = CenterOnLocationUpdate.always,
+              );
               // Center the location marker on the map and zoom the map to level 18.
               _centerCurrentLocationStreamController.add(18);
             },
-            child: Icon(
+            child: const Icon(
               Icons.my_location,
               color: Colors.white,
             ),

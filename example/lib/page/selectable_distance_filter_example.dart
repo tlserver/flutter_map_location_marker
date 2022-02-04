@@ -63,11 +63,8 @@ class _SelectableDistanceFilterExampleState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Distance Filter:'),
+                  const Text("Distance Filter:"),
                   ToggleButtons(
-                    children: distanceFilters
-                        .map((distance) => Text(distance.toString()))
-                        .toList(growable: false),
                     isSelected: List.generate(
                       distanceFilters.length,
                       (index) => index == _selectedIndex,
@@ -78,6 +75,9 @@ class _SelectableDistanceFilterExampleState
                       streamSubscription.cancel();
                       _subscriptPositionStream();
                     },
+                    children: distanceFilters
+                        .map((distance) => Text(distance.toString()))
+                        .toList(growable: false),
                   ),
                 ],
               ),

@@ -12,7 +12,7 @@ class OldStyleExample extends StatelessWidget {
         zoom: 1,
         maxZoom: 19,
         plugins: [
-          LocationMarkerPlugin(),
+          const LocationMarkerPlugin(),
         ],
       ),
       layers: [

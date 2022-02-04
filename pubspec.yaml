@@ -15,8 +15,9 @@ dependencies:
   latlong2: ^0.8.1
 
 dev_dependencies:
+  flutter_joystick: ^0.0.2
   flutter_test:
     sdk: flutter
-  flutter_joystick: ^0.0.2
+  lint: ^1.8.2
 
 flutter:

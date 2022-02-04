@@ -22,7 +22,7 @@ class CustomizeMarkerExample extends StatelessWidget {
         ),
         LocationMarkerLayerWidget(
           options: LocationMarkerLayerOptions(
-            marker: DefaultLocationMarker(
+            marker: const DefaultLocationMarker(
               color: Colors.green,
               child: Icon(
                 Icons.person,

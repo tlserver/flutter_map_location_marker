@@ -11,12 +11,21 @@ import 'layer_options.dart';
 import 'plugin.dart';
 import 'tween.dart';
 
+/// A layer for location marker in [FlutterMap].
 class LocationMarkerLayer extends StatefulWidget {
+  /// A [LocationMarkerPlugin] instance.
   final LocationMarkerPlugin plugin;
+
+  /// Options for drawing this layer.
   final LocationMarkerLayerOptions? locationMarkerOpts;
+
+  /// The map that should this layer be drawn.
   final MapState map;
+
+  /// A rebuild signal stream for GroupLayer. See [GroupLayer.stream].
   final Stream<Null> stream;
 
+  /// Create a LocationMarkerLayer.
   LocationMarkerLayer(
     this.plugin,
     this.locationMarkerOpts,
@@ -27,10 +36,11 @@ class LocationMarkerLayer extends StatefulWidget {
         );
 
   @override
-  _LocationMarkerLayerState createState() => _LocationMarkerLayerState();
+  LocationMarkerLayerState createState() => LocationMarkerLayerState();
 }
 
-class _LocationMarkerLayerState extends State<LocationMarkerLayer>
+/// The logic and internal state for a [LocationMarkerLayer].
+class LocationMarkerLayerState extends State<LocationMarkerLayer>
     with TickerProviderStateMixin {
   late LocationMarkerLayerOptions _locationMarkerOpts;
   late bool _isFirstLocationUpdate;
@@ -38,7 +48,7 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
   late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
   double? _centeringZoom;
 
-  /// A stream for centering single that also include a zoom level
+  /// A stream for centering single that also include a zoom level.
   StreamSubscription<double?>? _centerCurrentLocationStreamSubscription;
   AnimationController? _animationController;
 
@@ -53,9 +63,9 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
         widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
         _moveMap(
-                LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                zoom)
-            .whenComplete(() => _centeringZoom = null);
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          zoom,
+        ).whenComplete(() => _centeringZoom = null);
         _centeringZoom = zoom;
       }
     });
@@ -102,8 +112,9 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
       }
       if (centerCurrentLocation) {
         _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            _centeringZoom);
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          _centeringZoom,
+        );
       }
     })
       ..onError((_) => setState(() => _currentPosition = null));
@@ -117,16 +128,21 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
       } else {
         return TweenAnimationBuilder(
           tween: LocationMarkerPositionTween(
-              begin: _currentPosition!, end: _currentPosition!),
+            begin: _currentPosition!,
+            end: _currentPosition!,
+          ),
           duration: _locationMarkerOpts.markerAnimationDuration,
-          builder: (BuildContext context, LocationMarkerPosition position,
-              Widget? child) {
+          builder: (
+            BuildContext context,
+            LocationMarkerPosition position,
+            Widget? child,
+          ) {
             return _buildLocationMarker(position);
           },
         );
       }
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 
@@ -156,34 +172,39 @@ class _LocationMarkerLayerState extends State<LocationMarkerLayer>
                   height: diameter,
                   builder: (_) {
                     return IgnorePointer(
-                      ignoring: true,
                       child: StreamBuilder(
                         stream: _locationMarkerOpts.headingStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<LocationMarkerHeading> snapshot) {
+                        builder: (
+                          BuildContext context,
+                          AsyncSnapshot<LocationMarkerHeading> snapshot,
+                        ) {
                           if (snapshot.hasData) {
                             return TweenAnimationBuilder(
-                                tween: LocationMarkerHeadingTween(
-                                  begin: snapshot.data!,
-                                  end: snapshot.data!,
-                                ),
-                                duration:
-                                    _locationMarkerOpts.markerAnimationDuration,
-                                builder: (BuildContext context,
-                                    LocationMarkerHeading heading,
-                                    Widget? child) {
-                                  return CustomPaint(
-                                    size: Size.fromRadius(_locationMarkerOpts
-                                        .headingSectorRadius),
-                                    painter: HeadingSector(
-                                      _locationMarkerOpts.headingSectorColor,
-                                      heading.heading,
-                                      heading.accuracy,
-                                    ),
-                                  );
-                                });
+                              tween: LocationMarkerHeadingTween(
+                                begin: snapshot.data!,
+                                end: snapshot.data!,
+                              ),
+                              duration:
+                                  _locationMarkerOpts.markerAnimationDuration,
+                              builder: (
+                                BuildContext context,
+                                LocationMarkerHeading heading,
+                                Widget? child,
+                              ) {
+                                return CustomPaint(
+                                  size: Size.fromRadius(
+                                    _locationMarkerOpts.headingSectorRadius,
+                                  ),
+                                  painter: HeadingSector(
+                                    _locationMarkerOpts.headingSectorColor,
+                                    heading.heading,
+                                    heading.accuracy,
+                                  ),
+                                );
+                              },
+                            );
                           } else {
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
                         },
                       ),

@@ -26,7 +26,7 @@ class GeolocatorSettingsExample extends StatelessWidget {
             positionStream: const LocationMarkerDataStreamFactory()
                 .geolocatorPositionStream(
               stream: Geolocator.getPositionStream(
-                locationSettings: LocationSettings(
+                locationSettings: const LocationSettings(
                   accuracy: LocationAccuracy.medium,
                   distanceFilter: 50,
                   timeLimit: Duration(minutes: 1),

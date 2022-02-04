@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:math' as Math;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
@@ -24,16 +24,20 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
   void initState() {
     super.initState();
     positionStreamController = StreamController()
-      ..add(LocationMarkerPosition(
-        latitude: currentLat,
-        longitude: currentLng,
-        accuracy: 0,
-      ));
+      ..add(
+        LocationMarkerPosition(
+          latitude: currentLat,
+          longitude: currentLng,
+          accuracy: 0,
+        ),
+      );
     headingStreamController = StreamController()
-      ..add(LocationMarkerHeading(
-        heading: 0,
-        accuracy: Math.pi * 0.2,
-      ));
+      ..add(
+        LocationMarkerHeading(
+          heading: 0,
+          accuracy: pi * 0.2,
+        ),
+      );
   }
 
   @override
@@ -73,23 +77,29 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
         Positioned(
           right: 20,
           bottom: 20,
-          child: Joystick(listener: (details) {
-            currentLat -= details.y;
-            currentLat = currentLat.clamp(-90, 90);
-            currentLng += details.x;
-            currentLng = currentLng.clamp(-180, 180);
-            positionStreamController.add(LocationMarkerPosition(
-              latitude: currentLat,
-              longitude: currentLng,
-              accuracy: 0,
-            ));
-            if (details.x != 0 || details.y != 0) {
-              headingStreamController.add(LocationMarkerHeading(
-                heading: Math.atan2(details.y, details.x) + Math.pi * 0.5,
-                accuracy: Math.pi * 0.2,
-              ));
-            }
-          }),
+          child: Joystick(
+            listener: (details) {
+              currentLat -= details.y;
+              currentLat = currentLat.clamp(-90, 90);
+              currentLng += details.x;
+              currentLng = currentLng.clamp(-180, 180);
+              positionStreamController.add(
+                LocationMarkerPosition(
+                  latitude: currentLat,
+                  longitude: currentLng,
+                  accuracy: 0,
+                ),
+              );
+              if (details.x != 0 || details.y != 0) {
+                headingStreamController.add(
+                  LocationMarkerHeading(
+                    heading: atan2(details.y, details.x) + pi * 0.5,
+                    accuracy: pi * 0.2,
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ],
     );

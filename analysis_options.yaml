@@ -1,0 +1,13 @@
+# This file configures the analyzer to use the lint rule set from `package:lint`
+include: package:lint/analysis_options_package.yaml
+
+analyzer:
+  exclude:
+
+linter:
+  rules:
+    always_use_package_imports: false
+    public_member_api_docs: true
+    prefer_relative_imports: true
+    prefer_single_quotes: true
+    prefer_void_to_null: false
