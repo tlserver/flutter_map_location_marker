@@ -36,6 +36,9 @@ class _SelectableDistanceFilterExampleState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Selectable Distance Filter Example'),
+      ),
       body: FlutterMap(
         options: MapOptions(
           center: LatLng(0, 0),
@@ -97,8 +100,10 @@ class _SelectableDistanceFilterExampleState
         ),
       ),
     )
-        .listen((position) {
-      positionStream.add(position);
-    });
+        .listen(
+      (position) {
+        positionStream.add(position);
+      },
+    );
   }
 }

@@ -49,59 +49,64 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        FlutterMap(
-          options: MapOptions(
-            center: LatLng(0, 0),
-            zoom: 1,
-            maxZoom: 19,
-          ),
-          children: [
-            TileLayerWidget(
-              options: TileLayerOptions(
-                urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: ['a', 'b', 'c'],
-                maxZoom: 19,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Custom Stream Example'),
+      ),
+      body: Stack(
+        children: [
+          FlutterMap(
+            options: MapOptions(
+              center: LatLng(0, 0),
+              zoom: 1,
+              maxZoom: 19,
             ),
-            LocationMarkerLayerWidget(
-              options: LocationMarkerLayerOptions(
-                positionStream: positionStreamController.stream,
-                headingStream: headingStreamController.stream,
-              ),
-            ),
-          ],
-        ),
-        Positioned(
-          right: 20,
-          bottom: 20,
-          child: Joystick(
-            listener: (details) {
-              currentLat -= details.y;
-              currentLat = currentLat.clamp(-90, 90);
-              currentLng += details.x;
-              currentLng = currentLng.clamp(-180, 180);
-              positionStreamController.add(
-                LocationMarkerPosition(
-                  latitude: currentLat,
-                  longitude: currentLng,
-                  accuracy: 0,
+            children: [
+              TileLayerWidget(
+                options: TileLayerOptions(
+                  urlTemplate:
+                      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  subdomains: ['a', 'b', 'c'],
+                  maxZoom: 19,
                 ),
-              );
-              if (details.x != 0 || details.y != 0) {
-                headingStreamController.add(
-                  LocationMarkerHeading(
-                    heading: atan2(details.y, details.x) + pi * 0.5,
-                    accuracy: pi * 0.2,
+              ),
+              LocationMarkerLayerWidget(
+                options: LocationMarkerLayerOptions(
+                  positionStream: positionStreamController.stream,
+                  headingStream: headingStreamController.stream,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            right: 20,
+            bottom: 20,
+            child: Joystick(
+              listener: (details) {
+                currentLat -= details.y;
+                currentLat = currentLat.clamp(-90, 90);
+                currentLng += details.x;
+                currentLng = currentLng.clamp(-180, 180);
+                positionStreamController.add(
+                  LocationMarkerPosition(
+                    latitude: currentLat,
+                    longitude: currentLng,
+                    accuracy: 0,
                   ),
                 );
-              }
-            },
+                if (details.x != 0 || details.y != 0) {
+                  headingStreamController.add(
+                    LocationMarkerHeading(
+                      heading: atan2(details.y, details.x) + pi * 0.5,
+                      accuracy: pi * 0.2,
+                    ),
+                  );
+                }
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

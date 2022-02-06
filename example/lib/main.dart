@@ -23,7 +23,7 @@ class Home extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            title: const Text('Center Fab Example'),
+            title: const Text('Center FAB Example'),
             onTap: () {
               Navigator.push(
                 context,
