@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_compass: ^0.7.0
   flutter_map: ^0.14.0
-  geolocator: ^8.0.5
+  geolocator: ^8.1.1
   latlong2: ^0.8.1
 
 dev_dependencies:
