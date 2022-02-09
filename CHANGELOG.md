@@ -1,3 +1,11 @@
+## [3.0.2] - Update documentation
+
+* Update documentation
+* Update example project
+* Fix heading sector repaint condition
+
+Thank to Simone Masoero
+
 ## [3.0.1] - Fix Bug
 
 * Fix heading sector spin unexpectedly
