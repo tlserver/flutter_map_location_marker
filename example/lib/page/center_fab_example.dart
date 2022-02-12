@@ -33,41 +33,38 @@ class _CenterFabExampleState extends State<CenterFabExample> {
       appBar: AppBar(
         title: const Text('Center FAB Example'),
       ),
-      body: Stack(
+      body: FlutterMap(
+        options: MapOptions(
+          center: LatLng(0, 0),
+          zoom: 1,
+          maxZoom: 19,
+          // Stop centering the location marker on the map if user interacted with the map.
+          onPositionChanged: (MapPosition position, bool hasGesture) {
+            if (hasGesture) {
+              setState(
+                () => _centerOnLocationUpdate = CenterOnLocationUpdate.never,
+              );
+            }
+          },
+        ),
+        // ignore: sort_child_properties_last
         children: [
-          FlutterMap(
-            options: MapOptions(
-              center: LatLng(0, 0),
-              zoom: 1,
+          TileLayerWidget(
+            options: TileLayerOptions(
+              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+              subdomains: ['a', 'b', 'c'],
               maxZoom: 19,
-              // Stop centering the location marker on the map if user interacted with the map.
-              onPositionChanged: (MapPosition position, bool hasGesture) {
-                if (hasGesture) {
-                  setState(
-                    () =>
-                        _centerOnLocationUpdate = CenterOnLocationUpdate.never,
-                  );
-                }
-              },
             ),
-            children: [
-              TileLayerWidget(
-                options: TileLayerOptions(
-                  urlTemplate:
-                      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: ['a', 'b', 'c'],
-                  maxZoom: 19,
-                ),
-              ),
-              LocationMarkerLayerWidget(
-                plugin: LocationMarkerPlugin(
-                  centerCurrentLocationStream:
-                      _centerCurrentLocationStreamController.stream,
-                  centerOnLocationUpdate: _centerOnLocationUpdate,
-                ),
-              ),
-            ],
           ),
+          LocationMarkerLayerWidget(
+            plugin: LocationMarkerPlugin(
+              centerCurrentLocationStream:
+                  _centerCurrentLocationStreamController.stream,
+              centerOnLocationUpdate: _centerOnLocationUpdate,
+            ),
+          ),
+        ],
+        nonRotatedChildren: [
           Positioned(
             right: 20,
             bottom: 20,
@@ -85,7 +82,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
                 color: Colors.white,
               ),
             ),
-          ),
+          )
         ],
       ),
     );

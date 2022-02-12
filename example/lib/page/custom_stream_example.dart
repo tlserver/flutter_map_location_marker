@@ -53,31 +53,29 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
       appBar: AppBar(
         title: const Text('Custom Stream Example'),
       ),
-      body: Stack(
+      body: FlutterMap(
+        options: MapOptions(
+          center: LatLng(0, 0),
+          zoom: 1,
+          maxZoom: 19,
+        ),
+        // ignore: sort_child_properties_last
         children: [
-          FlutterMap(
-            options: MapOptions(
-              center: LatLng(0, 0),
-              zoom: 1,
+          TileLayerWidget(
+            options: TileLayerOptions(
+              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+              subdomains: ['a', 'b', 'c'],
               maxZoom: 19,
             ),
-            children: [
-              TileLayerWidget(
-                options: TileLayerOptions(
-                  urlTemplate:
-                      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: ['a', 'b', 'c'],
-                  maxZoom: 19,
-                ),
-              ),
-              LocationMarkerLayerWidget(
-                options: LocationMarkerLayerOptions(
-                  positionStream: positionStreamController.stream,
-                  headingStream: headingStreamController.stream,
-                ),
-              ),
-            ],
           ),
+          LocationMarkerLayerWidget(
+            options: LocationMarkerLayerOptions(
+              positionStream: positionStreamController.stream,
+              headingStream: headingStreamController.stream,
+            ),
+          ),
+        ],
+        nonRotatedChildren: [
           Positioned(
             right: 20,
             bottom: 20,
