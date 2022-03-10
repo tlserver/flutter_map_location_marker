@@ -215,7 +215,10 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
                 point: latLng,
                 width: _locationMarkerOpts.markerSize.width,
                 height: _locationMarkerOpts.markerSize.height,
-                builder: (_) => _locationMarkerOpts.marker,
+                builder: (_) => Transform.rotate(
+                  angle: -widget.map.rotationRad,
+                  child: _locationMarkerOpts.marker,
+                ),
               ),
             ],
           ),
