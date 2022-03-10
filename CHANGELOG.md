@@ -1,3 +1,8 @@
+## [3.0.3] - Improve behavior
+
+* Change the [LocationMarkerLayerOptions.marker] widget pointing to always phone top instead of to north
+* Update dependencies
+
 ## [3.0.2] - Update documentation
 
 * Update documentation
@@ -101,6 +106,7 @@ Thank to Ondřej Synáček
 
 * Initial release.
 
+[LocationMarkerLayerOptions.marker]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerOptions/marker.html
 [LocationMarkerLayerOptions.positionStream]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerOptions/positionStream.html
 [LocationMarkerPlugin.centerCurrentLocationStream]: https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerPlugin/centerCurrentLocationStream.html
 [LocationMarkerPlugin()]: https://pub.dev/documentation/flutter_map_location_marker/2.0.1/flutter_map_location_marker/LocationMarkerPlugin/LocationMarkerPlugin.html
