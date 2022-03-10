@@ -1,3 +1,7 @@
+## [3.1.0] - Improve behavior
+
+* Add [LocationMarkerLayerOptions.markerDirection] option to define the behavior of the marker rotation
+
 ## [3.0.3] - Improve behavior
 
 * Change the [LocationMarkerLayerOptions.marker] widget pointing to always phone top instead of to north
