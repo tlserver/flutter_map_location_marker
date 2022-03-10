@@ -8,6 +8,7 @@ import 'center_on_location_update.dart';
 import 'data.dart';
 import 'drawing/heading_sector.dart';
 import 'layer_options.dart';
+import 'marker_direction.dart';
 import 'plugin.dart';
 import 'tween.dart';
 
@@ -215,10 +216,51 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
                 point: latLng,
                 width: _locationMarkerOpts.markerSize.width,
                 height: _locationMarkerOpts.markerSize.height,
-                builder: (_) => Transform.rotate(
-                  angle: -widget.map.rotationRad,
-                  child: _locationMarkerOpts.marker,
-                ),
+                builder: (_) {
+                  switch (_locationMarkerOpts.markerDirection) {
+                    case MarkerDirection.north:
+                      return _locationMarkerOpts.marker;
+                    case MarkerDirection.top:
+                      return Transform.rotate(
+                        angle: -widget.map.rotationRad,
+                        child: _locationMarkerOpts.marker,
+                      );
+                    case MarkerDirection.heading:
+                      return StreamBuilder(
+                        stream: _locationMarkerOpts.headingStream,
+                        builder: (
+                          BuildContext context,
+                          AsyncSnapshot<LocationMarkerHeading> snapshot,
+                        ) {
+                          if (snapshot.hasData) {
+                            return TweenAnimationBuilder(
+                              tween: LocationMarkerHeadingTween(
+                                begin: snapshot.data!,
+                                end: snapshot.data!,
+                              ),
+                              duration:
+                                  _locationMarkerOpts.markerAnimationDuration,
+                              builder: (
+                                BuildContext context,
+                                LocationMarkerHeading heading,
+                                Widget? child,
+                              ) {
+                                return Transform.rotate(
+                                  angle: heading.heading,
+                                  child: _locationMarkerOpts.marker,
+                                );
+                              },
+                            );
+                          } else {
+                            return Transform.rotate(
+                              angle: -widget.map.rotationRad,
+                              child: _locationMarkerOpts.marker,
+                            );
+                          }
+                        },
+                      );
+                  }
+                },
               ),
             ],
           ),

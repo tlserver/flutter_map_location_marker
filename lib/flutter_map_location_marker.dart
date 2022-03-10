@@ -9,4 +9,5 @@ export 'src/drawing/heading_sector.dart';
 export 'src/layer.dart';
 export 'src/layer_options.dart';
 export 'src/layer_widget.dart';
+export 'src/marker_direction.dart';
 export 'src/plugin.dart';

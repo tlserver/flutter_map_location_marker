@@ -6,6 +6,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'data.dart';
 import 'data_stream_factory.dart';
 import 'drawing/default_location_marker.dart';
+import 'marker_direction.dart';
 
 /// Describes the needed properties to create a location marker layer. Location
 /// marker layer is a compose layer, containing 3 widgets which are
@@ -24,6 +25,9 @@ class LocationMarkerLayerOptions extends LayerOptions {
 
   /// The size of main marker widget.
   final Size markerSize;
+
+  /// The direction of the marker.
+  final MarkerDirection markerDirection;
 
   /// Whether to show accuracy circle. Android define accuracy as the radius of
   /// 68% confidence so there is a 68% probability that the true location is
@@ -52,6 +56,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
     Stream<LocationMarkerHeading>? headingStream,
     this.marker = const DefaultLocationMarker(),
     this.markerSize = const Size(20, 20),
+    this.markerDirection = MarkerDirection.top,
     this.showAccuracyCircle = true,
     this.accuracyCircleColor = const Color.fromARGB(0x18, 0x21, 0x96, 0xF3),
     this.showHeadingSector = true,
