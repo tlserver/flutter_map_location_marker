@@ -24,7 +24,7 @@ class LocationMarkerLayer extends StatefulWidget {
   final MapState map;
 
   /// A rebuild signal stream for GroupLayer. See [GroupLayer.stream].
-  final Stream<Null> stream;
+  final Stream<void> stream;
 
   /// Create a LocationMarkerLayer.
   LocationMarkerLayer(

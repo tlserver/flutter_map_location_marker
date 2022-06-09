@@ -35,7 +35,7 @@ class LocationMarkerPlugin implements MapPlugin {
   Widget createLayer(
     LayerOptions options,
     MapState mapState,
-    Stream<Null> stream,
+    Stream<void> stream,
   ) {
     return LocationMarkerLayer(
       this,

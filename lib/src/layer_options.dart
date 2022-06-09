@@ -63,7 +63,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
     this.headingSectorRadius = 60,
     this.headingSectorColor = const Color.fromARGB(0xCC, 0x21, 0x96, 0xF3),
     this.markerAnimationDuration = const Duration(milliseconds: 200),
-    Stream<Null>? rebuild,
+    Stream<void>? rebuild,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory().geolocatorPositionStream(),
         headingStream = headingStream ??
