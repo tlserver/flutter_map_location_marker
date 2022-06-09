@@ -1,13 +1,18 @@
-## [3.1.0] - Improve behavior
+## [4.0.0] - Update Dependencies
+
+* __BRAKING CHANGE__ Change rebuilt signal streams' type from Stream<Null> to Stream<void>
+* Update dependencies
+
+## [3.1.0] - Improve Behavior
 
 * Add [LocationMarkerLayerOptions.markerDirection] option to define the behavior of the marker rotation
 
-## [3.0.3] - Improve behavior
+## [3.0.3] - Improve Behavior
 
 * Change the [LocationMarkerLayerOptions.marker] widget pointing to always phone top instead of to north
 * Update dependencies
 
-## [3.0.2] - Update documentation
+## [3.0.2] - Update Documentation
 
 * Update documentation
 * Update example project
@@ -32,14 +37,14 @@ Thank to Simone Masoero
 
 Thank to Ondřej Synáček
 
-## [2.1.0] - Improve behavior
+## [2.1.0] - Improve Behavior
 
 * Accept callback for handling geolocator error
 * Resubscribe position stream on location settings change
 
 Thank to Ondřej Synáček
 
-## [2.0.2] - Improve naming
+## [2.0.2] - Improve Naming
 
 * Rename [CenterOnLocationUpdate.first] to [CenterOnLocationUpdate.once]
 
