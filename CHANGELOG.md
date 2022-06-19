@@ -1,3 +1,7 @@
+## [4.0.1] - Update Dependencies
+
+* Update dependencies
+
 ## [4.0.0] - Update Dependencies
 
 * __BRAKING CHANGE__ Change rebuilt signal streams' type from Stream<Null> to Stream<void>
@@ -32,7 +36,7 @@ Thank to Simone Masoero
 ## [3.0.0] - Expose Position and Heading Streams
 
 * __BRAKING CHANGE__ Remove deprecated code
-* [LocationMarkerPlugin()] do not accept `locationSettings` parameters anymore. If this settings need to be changed, see [this example](../example/lib/page/geolocator_settings_example.dart)
+* [LocationMarkerPlugin()] do not accept `locationSettings` parameters anymore. If this settings need to be changed, see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart)
 * [LocationMarkerLayerOptions()] now accept `positionStream` and `headingStream` parameters so the application have more control of these streams.
 
 Thank to Ondřej Synáček
