@@ -9,10 +9,18 @@ A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying devi
 
 ## Features
 
-* **Customization**: The location marker can be fully customized. The colors of accuracy circle and
-header are also customizable.
+* **Simple**: The only thing to do is adding a `LocationMarkerLayerWidget()` in to your map because
+all parameters have good default values.
 
-* **Simple**: Not depend on other layer. No `MapController` or `MarkerLayer` are needed.
+* **Flexible**: The default implementation is receiving device's position from the
+[geolocator](https://pub.dev/packages/geolocator) package and receiving device's heading from the
+[flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
+streams from other source are also supported.
+
+* **Auto-centering**: The map center on the new location when location is updated.
+
+* **Customization**: The location marker can be fully customized, even the colors of accuracy circle
+and header.
 
 ## Usage
 
@@ -23,7 +31,8 @@ dependencies:
   flutter_map_location_marker: any // or latest verion
 ```
 
-Add permission, please follow the instruction from [geolocation](https://pub.dev/packages/geolocator) package.
+Add permission, please follow the instruction from
+[geolocator](https://pub.dev/packages/geolocator#permissions) package.
 
 Add the layer widget into `FlutterMap`:
 

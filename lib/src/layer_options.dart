@@ -10,7 +10,7 @@ import 'marker_direction.dart';
 
 /// Describes the needed properties to create a location marker layer. Location
 /// marker layer is a compose layer, containing 3 widgets which are
-/// 1) a accuracy circle (in a circle layer)
+/// 1) an accuracy circle (in a circle layer)
 /// 2) a heading sector (in a marker layer) and
 /// 3) a marker (in the same marker layer).
 class LocationMarkerLayerOptions extends LayerOptions {
