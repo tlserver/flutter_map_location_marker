@@ -37,7 +37,7 @@ class CustomizeMarkerExample extends StatelessWidget {
               accuracyCircleColor: Colors.green.withOpacity(0.1),
               headingSectorColor: Colors.green.withOpacity(0.8),
               headingSectorRadius: 120,
-              markerAnimationDuration: Duration.zero, // disable animation
+              moveAnimationDuration: Duration.zero, // disable animation
             ),
           ),
         ],
