@@ -51,26 +51,49 @@ class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
   }
 }
 
+/// A linear interpolation between a beginning and ending value for degree
+/// value. This value turn for both clockwise or anti-clockwise according to the
+/// shorter direction.
+class DegreeTween extends Tween<double> {
+  /// Creates a tween.
+  DegreeTween({
+    required double begin,
+    required double end,
+  }) : super(
+          begin: begin,
+          end: end,
+        );
+
+  @override
+  double lerp(double t) => _degreeLerp(begin!, end!, t);
+}
+
 double _doubleLerp(double begin, double end, double t) =>
     begin + (end - begin) * t;
 
-double _radiusLerp(double begin, double end, double t) {
-  const twoPi = 2 * pi;
+double _circularLerp(double begin, double end, double t, double oneCircle) {
+  final halfCircle = oneCircle / 2;
   // ignore: parameter_assignments
-  begin = begin % twoPi;
+  begin = begin % oneCircle;
   // ignore: parameter_assignments
-  end = end % twoPi;
+  end = end % oneCircle;
 
-  final compareResult = (end - begin).abs().compareTo(pi);
+  final compareResult = (end - begin).abs().compareTo(halfCircle);
   final crossZero =
-      compareResult == 1 || (compareResult == 0 && begin != end && begin >= pi);
+      compareResult == 1 || (compareResult == 0 && begin != end && begin >= halfCircle);
   if (crossZero) {
-    double shift(double value) {
-      return (value + pi) % twoPi;
+    double opposite(double value) {
+      return (value + halfCircle) % oneCircle;
     }
 
-    return shift(_doubleLerp(shift(begin), shift(end), t));
+    return opposite(_doubleLerp(opposite(begin), opposite(end), t));
   } else {
     return _doubleLerp(begin, end, t);
   }
 }
+
+double _degreeLerp(double begin, double end, double t) =>
+    _circularLerp(begin, end, t, 360);
+
+double _radiusLerp(double begin, double end, double t) =>
+    _circularLerp(begin, end, t, 2 * pi);
