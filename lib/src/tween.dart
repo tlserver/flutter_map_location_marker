@@ -18,8 +18,8 @@ class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
 
   @override
   LocationMarkerPosition lerp(double t) {
-    final begin = super.begin!;
-    final end = super.end!;
+    final begin = this.begin!;
+    final end = this.end!;
     return LocationMarkerPosition(
       latitude: _doubleLerp(begin.latitude, end.latitude, t),
       longitude: _doubleLerp(begin.longitude, end.longitude, t),
@@ -42,8 +42,8 @@ class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
 
   @override
   LocationMarkerHeading lerp(double t) {
-    final begin = super.begin!;
-    final end = super.end!;
+    final begin = this.begin!;
+    final end = this.end!;
     return LocationMarkerHeading(
       heading: _radiusLerp(begin.heading, end.heading, t),
       accuracy: _radiusLerp(begin.accuracy, end.accuracy, t),
