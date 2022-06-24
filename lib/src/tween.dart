@@ -29,7 +29,7 @@ class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
 }
 
 /// A linear interpolation between a beginning and ending value for
-/// `LocationMarkerHeadingTween`.
+/// `LocationMarkerHeading`.
 class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
   /// Creates a tween.
   LocationMarkerHeadingTween({

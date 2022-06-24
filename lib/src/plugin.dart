@@ -10,9 +10,9 @@ import 'layer_options.dart';
 /// A plugin that should be registered in [FlutterMap] in order to render
 /// [LocationMarkerLayer].
 class LocationMarkerPlugin implements MapPlugin {
-  /// The event stream for center current location. Add a zoom level into this
-  /// stream to center the current location at the provided zoom level or a null
-  /// if the zoom level should be unchanged.
+  /// The event stream for centering current location. Add a zoom level into
+  /// this stream to center the current location at the provided zoom level or a
+  /// null if the zoom level should be unchanged.
   ///
   /// For more details, see
   /// [CenterFabExample](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart).
