@@ -46,8 +46,17 @@ class LocationMarkerLayerOptions extends LayerOptions {
   /// The color of the heading sector.
   final Color headingSectorColor;
 
-  /// The duration of the animation of location update.
-  final Duration markerAnimationDuration;
+  /// The duration of the marker's move animation .
+  final Duration moveAnimationDuration;
+
+  /// The curve of the marker's move animation.
+  final Curve moveAnimationCurve;
+
+  /// The duration of the heading sector rotate animation.
+  final Duration rotateAnimationDuration;
+
+  /// The curve of the heading sector rotate animation.
+  final Curve rotateAnimationCurve;
 
   /// Create a LocationMarkerLayerOptions.
   LocationMarkerLayerOptions({
@@ -62,14 +71,31 @@ class LocationMarkerLayerOptions extends LayerOptions {
     this.showHeadingSector = true,
     this.headingSectorRadius = 60,
     this.headingSectorColor = const Color.fromARGB(0xCC, 0x21, 0x96, 0xF3),
-    this.markerAnimationDuration = const Duration(milliseconds: 200),
+    @Deprecated(
+      '`markerAnimationDuration` is split into `moveAnimationDuration` and `rotateAnimationDuration`',
+    )
+        Duration markerAnimationDuration = const Duration(milliseconds: 200),
+    Duration? moveAnimationDuration,
+    Duration? rotateAnimationDuration,
+    this.moveAnimationCurve = Curves.fastOutSlowIn,
+    this.rotateAnimationCurve = Curves.easeInOut,
     Stream<void>? rebuild,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory().geolocatorPositionStream(),
         headingStream = headingStream ??
             const LocationMarkerDataStreamFactory().compassHeadingStream(),
+        moveAnimationDuration =
+            moveAnimationDuration ?? markerAnimationDuration,
+        rotateAnimationDuration =
+            rotateAnimationDuration ?? markerAnimationDuration,
         super(
           key: key,
           rebuild: rebuild,
         );
+
+  /// The duration of the animation of location update.
+  @Deprecated(
+    '`markerAnimationDuration` is split into `moveAnimationDuration` and `rotateAnimationDuration`',
+  )
+  Duration get markerAnimationDuration => moveAnimationDuration;
 }

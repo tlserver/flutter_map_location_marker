@@ -11,3 +11,4 @@ export 'src/layer_options.dart';
 export 'src/layer_widget.dart';
 export 'src/marker_direction.dart';
 export 'src/plugin.dart';
+export 'src/turn_on_heading_update.dart';
