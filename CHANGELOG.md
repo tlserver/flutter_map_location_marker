@@ -1,3 +1,7 @@
+## [4.0.1+1] - Update Documentation
+
+* Update documentation
+
 ## [4.0.1] - Update Dependencies
 
 * Update dependencies
