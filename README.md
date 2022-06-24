@@ -19,6 +19,8 @@ streams from other source are also supported.
 
 * **Auto-centering**: The map center on the new location when location is updated.
 
+* **Auto-rotating**: The map can be rotated automatically as navigation mode.
+
 * **Customization**: The location marker can be fully customized, even the colors of accuracy circle
 and header.
 
