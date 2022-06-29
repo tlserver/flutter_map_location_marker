@@ -1,3 +1,8 @@
+## [4.1.1] - Update Dependencies
+
+* Update dependencies
+* Update documentation
+ 
 ## [4.1.0] - Improve Behavior
 
 * Support navigation mode, see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/navigation_example.dart)
