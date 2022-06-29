@@ -10,19 +10,19 @@ A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying devi
 ## Features
 
 * **Simple**: The only thing to do is adding a `LocationMarkerLayerWidget()` in to your map because
-all parameters have good default values.
+  all parameters have good default values.
 
 * **Flexible**: The default implementation is receiving device's position from the
-[geolocator](https://pub.dev/packages/geolocator) package and receiving device's heading from the
-[flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
-streams from other source are also supported.
+  [geolocator](https://pub.dev/packages/geolocator) package and receiving device's heading from the
+  [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
+  streams from other source are also supported.
 
 * **Auto-centering**: The map center on the new location when location is updated.
 
 * **Auto-rotating**: The map can be rotated automatically as navigation mode.
 
 * **Customization**: The location marker can be fully customized, even the colors of accuracy circle
-and header.
+  and header.
 
 ## Usage
 
@@ -77,17 +77,22 @@ Widget build(BuildContext context) {
 
 ## Examples
 
-1. [Marker Customization](./example/lib/page/customize_marker_example.dart)
-Change the marker to any widget you want.
+1. [Marker Customization](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/customize_marker_example.dart) :
+   Change the marker to any widget you want.
 
-2. [Floating Action Button for Centering Current Location](./example/lib/page/center_fab_example.dart)
-Use a floating action button to move and zoom the map to current location.
+2. [Floating Action Button for Centering Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart) :
+   Use a floating action button to move and zoom the map to current location.
 
-3. [Change Geolocator Settings](./example/lib/page/geolocator_settings_example.dart)
-Define Geolocator settings yourself.
+3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart) :
+   Define Geolocator settings yourself.
 
-4. [Selectable Distance Filter](./example/lib/page/selectable_distance_filter_example.dart)
-Change Geolocator settings at the runtime.
+4. [Selectable Distance Filter](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/selectable_distance_filter_example.dart) :
+   Change Geolocator settings at the runtime.
 
-5. [Custom Stream](./example/lib/page/custom_stream_example.dart)
-Use your own stream, such as position stream from other library or predefined route, as the source.
+5. [Custom Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/custom_stream_example.dart) :
+   Use your own stream, such as position stream from other library or predefined route, as the
+   source.
+
+6. [Navigation Mode](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/navigation_example.dart) :
+   Rotate the map to keep heading pointing upward.
+
