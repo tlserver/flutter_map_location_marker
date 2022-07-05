@@ -50,7 +50,7 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
   LocationMarkerPosition? _currentPosition;
   LocationMarkerHeading? _currentHeading;
   late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
-  late StreamSubscription<LocationMarkerHeading> _headingStreamSubscription;
+  StreamSubscription<LocationMarkerHeading>? _headingStreamSubscription;
   double? _centeringZoom;
 
   /// Subscription to a stream for centering single that also include a zoom level.
@@ -69,7 +69,9 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
     _isFirstLocationUpdate = true;
     _isFirstHeadingUpdate = true;
     _positionStreamSubscription = _subscriptPositionStream();
-    _headingStreamSubscription = _subscriptHeadingStream();
+    if (_locationMarkerOpts.showHeadingSector) {
+      _headingStreamSubscription = _subscriptHeadingStream();
+    }
     _centerCurrentLocationStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
@@ -101,7 +103,7 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
         _positionStreamSubscription = _subscriptPositionStream();
       }
       if (_locationMarkerOpts.headingStream != previousHeadingStream) {
-        _headingStreamSubscription.cancel();
+        _headingStreamSubscription?.cancel();
         _headingStreamSubscription = _subscriptHeadingStream();
       }
     }
@@ -110,7 +112,7 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
   @override
   void dispose() {
     _positionStreamSubscription.cancel();
-    _headingStreamSubscription.cancel();
+    _headingStreamSubscription?.cancel();
     _centerCurrentLocationStreamSubscription?.cancel();
     _turnHeadingUpStreamSubscription?.cancel();
     _centerCurrentLocationAnimationController?.dispose();
