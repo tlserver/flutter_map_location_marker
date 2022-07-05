@@ -39,6 +39,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
   final Color accuracyCircleColor;
 
   /// Whether to show the heading sector.
+  /// This is unsupported on web and this value will be ignored there.
   final bool showHeadingSector;
 
   /// The radius of the heading sector in pixels.
