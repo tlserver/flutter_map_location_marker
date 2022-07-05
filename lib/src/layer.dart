@@ -69,9 +69,8 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
     _isFirstLocationUpdate = true;
     _isFirstHeadingUpdate = true;
     _positionStreamSubscription = _subscriptPositionStream();
-    if (_locationMarkerOpts.showHeadingSector) {
-      _headingStreamSubscription = _subscriptHeadingStream();
-    }
+    _headingStreamSubscription = _subscriptHeadingStream();
+
     _centerCurrentLocationStreamSubscription =
         widget.plugin.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
@@ -147,8 +146,8 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
       ..onError((_) => setState(() => _currentPosition = null));
   }
 
-  StreamSubscription<LocationMarkerHeading> _subscriptHeadingStream() {
-    return _locationMarkerOpts.headingStream.listen((heading) {
+  StreamSubscription<LocationMarkerHeading>? _subscriptHeadingStream() {
+    return _locationMarkerOpts.headingStream?.listen((heading) {
       setState(() => _currentHeading = heading);
 
       bool turnHeadingUp;
@@ -168,7 +167,7 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
         _rotateMap(-_currentHeading!.heading / pi * 180);
       }
     })
-      ..onError((_) => setState(() => _currentPosition = null));
+      ?..onError((_) => setState(() => _currentPosition = null));
   }
 
   @override
