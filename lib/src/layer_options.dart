@@ -94,6 +94,8 @@ class LocationMarkerLayerOptions extends LayerOptions {
         );
 
   static Stream<LocationMarkerHeading>? _getDefaultHeadingStream() {
+    // The compass plugin does not support web, hence, return a null stream if
+    // the project is building for web.
     if (!kIsWeb) {
       return const LocationMarkerDataStreamFactory().compassHeadingStream();
     }
