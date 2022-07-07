@@ -1,3 +1,9 @@
+## [4.1.2] - Fix Bug
+
+* Fix MissingPluginException for web
+
+Thank to NamanShergill
+
 ## [4.1.1] - Update Dependencies
 
 * Update dependencies
