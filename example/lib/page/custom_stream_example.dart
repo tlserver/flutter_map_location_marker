@@ -65,6 +65,8 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
             options: TileLayerOptions(
               urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
               subdomains: ['a', 'b', 'c'],
+              userAgentPackageName:
+                  'net.tlserver6y.flutter_map_location_marker.example',
               maxZoom: 19,
             ),
           ),
