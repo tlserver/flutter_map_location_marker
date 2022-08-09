@@ -10,14 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_compass: ^0.7.0
-  flutter_map: ^2.0.0
-  geolocator: ^9.0.0
+  flutter_map: ^2.2.0
+  geolocator: ^9.0.1
   latlong2: ^0.8.1
 
 dev_dependencies:
   flutter_joystick: ^0.0.2
   flutter_test:
     sdk: flutter
-  lint: ^1.8.2
+  lint: ^1.10.0
 
 flutter:
