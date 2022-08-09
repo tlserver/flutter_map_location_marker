@@ -14,48 +14,52 @@ import 'marker_direction.dart';
 /// 2) a heading sector (in a marker layer) and
 /// 3) a marker (in the same marker layer).
 class LocationMarkerLayerOptions extends LayerOptions {
-  /// A Stream that provide position data for this marker.
+  /// A Stream that provide position data for this marker. Default to
+  /// [LocationMarkerDataStreamFactory.geolocatorPositionStream].
   final Stream<LocationMarkerPosition> positionStream;
 
-  /// A Stream that provide heading data for this marker.
+  /// A Stream that provide heading data for this marker. Default to
+  /// [LocationMarkerDataStreamFactory.compassHeadingStream].
   final Stream<LocationMarkerHeading> headingStream;
 
-  /// The main marker widget.
+  /// The main marker widget. Default to [DefaultLocationMarker]
   final Widget marker;
 
-  /// The size of main marker widget.
+  /// The size of main marker widget. Default to 20px * 20px.
   final Size markerSize;
 
-  /// The direction of the marker.
+  /// The direction of the marker. Default to [MarkerDirection.top].
   final MarkerDirection markerDirection;
 
   /// Whether to show accuracy circle. Android define accuracy as the radius of
   /// 68% confidence so there is a 68% probability that the true location is
-  /// inside the circle.
+  /// inside the circle. Default to true.
   final bool showAccuracyCircle;
 
-  /// The color of the accuracy circle.
+  /// The color of the accuracy circle. Default to ARGB(0x182196F3).
   final Color accuracyCircleColor;
 
-  /// Whether to show the heading sector.
+  /// Whether to show the heading sector. Default to true.
   final bool showHeadingSector;
 
-  /// The radius of the heading sector in pixels.
+  /// The radius of the heading sector in pixels. Default to 60.
   final double headingSectorRadius;
 
-  /// The color of the heading sector.
+  /// The color of the heading sector. Default to ARGB(0xCC2196F3).
   final Color headingSectorColor;
 
-  /// The duration of the marker's move animation .
+  /// The duration of the marker's move animation. Default to 200ms.
   final Duration moveAnimationDuration;
 
-  /// The curve of the marker's move animation.
+  /// The curve of the marker's move animation. Default to
+  /// [Curves.fastOutSlowIn].
   final Curve moveAnimationCurve;
 
-  /// The duration of the heading sector rotate animation.
+  /// The duration of the heading sector rotate animation. Default to 200ms.
   final Duration rotateAnimationDuration;
 
-  /// The curve of the heading sector rotate animation.
+  /// The curve of the heading sector rotate animation. Default to
+  /// [Curves.easeInOut].
   final Curve rotateAnimationCurve;
 
   /// Create a LocationMarkerLayerOptions.

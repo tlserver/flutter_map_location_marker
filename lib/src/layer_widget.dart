@@ -7,10 +7,11 @@ import 'plugin.dart';
 
 /// A [Widget] that build a [LocationMarkerLayer].
 class LocationMarkerLayerWidget extends StatelessWidget {
-  /// A [LocationMarkerPlugin] instance.
+  /// A [LocationMarkerPlugin] instance. Default to [LocationMarkerPlugin] with
+  /// default parameters.
   final LocationMarkerPlugin plugin;
 
-  /// Options for drawing this layer.
+  /// Options for drawing this layer. Default to null.
   final LocationMarkerLayerOptions? options;
 
   /// Create a LocationMarkerLayerWidget.
