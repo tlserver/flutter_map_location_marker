@@ -82,7 +82,7 @@ packages:
       name: flutter_map
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.2.0"
   flutter_map_location_marker:
     dependency: "direct main"
     description:
@@ -106,7 +106,7 @@ packages:
       name: geolocator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.0"
+    version: "9.0.1"
   geolocator_android:
     dependency: transitive
     description:
