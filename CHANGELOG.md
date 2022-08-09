@@ -1,3 +1,8 @@
+## [4.1.4] - Update Dependencies
+
+* Update dependencies
+* Update documentation
+
 ## [4.1.3] - Update Dependencies
 
 * Update dependencies
