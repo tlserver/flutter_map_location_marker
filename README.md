@@ -5,7 +5,11 @@
 [![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/master/LICENSE)
 
 A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying device current location.
-![Interface preview](https://github.com/tlserver/flutter_map_location_marker/raw/master/assets/interface.jpg)
+<br>
+<img src="https://github.com/tlserver/flutter_map_location_marker/raw/master/assets/interface.jpg" alt="Interface preview" width="400">
+
+Join [flutter_map Discord server](https://discord.gg/egEGeByf4q). Talk
+about `flutter_map_location_marker`, get and give help in #plugins channel.
 
 ## Features
 
@@ -17,9 +21,11 @@ A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying devi
   [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
   streams from other source are also supported.
 
-* **Auto-centering**: The map center on the new location when location is updated.
+* **Auto-centering**: The map center on the new location when location is updated. This feature is
+  disabled by default.
 
-* **Auto-rotating**: The map can be rotated automatically as navigation mode.
+* **Auto-rotating**: The map can be rotated automatically as navigation mode. This feature is
+  disabled by default.
 
 * **Customization**: The location marker can be fully customized, even the colors of accuracy circle
   and header.
@@ -71,6 +77,32 @@ Widget build(BuildContext context) {
       ),
       LocationMarkerLayerOptions(), // <-- add layer options here
     ],
+  );
+}
+```
+
+Discover more parameters
+in [LocationMarkerPlugin](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerPlugin-class.html)
+and [LocationMarkerLayerOptions](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerOptions-class.html)
+.
+
+```dart
+Widget build() {
+  return LocationMarkerLayerWidget(
+    plugin: LocationMarkerPlugin(
+      centerOnLocationUpdate: CenterOnLocationUpdate.always,
+      turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+    ),
+    options: LocationMarkerLayerOptions(
+      marker: const DefaultLocationMarker(
+        child: Icon(
+          Icons.navigation,
+          color: Colors.white,
+        ),
+      ),
+      markerSize: const Size(40, 40),
+      markerDirection: MarkerDirection.heading,
+    ),
   );
 }
 ```
