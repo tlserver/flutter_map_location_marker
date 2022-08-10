@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_joystick: ^0.0.2
-  flutter_map: any
+  flutter_map: #any
+    git: https://github.com/MooNag/flutter_map
   flutter_map_location_marker:
     path: ../
   geolocator: any

@@ -6,7 +6,6 @@ import 'page/customize_marker_example.dart';
 import 'page/geolocator_settings_example.dart';
 import 'page/minimum_example.dart';
 import 'page/navigation_example.dart';
-import 'page/old_style_example.dart';
 import 'page/selectable_distance_filter_example.dart';
 
 void main() {
@@ -98,17 +97,6 @@ class Home extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => NavigationExample(),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            title: const Text('Old Style Example'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => OldStyleExample(),
                 ),
               );
             },

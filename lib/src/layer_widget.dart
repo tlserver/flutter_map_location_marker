@@ -16,15 +16,14 @@ class LocationMarkerLayerWidget extends StatelessWidget {
 
   /// Create a LocationMarkerLayerWidget.
   LocationMarkerLayerWidget({
+    super.key,
     this.plugin = const LocationMarkerPlugin(),
     this.options,
-  }) : super(
-          key: options?.key,
-        );
+  });
 
   @override
   Widget build(BuildContext context) {
-    final mapState = MapState.maybeOf(context)!;
-    return LocationMarkerLayer(plugin, options, mapState, mapState.onMoved);
+    final mapState = FlutterMapState.maybeOf(context)!;
+    return LocationMarkerLayer(plugin, options, mapState);
   }
 }

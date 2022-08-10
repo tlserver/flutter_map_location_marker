@@ -79,10 +79,12 @@ packages:
   flutter_map:
     dependency: "direct main"
     description:
-      name: flutter_map
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: c6f31eaee57fa77785e7840931b0a9767e99a171
+      url: "https://github.com/MooNag/flutter_map"
+    source: git
+    version: "3.0.0"
   flutter_map_location_marker:
     dependency: "direct main"
     description:

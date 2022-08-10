@@ -10,7 +10,7 @@ import 'turn_on_heading_update.dart';
 
 /// A plugin that should be registered in [FlutterMap] in order to render
 /// [LocationMarkerLayer].
-class LocationMarkerPlugin implements MapPlugin {
+class LocationMarkerPlugin {
   /// The event stream for centering current location. Add a zoom level into
   /// this stream to center the current location at the provided zoom level or a
   /// null if the zoom level should be unchanged. Default to null.
@@ -58,22 +58,4 @@ class LocationMarkerPlugin implements MapPlugin {
     this.turnAnimationCurve = Curves.easeInOut,
   });
 
-  @override
-  Widget createLayer(
-    LayerOptions options,
-    MapState mapState,
-    Stream<void> stream,
-  ) {
-    return LocationMarkerLayer(
-      this,
-      options as LocationMarkerLayerOptions,
-      mapState,
-      stream,
-    );
-  }
-
-  @override
-  bool supportsLayer(LayerOptions options) {
-    return options is LocationMarkerLayerOptions;
-  }
 }

@@ -13,7 +13,7 @@ import 'marker_direction.dart';
 /// 1) an accuracy circle (in a circle layer)
 /// 2) a heading sector (in a marker layer) and
 /// 3) a marker (in the same marker layer).
-class LocationMarkerLayerOptions extends LayerOptions {
+class LocationMarkerLayerOptions {
   /// A Stream that provide position data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.geolocatorPositionStream].
   final Stream<LocationMarkerPosition> positionStream;
@@ -64,7 +64,6 @@ class LocationMarkerLayerOptions extends LayerOptions {
 
   /// Create a LocationMarkerLayerOptions.
   LocationMarkerLayerOptions({
-    Key? key,
     Stream<LocationMarkerPosition>? positionStream,
     Stream<LocationMarkerHeading>? headingStream,
     this.marker = const DefaultLocationMarker(),
@@ -83,7 +82,6 @@ class LocationMarkerLayerOptions extends LayerOptions {
     Duration? rotateAnimationDuration,
     this.moveAnimationCurve = Curves.fastOutSlowIn,
     this.rotateAnimationCurve = Curves.easeInOut,
-    Stream<void>? rebuild,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory().geolocatorPositionStream(),
         headingStream = headingStream ??
@@ -91,11 +89,7 @@ class LocationMarkerLayerOptions extends LayerOptions {
         moveAnimationDuration =
             moveAnimationDuration ?? markerAnimationDuration,
         rotateAnimationDuration =
-            rotateAnimationDuration ?? markerAnimationDuration,
-        super(
-          key: key,
-          rebuild: rebuild,
-        );
+            rotateAnimationDuration ?? markerAnimationDuration;
 
   /// The duration of the animation of location update.
   @Deprecated(

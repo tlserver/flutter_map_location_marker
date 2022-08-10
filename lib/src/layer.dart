@@ -22,20 +22,14 @@ class LocationMarkerLayer extends StatefulWidget {
   final LocationMarkerLayerOptions? locationMarkerOpts;
 
   /// The map that should this layer be drawn.
-  final MapState map;
-
-  /// A rebuild signal stream for GroupLayer. See [GroupLayer.stream].
-  final Stream<void> stream;
+  final FlutterMapState map;
 
   /// Create a LocationMarkerLayer.
   LocationMarkerLayer(
     this.plugin,
     this.locationMarkerOpts,
     this.map,
-    this.stream,
-  ) : super(
-          key: locationMarkerOpts?.key,
-        );
+  );
 
   @override
   LocationMarkerLayerState createState() => LocationMarkerLayerState();
@@ -199,11 +193,9 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
   Widget _buildLocationMarker(LocationMarkerPosition position) {
     final latLng = position.latLng;
     final diameter = _locationMarkerOpts.headingSectorRadius * 2;
-    return GroupLayer(
-      GroupLayerOptions(
-        group: [
+    return Stack(children: [
           if (_locationMarkerOpts.showAccuracyCircle)
-            CircleLayerOptions(
+            CircleLayer(
               circles: [
                 CircleMarker(
                   point: latLng,
@@ -213,7 +205,7 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
                 ),
               ],
             ),
-          MarkerLayerOptions(
+          MarkerLayer(
             markers: [
               if (_locationMarkerOpts.showHeadingSector)
                 Marker(
@@ -316,10 +308,7 @@ class LocationMarkerLayerState extends State<LocationMarkerLayer>
             ],
           ),
         ],
-      ),
-      widget.map,
-      widget.stream,
-    );
+      );
   }
 
   TickerFuture _moveMap(LatLng latLng, [double? zoom]) {
