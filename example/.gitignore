@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -42,4 +43,8 @@ app.*.map.json
 
 # Exceptions to above rules.
 !pubspec.lock
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
