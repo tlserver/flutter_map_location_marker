@@ -13,12 +13,12 @@ about `flutter_map_location_marker`, get and give help in #plugins channel.
 
 ## Features
 
-* **Simple**: The only thing to do is adding a `LocationMarkerLayerWidget()` in to your map because
-  all parameters have good default values.
+* **Simple**: The only thing to do is adding a `CurrentLocationLayer()` in to your map because all
+  parameters have good default values.
 
-* **Flexible**: The default implementation is receiving device's position from the
-  [geolocator](https://pub.dev/packages/geolocator) package and receiving device's heading from the
-  [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
+* **Flexible**: The default implementation is receiving device's position from
+  the [geolocator](https://pub.dev/packages/geolocator) package and receiving device's heading from
+  the [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
   streams from other source are also supported.
 
 * **Auto-centering**: The map center on the new location when location is updated. This feature is
@@ -39,8 +39,8 @@ dependencies:
   flutter_map_location_marker: any // or latest verion
 ```
 
-Add permission, please follow the instruction from
-[geolocator](https://pub.dev/packages/geolocator#permissions) package.
+Add permission, please follow the instruction
+from [geolocator](https://pub.dev/packages/geolocator#permissions) package.
 
 Add the layer widget into `FlutterMap`:
 
@@ -48,53 +48,27 @@ Add the layer widget into `FlutterMap`:
 Widget build(BuildContext context) {
   return FlutterMap(
     children: [
-      TileLayerWidget(
-        options: TileLayerOptions(
-          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c'],
-        ),
-      ),
-      LocationMarkerLayerWidget(), // <-- add layer widget here
-    ],
-  );
-}
-```
-
-Alternatively, you can use the old style to create the layer:
-
-```dart
-Widget build(BuildContext context) {
-  return FlutterMap(
-    options: MapOptions(
-      plugins: [
-        LocationMarkerPlugin(), // <-- add plugin here
-      ],
-    ),
-    layers: [
-      TileLayerOptions(
+      TileLayer(
         urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         subdomains: ['a', 'b', 'c'],
+        maxZoom: 19,
       ),
-      LocationMarkerLayerOptions(), // <-- add layer options here
+      CurrentLocationLayer(), // <-- add layer here
     ],
   );
 }
 ```
 
 Discover more parameters
-in [LocationMarkerPlugin](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerPlugin-class.html)
-and [LocationMarkerLayerOptions](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayerOptions-class.html)
-.
+in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html).
 
 ```dart
 Widget build() {
-  return LocationMarkerLayerWidget(
-    plugin: LocationMarkerPlugin(
-      centerOnLocationUpdate: CenterOnLocationUpdate.always,
-      turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
-    ),
-    options: LocationMarkerLayerOptions(
-      marker: const DefaultLocationMarker(
+  return CurrentLocationLayer(
+    centerOnLocationUpdate: CenterOnLocationUpdate.always,
+    turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+    style: LocationMarkerStyle(
+      mainMarker: const DefaultLocationMarker(
         child: Icon(
           Icons.navigation,
           color: Colors.white,
@@ -106,6 +80,10 @@ Widget build() {
   );
 }
 ```
+
+If multiple location markers is needed to display, consider using [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
+or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html).
+
 
 ## Examples
 
@@ -125,6 +103,9 @@ Widget build() {
    Use your own stream, such as position stream from other library or predefined route, as the
    source.
 
-6. [Navigation Mode](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/navigation_example.dart) :
+6. [No Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/no_stream_example.dart) :
+   Use Flutter `setState()` to update position and heading.
+
+7. [Navigation Mode](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/navigation_example.dart) :
    Rotate the map to keep heading pointing upward.
 
