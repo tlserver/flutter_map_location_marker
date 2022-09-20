@@ -49,21 +49,17 @@ class _CenterFabExampleState extends State<CenterFabExample> {
         ),
         // ignore: sort_child_properties_last
         children: [
-          TileLayerWidget(
-            options: TileLayerOptions(
-              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: ['a', 'b', 'c'],
-              userAgentPackageName:
-                  'net.tlserver6y.flutter_map_location_marker.example',
-              maxZoom: 19,
-            ),
+          TileLayer(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: const ['a', 'b', 'c'],
+            userAgentPackageName:
+                'net.tlserver6y.flutter_map_location_marker.example',
+            maxZoom: 19,
           ),
-          LocationMarkerLayerWidget(
-            plugin: LocationMarkerPlugin(
-              centerCurrentLocationStream:
-                  _centerCurrentLocationStreamController.stream,
-              centerOnLocationUpdate: _centerOnLocationUpdate,
-            ),
+          CurrentLocationLayer(
+            centerCurrentLocationStream:
+                _centerCurrentLocationStreamController.stream,
+            centerOnLocationUpdate: _centerOnLocationUpdate,
           ),
         ],
         nonRotatedChildren: [
@@ -84,7 +80,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
                 color: Colors.white,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

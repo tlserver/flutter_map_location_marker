@@ -52,32 +52,27 @@ class _NavigationExampleState extends State<NavigationExample> {
         ),
         // ignore: sort_child_properties_last
         children: [
-          TileLayerWidget(
-            options: TileLayerOptions(
-              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: ['a', 'b', 'c'],
-              userAgentPackageName:
-                  'net.tlserver6y.flutter_map_location_marker.example',
-              maxZoom: 19,
-            ),
+          TileLayer(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: const ['a', 'b', 'c'],
+            userAgentPackageName:
+                'net.tlserver6y.flutter_map_location_marker.example',
+            maxZoom: 19,
           ),
-          LocationMarkerLayerWidget(
-            plugin: LocationMarkerPlugin(
-              centerCurrentLocationStream:
-                  _centerCurrentLocationStreamController.stream,
-              turnHeadingUpLocationStream:
-                  _turnHeadingUpStreamController.stream,
-              centerOnLocationUpdate: _centerOnLocationUpdate,
-              turnOnHeadingUpdate: _turnOnHeadingUpdate,
-            ),
-            options: LocationMarkerLayerOptions(
-              marker: const DefaultLocationMarker(
+          CurrentLocationLayer(
+            centerCurrentLocationStream:
+                _centerCurrentLocationStreamController.stream,
+            turnHeadingUpLocationStream: _turnHeadingUpStreamController.stream,
+            centerOnLocationUpdate: _centerOnLocationUpdate,
+            turnOnHeadingUpdate: _turnOnHeadingUpdate,
+            style: const LocationMarkerStyle(
+              marker: DefaultLocationMarker(
                 child: Icon(
                   Icons.navigation,
                   color: Colors.white,
                 ),
               ),
-              markerSize: const Size(40, 40),
+              markerSize: Size(40, 40),
               markerDirection: MarkerDirection.heading,
             ),
           ),
