@@ -17,17 +17,15 @@ class CustomizeMarkerExample extends StatelessWidget {
           maxZoom: 19,
         ),
         children: [
-          TileLayerWidget(
-            options: TileLayerOptions(
-              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: ['a', 'b', 'c'],
-              userAgentPackageName:
-                  'net.tlserver6y.flutter_map_location_marker.example',
-              maxZoom: 19,
-            ),
+          TileLayer(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: const ['a', 'b', 'c'],
+            userAgentPackageName:
+                'net.tlserver6y.flutter_map_location_marker.example',
+            maxZoom: 19,
           ),
-          LocationMarkerLayerWidget(
-            options: LocationMarkerLayerOptions(
+          CurrentLocationLayer(
+            style: LocationMarkerStyle(
               marker: const DefaultLocationMarker(
                 color: Colors.green,
                 child: Icon(
@@ -39,8 +37,8 @@ class CustomizeMarkerExample extends StatelessWidget {
               accuracyCircleColor: Colors.green.withOpacity(0.1),
               headingSectorColor: Colors.green.withOpacity(0.8),
               headingSectorRadius: 120,
-              moveAnimationDuration: Duration.zero, // disable animation
             ),
+            moveAnimationDuration: Duration.zero, // disable animation
           ),
         ],
       ),
