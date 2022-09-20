@@ -9,6 +9,7 @@ import 'package:latlong2/latlong.dart';
 
 // A demo for a custom position and heading stream. In this example, the
 // location marker is controlled by a joystick instead of the device sensor.
+// This example provide same behavior as Joystick Example.
 class CustomStreamExample extends StatefulWidget {
   @override
   _CustomStreamExampleState createState() => _CustomStreamExampleState();
@@ -17,8 +18,8 @@ class CustomStreamExample extends StatefulWidget {
 class _CustomStreamExampleState extends State<CustomStreamExample> {
   late final StreamController<LocationMarkerPosition> positionStreamController;
   late final StreamController<LocationMarkerHeading> headingStreamController;
-  double currentLat = 0;
-  double currentLng = 0;
+  double _currentLat = 0;
+  double _currentLng = 0;
 
   @override
   void initState() {
@@ -26,8 +27,8 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
     positionStreamController = StreamController()
       ..add(
         LocationMarkerPosition(
-          latitude: currentLat,
-          longitude: currentLng,
+          latitude: _currentLat,
+          longitude: _currentLng,
           accuracy: 0,
         ),
       );
@@ -53,44 +54,43 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
       appBar: AppBar(
         title: const Text('Custom Stream Example'),
       ),
-      body: FlutterMap(
-        options: MapOptions(
-          center: LatLng(0, 0),
-          zoom: 1,
-          maxZoom: 19,
-        ),
-        // ignore: sort_child_properties_last
+      body: Stack(
         children: [
-          TileLayerWidget(
-            options: TileLayerOptions(
-              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: ['a', 'b', 'c'],
-              userAgentPackageName:
-                  'net.tlserver6y.flutter_map_location_marker.example',
+          FlutterMap(
+            options: MapOptions(
+              center: LatLng(0, 0),
+              zoom: 1,
               maxZoom: 19,
             ),
+            // ignore: sort_child_properties_last
+            children: [
+              TileLayer(
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: const ['a', 'b', 'c'],
+                userAgentPackageName:
+                    'net.tlserver6y.flutter_map_location_marker.example',
+                maxZoom: 19,
+              ),
+              CurrentLocationLayer(
+                positionStream: positionStreamController.stream,
+                headingStream: headingStreamController.stream,
+              ),
+            ],
           ),
-          LocationMarkerLayerWidget(
-            options: LocationMarkerLayerOptions(
-              positionStream: positionStreamController.stream,
-              headingStream: headingStreamController.stream,
-            ),
-          ),
-        ],
-        nonRotatedChildren: [
           Positioned(
             right: 20,
             bottom: 20,
             child: Joystick(
               listener: (details) {
-                currentLat -= details.y;
-                currentLat = currentLat.clamp(-90, 90);
-                currentLng += details.x;
-                currentLng = currentLng.clamp(-180, 180);
+                _currentLat -= details.y;
+                _currentLat = _currentLat.clamp(-90, 90);
+                _currentLng += details.x;
+                _currentLng = _currentLng.clamp(-180, 180);
                 positionStreamController.add(
                   LocationMarkerPosition(
-                    latitude: currentLat,
-                    longitude: currentLng,
+                    latitude: _currentLat,
+                    longitude: _currentLng,
                     accuracy: 0,
                   ),
                 );

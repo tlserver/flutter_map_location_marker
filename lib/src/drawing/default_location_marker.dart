@@ -12,12 +12,10 @@ class DefaultLocationMarker extends StatelessWidget {
 
   /// Create a DefaultLocationMarker.
   const DefaultLocationMarker({
-    Key? key,
+    super.key,
     this.color = const Color.fromARGB(0xFF, 0x21, 0x96, 0xF3),
     this.child,
-  }) : super(
-          key: key,
-        );
+  });
 
   @override
   Widget build(BuildContext context) {

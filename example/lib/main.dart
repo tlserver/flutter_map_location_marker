@@ -6,8 +6,11 @@ import 'page/customize_marker_example.dart';
 import 'page/geolocator_settings_example.dart';
 import 'page/minimum_example.dart';
 import 'page/navigation_example.dart';
-import 'page/old_style_example.dart';
+import 'page/no_stream_example.dart';
 import 'page/selectable_distance_filter_example.dart';
+
+// import 'page/animation_debugger.dart';
+// import 'page/stream_debugger.dart';
 
 void main() {
   runApp(
@@ -23,13 +26,35 @@ class Home extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
+          // ListTile(
+          //   title: const Text('Animation Debugger'),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (BuildContext context) => AnimationDebugger(),
+          //       ),
+          //     );
+          //   },
+          // ),
+          // ListTile(
+          //   title: const Text('Stream Debugger'),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (BuildContext context) => StreamDebugger(),
+          //       ),
+          //     );
+          //   },
+          // ),
           ListTile(
-            title: const Text('Center FAB Example'),
+            title: const Text('Minimum Example'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => CenterFabExample(),
+                  builder: (BuildContext context) => MinimumExample(),
                 ),
               );
             },
@@ -41,6 +66,17 @@ class Home extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => CustomizeMarkerExample(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Center FAB Example'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => CenterFabExample(),
                 ),
               );
             },
@@ -81,12 +117,12 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Minimum Example'),
+            title: const Text('No Stream Example'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => MinimumExample(),
+                  builder: (BuildContext context) => NoStreamExample(),
                 ),
               );
             },
@@ -98,17 +134,6 @@ class Home extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => NavigationExample(),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            title: const Text('Old Style Example'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => OldStyleExample(),
                 ),
               );
             },
