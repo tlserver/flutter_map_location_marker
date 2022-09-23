@@ -14,7 +14,7 @@
   and [LocationMarkerStyle](https://pub.dev/documentation/flutter_map_location_marker/5.0.0/flutter_map_location_marker/LocationMarkerLayer-class.html)
   classes
 
-See [V5 migration note](https://github.com/tlserver/flutter_map_location_marker/blob/master/notes/migration-v5.md)
+See [V5 migration note](https://github.com/tlserver/flutter_map_location_marker/blob/master/notes/migration_v5.md)
 
 ## [4.1.4] - Update Dependencies
 
