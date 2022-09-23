@@ -1,3 +1,7 @@
+## [5.0.0+1] - Update Changelog
+
+* Update changelog
+
 ## [5.0.0] - Migrate to Flutter Map v3
 
 * Migrate to `flutter_map` v3
@@ -113,8 +117,8 @@ Thank to Ondřej Synáček
 
 ## [2.0.2] - Improve Naming
 
-* Rename 
-  [CenterOnLocationUpdate.first](https://pub.dev/documentation/flutter_map_location_marker/2.0.1/flutter_map_location_marker/CenterOnLocationUpdate.html)
+* Rename
+  [CenterOnLocationUpdate.first](https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html)
   to [CenterOnLocationUpdate.once](https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html)
 
 ## [2.0.1] - Update Dependencies
