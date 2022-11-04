@@ -23,7 +23,7 @@ class CurrentLocationLayer extends StatefulWidget {
 
   /// A Stream that provide heading data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.compassHeadingStream].
-  final Stream<LocationMarkerHeading> headingStream;
+  final Stream<LocationMarkerHeading?> headingStream;
 
   /// The event stream for centering current location. Add a zoom level into
   /// this stream to center the current location at the provided zoom level or a
@@ -79,7 +79,7 @@ class CurrentLocationLayer extends StatefulWidget {
     super.key,
     this.style = const LocationMarkerStyle(),
     Stream<LocationMarkerPosition?>? positionStream,
-    Stream<LocationMarkerHeading>? headingStream,
+    Stream<LocationMarkerHeading?>? headingStream,
     this.centerCurrentLocationStream,
     this.turnHeadingUpLocationStream,
     this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
@@ -111,7 +111,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late bool _isFirstHeadingUpdate;
 
   late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
-  late StreamSubscription<LocationMarkerHeading> _headingStreamSubscription;
+  late StreamSubscription<LocationMarkerHeading?> _headingStreamSubscription;
 
   /// Subscription to a stream for centering single that also include a zoom level.
   StreamSubscription<double?>? _centerCurrentLocationStreamSubscription;
@@ -218,7 +218,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   void _subscriptHeadingStream() {
     _headingStreamSubscription =
-        widget.headingStream.listen((LocationMarkerHeading heading) {
+        widget.headingStream.listen((LocationMarkerHeading? heading) {
       setState(() => _currentHeading = heading);
 
       bool turnHeadingUp;
@@ -235,7 +235,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           break;
       }
       if (turnHeadingUp) {
-        _rotateMap(-_currentHeading!.heading / pi * 180);
+        final currentHeading = _currentHeading;
+        if (currentHeading == null) return;
+
+        _rotateMap(-currentHeading.heading / pi * 180);
       }
     })
           ..onError((_) => setState(() => _currentHeading = null));
@@ -262,7 +265,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _turnHeadingUpStreamSubscription =
         widget.turnHeadingUpLocationStream?.listen((_) {
       if (_currentHeading != null) {
-        _rotateMap(-_currentHeading!.heading / pi * 180);
+        final currentHeading = _currentHeading;
+        if (currentHeading == null) return;
+
+        _rotateMap(-currentHeading.heading / pi * 180);
       }
     });
   }
