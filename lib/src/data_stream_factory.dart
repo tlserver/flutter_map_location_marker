@@ -18,13 +18,43 @@ class LocationMarkerDataStreamFactory {
   Stream<LocationMarkerPosition> geolocatorPositionStream({
     Stream<Position>? stream,
   }) {
-    return (stream ?? Geolocator.getPositionStream()).map((Position position) {
+    return (stream ?? _getGeolocatorStream()).map((Position position) {
       return LocationMarkerPosition(
         latitude: position.latitude,
         longitude: position.longitude,
         accuracy: position.accuracy,
       );
     });
+  }
+
+  Stream<Position> _getGeolocatorStream() {
+    final streamController = StreamController<Position>();
+
+    /// Regular geolocator stream values
+    late StreamSubscription<Position> geolocatorPositionStreamSubscription;
+    geolocatorPositionStreamSubscription =
+        Geolocator.getPositionStream().listen((position) {
+      /// Closing the stream subscription if there isn't any listenners
+      if (!streamController.hasListener) {
+        geolocatorPositionStreamSubscription.cancel();
+        streamController.close();
+
+        return;
+      }
+
+      streamController.add(position);
+    });
+
+    /// Initial user position value
+    unawaited(() async {
+      try {
+        final userPosition = await Geolocator.getCurrentPosition();
+
+        streamController.add(userPosition);
+      } catch (_) {}
+    }());
+
+    return streamController.stream;
   }
 
   /// Create a heading stream from
