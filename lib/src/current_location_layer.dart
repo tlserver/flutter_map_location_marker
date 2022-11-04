@@ -19,7 +19,7 @@ class CurrentLocationLayer extends StatefulWidget {
 
   /// A Stream that provide position data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.geolocatorPositionStream].
-  final Stream<LocationMarkerPosition> positionStream;
+  final Stream<LocationMarkerPosition?> positionStream;
 
   /// A Stream that provide heading data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.compassHeadingStream].
@@ -78,7 +78,7 @@ class CurrentLocationLayer extends StatefulWidget {
   CurrentLocationLayer({
     super.key,
     this.style = const LocationMarkerStyle(),
-    Stream<LocationMarkerPosition>? positionStream,
+    Stream<LocationMarkerPosition?>? positionStream,
     Stream<LocationMarkerHeading>? headingStream,
     this.centerCurrentLocationStream,
     this.turnHeadingUpLocationStream,
@@ -110,7 +110,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late bool _isFirstLocationUpdate;
   late bool _isFirstHeadingUpdate;
 
-  late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
+  late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
   late StreamSubscription<LocationMarkerHeading> _headingStreamSubscription;
 
   /// Subscription to a stream for centering single that also include a zoom level.
@@ -157,9 +157,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   @override
   Widget build(BuildContext context) {
-    if (_currentPosition != null) {
+    final currentPosition = _currentPosition;
+    if (currentPosition != null) {
       return AnimatedLocationMarkerLayer(
-        position: _currentPosition!,
+        position: currentPosition,
         heading: _currentHeading,
         style: widget.style,
         moveAnimationDuration: widget.moveAnimationDuration,
@@ -185,7 +186,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   void _subscriptPositionStream() {
     _positionStreamSubscription =
-        widget.positionStream.listen((LocationMarkerPosition position) {
+        widget.positionStream.listen((LocationMarkerPosition? position) {
       setState(() => _currentPosition = position);
 
       bool centerCurrentLocation;
@@ -202,8 +203,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           break;
       }
       if (centerCurrentLocation) {
+        final currentPosition = _currentPosition;
+
+        if (currentPosition == null) return;
+
         _moveMap(
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          LatLng(currentPosition.latitude, currentPosition.longitude),
           _centeringZoom,
         );
       }
@@ -241,8 +246,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         widget.centerCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
         _centeringZoom = zoom;
+
+        final currentPosition = _currentPosition;
+        if (currentPosition == null) return;
+
         _moveMap(
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          LatLng(currentPosition.latitude, currentPosition.longitude),
           zoom,
         ).whenComplete(() => _centeringZoom = null);
       }
