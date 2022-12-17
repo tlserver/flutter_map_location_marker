@@ -18,7 +18,19 @@ class LocationMarkerDataStreamFactory {
   Stream<LocationMarkerPosition> geolocatorPositionStream({
     Stream<Position>? stream,
   }) {
-    return (stream ?? Geolocator.getPositionStream()).map((Position position) {
+    Stream<Position>? positionStream = stream;
+    if (positionStream == null) {
+      final streamController = StreamController<Position>();
+      Geolocator.getLastKnownPosition()
+          .then((lastKnown) {
+            if (lastKnown != null) {
+              streamController.sink.add(lastKnown);
+            }
+            streamController.sink.addStream(Geolocator.getPositionStream());
+          });
+      positionStream = streamController.stream;
+    }
+    return positionStream.map((Position position) {
       return LocationMarkerPosition(
         latitude: position.latitude,
         longitude: position.longitude,
