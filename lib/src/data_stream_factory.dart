@@ -15,48 +15,53 @@ class LocationMarkerDataStreamFactory {
 
   /// Create a position stream from
   /// [geolocator](https://pub.dev/packages/geolocator).
-  Stream<LocationMarkerPosition> geolocatorPositionStream({
-    Stream<Position>? stream,
+  Stream<LocationMarkerPosition?> geolocatorPositionStream({
+    Stream<Position?>? stream,
   }) {
-    Stream<Position>? positionStream = stream;
+    var positionStream = stream;
     if (positionStream == null) {
-      final streamController = StreamController<Position>();
-      Geolocator.getLastKnownPosition()
-          .then((lastKnown) {
-            if (lastKnown != null) {
-              streamController.sink.add(lastKnown);
-            }
-            streamController.sink.addStream(Geolocator.getPositionStream());
-          });
+      final streamController = StreamController<Position?>();
+      Geolocator.getLastKnownPosition().then((lastKnown) {
+        if (lastKnown != null) {
+          streamController.sink.add(lastKnown);
+        }
+        streamController.sink.addStream(Geolocator.getPositionStream());
+      });
       positionStream = streamController.stream;
     }
-    return positionStream.map((Position position) {
-      return LocationMarkerPosition(
-        latitude: position.latitude,
-        longitude: position.longitude,
-        accuracy: position.accuracy,
-      );
+    return positionStream.map((Position? position) {
+      return position != null
+          ? LocationMarkerPosition(
+              latitude: position.latitude,
+              longitude: position.longitude,
+              accuracy: position.accuracy,
+            )
+          : null;
     });
   }
 
   /// Create a heading stream from
   /// [flutter_compass](https://pub.dev/packages/flutter_compass).
-  Stream<LocationMarkerHeading> compassHeadingStream({
+  Stream<LocationMarkerHeading?> compassHeadingStream({
     Stream<CompassEvent>? stream,
     double minAccuracy = pi * 0.1,
     double defAccuracy = pi * 0.3,
     double maxAccuracy = pi * 0.4,
   }) {
     return (stream ?? (!kIsWeb ? FlutterCompass.events! : const Stream.empty()))
-        .where((CompassEvent compassEvent) => compassEvent.heading != null)
-        .map((CompassEvent compassEvent) {
-      return LocationMarkerHeading(
-        heading: degToRadian(compassEvent.heading!),
-        accuracy: (compassEvent.accuracy ?? defAccuracy).clamp(
-          minAccuracy,
-          maxAccuracy,
-        ),
-      );
-    });
+        .where((CompassEvent? e) => e == null || e.heading != null)
+        .map(
+      (CompassEvent? e) {
+        return e != null
+            ? LocationMarkerHeading(
+                heading: degToRadian(e.heading!),
+                accuracy: (e.accuracy ?? defAccuracy).clamp(
+                  minAccuracy,
+                  maxAccuracy,
+                ),
+              )
+            : null;
+      },
+    );
   }
 }
