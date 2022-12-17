@@ -19,11 +19,11 @@ class CurrentLocationLayer extends StatefulWidget {
 
   /// A Stream that provide position data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.geolocatorPositionStream].
-  final Stream<LocationMarkerPosition> positionStream;
+  final Stream<LocationMarkerPosition?> positionStream;
 
   /// A Stream that provide heading data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.compassHeadingStream].
-  final Stream<LocationMarkerHeading> headingStream;
+  final Stream<LocationMarkerHeading?> headingStream;
 
   /// The event stream for centering current location. Add a zoom level into
   /// this stream to center the current location at the provided zoom level or a
@@ -78,8 +78,8 @@ class CurrentLocationLayer extends StatefulWidget {
   CurrentLocationLayer({
     super.key,
     this.style = const LocationMarkerStyle(),
-    Stream<LocationMarkerPosition>? positionStream,
-    Stream<LocationMarkerHeading>? headingStream,
+    Stream<LocationMarkerPosition?>? positionStream,
+    Stream<LocationMarkerHeading?>? headingStream,
     this.centerCurrentLocationStream,
     this.turnHeadingUpLocationStream,
     this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
@@ -110,8 +110,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late bool _isFirstLocationUpdate;
   late bool _isFirstHeadingUpdate;
 
-  late StreamSubscription<LocationMarkerPosition> _positionStreamSubscription;
-  late StreamSubscription<LocationMarkerHeading> _headingStreamSubscription;
+  late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
+  late StreamSubscription<LocationMarkerHeading?> _headingStreamSubscription;
 
   /// Subscription to a stream for centering single that also include a zoom level.
   StreamSubscription<double?>? _centerCurrentLocationStreamSubscription;
@@ -185,7 +185,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   void _subscriptPositionStream() {
     _positionStreamSubscription =
-        widget.positionStream.listen((LocationMarkerPosition position) {
+        widget.positionStream.listen((LocationMarkerPosition? position) {
       setState(() => _currentPosition = position);
 
       bool centerCurrentLocation;
@@ -213,7 +213,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   void _subscriptHeadingStream() {
     _headingStreamSubscription =
-        widget.headingStream.listen((LocationMarkerHeading heading) {
+        widget.headingStream.listen((LocationMarkerHeading? heading) {
       setState(() => _currentHeading = heading);
 
       bool turnHeadingUp;
