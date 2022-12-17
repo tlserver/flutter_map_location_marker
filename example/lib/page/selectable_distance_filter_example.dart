@@ -17,8 +17,8 @@ class _SelectableDistanceFilterExampleState
   static const distanceFilters = [0, 5, 10, 30, 50];
   int _selectedIndex = 0;
 
-  late StreamController<LocationMarkerPosition> positionStream;
-  late StreamSubscription<LocationMarkerPosition> streamSubscription;
+  late StreamController<LocationMarkerPosition?> positionStream;
+  late StreamSubscription<LocationMarkerPosition?> streamSubscription;
 
   @override
   void initState() {
