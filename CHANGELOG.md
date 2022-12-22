@@ -1,3 +1,21 @@
+## [5.1.0] - Improve Behavior
+
+* Use lastKnownPosition as initial value of default position stream (#49)
+* Auto require permission on getting default position stream
+* Fix marker not showing after permission approving (#50)
+* Accept null value
+  for [CurrentLocationLayer.positionStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/positionStream.html)
+  and [CurrentLocationLayer.headingStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/headingStream.html)
+* Rename
+  [LocationMarkerDataStreamFactory.geolocatorPositionStream](https://pub.dev/documentation/flutter_map_location_marker/5.0.0/flutter_map_location_marker/LocationMarkerDataStreamFactory/geolocatorPositionStream.html)
+  to [LocationMarkerDataStreamFactory.fromGeolocatorPositionStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/LocationMarkerDataStreamFactory/fromGeolocatorPositionStream.html)
+  and [LocationMarkerDataStreamFactory.compassHeadingStream](https://pub.dev/documentation/flutter_map_location_marker/5.0.0/flutter_map_location_marker/LocationMarkerDataStreamFactory/compassHeadingStream.html)
+  to [LocationMarkerDataStreamFactory.fromCompassHeadingStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/LocationMarkerDataStreamFactory/fromCompassHeadingStream.html)
+* Update dependencies
+* Update documentation
+
+Thank to LeonTenorio
+
 ## [5.0.0+1] - Update Changelog
 
 * Update changelog
@@ -117,8 +135,8 @@ Thank to Ondřej Synáček
 
 ## [2.0.2] - Improve Naming
 
-* Rename
-  [CenterOnLocationUpdate.first](https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html)
+* Rename 
+  [CenterOnLocationUpdate.first](https://pub.dev/documentation/flutter_map_location_marker/2.0.1/flutter_map_location_marker/CenterOnLocationUpdate.html)
   to [CenterOnLocationUpdate.once](https://pub.dev/documentation/flutter_map_location_marker/2.0.2/flutter_map_location_marker/CenterOnLocationUpdate.html)
 
 ## [2.0.1] - Update Dependencies
