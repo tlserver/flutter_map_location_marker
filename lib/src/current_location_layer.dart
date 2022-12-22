@@ -23,11 +23,11 @@ class CurrentLocationLayer extends StatefulWidget {
   final LocationMarkerStyle style;
 
   /// A Stream that provide position data for this marker. Default to
-  /// [LocationMarkerDataStreamFactory.geolocatorPositionStream].
+  /// [LocationMarkerDataStreamFactory.fromGeolocatorPositionStream].
   final Stream<LocationMarkerPosition?> positionStream;
 
   /// A Stream that provide heading data for this marker. Default to
-  /// [LocationMarkerDataStreamFactory.compassHeadingStream].
+  /// [LocationMarkerDataStreamFactory.fromCompassHeadingStream].
   final Stream<LocationMarkerHeading?> headingStream;
 
   /// The event stream for centering current location. Add a zoom level into
@@ -98,9 +98,10 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 200),
     this.rotateAnimationCurve = Curves.easeInOut,
   })  : positionStream = positionStream ??
-            const LocationMarkerDataStreamFactory().geolocatorPositionStream(),
+            const LocationMarkerDataStreamFactory()
+                .fromGeolocatorPositionStream(),
         headingStream = headingStream ??
-            const LocationMarkerDataStreamFactory().compassHeadingStream();
+            const LocationMarkerDataStreamFactory().fromCompassHeadingStream();
 
   @override
   State<CurrentLocationLayer> createState() => _CurrentLocationLayerState();
