@@ -60,7 +60,8 @@ Widget build(BuildContext context) {
 ```
 
 Discover more parameters
-in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html).
+in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html)
+.
 
 ```dart
 Widget build() {
@@ -81,9 +82,10 @@ Widget build() {
 }
 ```
 
-If multiple location markers is needed to display, consider using [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
-or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html).
-
+If multiple location markers is needed to display, consider
+using [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
+or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html)
+.
 
 ## Examples
 
@@ -109,3 +111,16 @@ or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_mark
 7. [Navigation Mode](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/navigation_example.dart) :
    Rotate the map to keep heading pointing upward.
 
+8. [Default Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart) :
+
+## FAQ
+
+*Q*: How to get
+the [positionStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/positionStream.html)
+, [headingStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/headingStream.html)
+or their origin streams from a CurrentLocationLayer widget?
+
+*A*: No. You should not get value from a widget, instead, create the stream you need and also pass
+it to the widget. You may
+see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart)
+to know about how to do this.
