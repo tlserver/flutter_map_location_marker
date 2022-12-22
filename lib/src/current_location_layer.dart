@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
@@ -8,6 +9,10 @@ import 'animated_location_marker_layer.dart';
 import 'center_on_location_update.dart';
 import 'data.dart';
 import 'data_stream_factory.dart';
+import 'exception/incorrect_setup_exception.dart';
+import 'exception/permission_denied_exception.dart';
+import 'exception/permission_requesting_exception.dart';
+import 'exception/service_disabled_exception.dart';
 import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
@@ -103,6 +108,7 @@ class CurrentLocationLayer extends StatefulWidget {
 
 class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     with TickerProviderStateMixin {
+  _Status _status = _Status.initialing;
   LocationMarkerPosition? _currentPosition;
   LocationMarkerHeading? _currentHeading;
   double? _centeringZoom;
@@ -157,18 +163,86 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   @override
   Widget build(BuildContext context) {
-    if (_currentPosition != null) {
-      return AnimatedLocationMarkerLayer(
-        position: _currentPosition!,
-        heading: _currentHeading,
-        style: widget.style,
-        moveAnimationDuration: widget.moveAnimationDuration,
-        moveAnimationCurve: widget.moveAnimationCurve,
-        rotateAnimationDuration: widget.rotateAnimationDuration,
-        rotateAnimationCurve: widget.rotateAnimationCurve,
-      );
-    } else {
-      return const SizedBox.shrink();
+    switch (_status) {
+      case _Status.initialing:
+        return const SizedBox.shrink();
+      case _Status.ready:
+        if (_currentPosition != null) {
+          return AnimatedLocationMarkerLayer(
+            position: _currentPosition!,
+            heading: _currentHeading,
+            style: widget.style,
+            moveAnimationDuration: widget.moveAnimationDuration,
+            moveAnimationCurve: widget.moveAnimationCurve,
+            rotateAnimationDuration: widget.rotateAnimationDuration,
+            rotateAnimationCurve: widget.rotateAnimationCurve,
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      case _Status.incorrectSetup:
+        if (kDebugMode) {
+          return SizedBox.expand(
+            child: ColoredBox(
+              color: Colors.red.withAlpha(0x80),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'LocationMarker plugin has not been setup correctly. '
+                  'Please follow the instructions in the documentation.',
+                  style: TextStyle(fontSize: 26),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      case _Status.permissionRequesting:
+        if (kDebugMode) {
+          return const Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Text(
+                '(Debug Only)\nLocation Access Permission Requesting',
+                textAlign: TextAlign.right,
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      case _Status.permissionDenied:
+        if (kDebugMode) {
+          return const Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Text(
+                '(Debug Only)\nLocation Access Permission Denied',
+                textAlign: TextAlign.right,
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      case _Status.serviceDisabled:
+        if (kDebugMode) {
+          return const Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Text(
+                '(Debug Only)\nLocation Service Disabled',
+                textAlign: TextAlign.right,
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
     }
   }
 
@@ -184,56 +258,76 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptPositionStream() {
-    _positionStreamSubscription =
-        widget.positionStream.listen((LocationMarkerPosition? position) {
-      setState(() => _currentPosition = position);
+    _positionStreamSubscription = widget.positionStream.listen(
+      (LocationMarkerPosition? position) {
+        setState(() {
+          _status = _Status.ready;
+          _currentPosition = position;
+        });
 
-      bool centerCurrentLocation;
-      switch (widget.centerOnLocationUpdate) {
-        case CenterOnLocationUpdate.always:
-          centerCurrentLocation = true;
-          break;
-        case CenterOnLocationUpdate.once:
-          centerCurrentLocation = _isFirstLocationUpdate;
-          _isFirstLocationUpdate = false;
-          break;
-        case CenterOnLocationUpdate.never:
-          centerCurrentLocation = false;
-          break;
-      }
-      if (centerCurrentLocation) {
-        _moveMap(
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-          _centeringZoom,
-        );
-      }
-    })
-          ..onError((_) => setState(() => _currentPosition = null));
+        bool centerCurrentLocation;
+        switch (widget.centerOnLocationUpdate) {
+          case CenterOnLocationUpdate.always:
+            centerCurrentLocation = true;
+            break;
+          case CenterOnLocationUpdate.once:
+            centerCurrentLocation = _isFirstLocationUpdate;
+            _isFirstLocationUpdate = false;
+            break;
+          case CenterOnLocationUpdate.never:
+            centerCurrentLocation = false;
+            break;
+        }
+        if (centerCurrentLocation) {
+          _moveMap(
+            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+            _centeringZoom,
+          );
+        }
+      },
+      onError: (error) {
+        switch (error.runtimeType) {
+          case IncorrectSetupException:
+            setState(() => _status = _Status.incorrectSetup);
+            break;
+          case PermissionRequestingException:
+            setState(() => _status = _Status.permissionRequesting);
+            break;
+          case PermissionDeniedException:
+            setState(() => _status = _Status.permissionDenied);
+            break;
+          case ServiceDisabledException:
+            setState(() => _status = _Status.serviceDisabled);
+            break;
+        }
+      },
+    );
   }
 
   void _subscriptHeadingStream() {
-    _headingStreamSubscription =
-        widget.headingStream.listen((LocationMarkerHeading? heading) {
-      setState(() => _currentHeading = heading);
+    _headingStreamSubscription = widget.headingStream.listen(
+      (LocationMarkerHeading? heading) {
+        setState(() => _currentHeading = heading);
 
-      bool turnHeadingUp;
-      switch (widget.turnOnHeadingUpdate) {
-        case TurnOnHeadingUpdate.always:
-          turnHeadingUp = true;
-          break;
-        case TurnOnHeadingUpdate.once:
-          turnHeadingUp = _isFirstHeadingUpdate;
-          _isFirstHeadingUpdate = false;
-          break;
-        case TurnOnHeadingUpdate.never:
-          turnHeadingUp = false;
-          break;
-      }
-      if (turnHeadingUp) {
-        _rotateMap(-_currentHeading!.heading / pi * 180);
-      }
-    })
-          ..onError((_) => setState(() => _currentHeading = null));
+        bool turnHeadingUp;
+        switch (widget.turnOnHeadingUpdate) {
+          case TurnOnHeadingUpdate.always:
+            turnHeadingUp = true;
+            break;
+          case TurnOnHeadingUpdate.once:
+            turnHeadingUp = _isFirstHeadingUpdate;
+            _isFirstHeadingUpdate = false;
+            break;
+          case TurnOnHeadingUpdate.never:
+            turnHeadingUp = false;
+            break;
+        }
+        if (turnHeadingUp) {
+          _rotateMap(-_currentHeading!.heading / pi * 180);
+        }
+      },
+      onError: (_) => setState(() => _currentHeading = null),
+    );
   }
 
   void _subscriptCenterCurrentLocationStream() {
@@ -340,4 +434,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
     return _turnHeadingUpAnimationController!.forward();
   }
+}
+
+enum _Status {
+  initialing,
+  incorrectSetup,
+  serviceDisabled,
+  permissionRequesting,
+  permissionDenied,
+  ready,
 }
