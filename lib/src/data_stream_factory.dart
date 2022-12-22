@@ -17,9 +17,9 @@ class LocationMarkerDataStreamFactory {
   /// Create a LocationMarkerDataStreamFactory.
   const LocationMarkerDataStreamFactory();
 
-  /// Create a position stream from
-  /// [geolocator](https://pub.dev/packages/geolocator).
-  Stream<LocationMarkerPosition?> geolocatorPositionStream({
+  /// Cast to a position stream from
+  /// [geolocator](https://pub.dev/packages/geolocator) stream.
+  Stream<LocationMarkerPosition?> fromGeolocatorPositionStream({
     Stream<Position?>? stream,
   }) {
     return (stream ?? defaultPositionStreamSource()).map((Position? position) {
@@ -32,6 +32,16 @@ class LocationMarkerDataStreamFactory {
           : null;
     });
   }
+
+  /// Cast to a position stream from
+  /// [geolocator](https://pub.dev/packages/geolocator) stream.
+  @Deprecated('Use fromGeolocatorPositionStream instead')
+  Stream<LocationMarkerPosition?> geolocatorPositionStream({
+    Stream<Position?>? stream,
+  }) =>
+      fromGeolocatorPositionStream(
+        stream: stream,
+      );
 
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
@@ -69,10 +79,10 @@ class LocationMarkerDataStreamFactory {
     return streamController.stream;
   }
 
-  /// Create a heading stream from
-  /// [flutter_compass](https://pub.dev/packages/flutter_compass).
-  Stream<LocationMarkerHeading?> compassHeadingStream({
-    Stream<CompassEvent>? stream,
+  /// Cast to a heading stream from
+  /// [flutter_compass](https://pub.dev/packages/flutter_compass) stream.
+  Stream<LocationMarkerHeading?> fromCompassHeadingStream({
+    Stream<CompassEvent?>? stream,
     double minAccuracy = pi * 0.1,
     double defAccuracy = pi * 0.3,
     double maxAccuracy = pi * 0.4,
@@ -93,6 +103,22 @@ class LocationMarkerDataStreamFactory {
       },
     );
   }
+
+  /// Cast to a heading stream from
+  /// [flutter_compass](https://pub.dev/packages/flutter_compass) stream.
+  @Deprecated('Use fromCompassHeadingStream instead')
+  Stream<LocationMarkerHeading?> compassHeadingStream({
+    Stream<CompassEvent?>? stream,
+    double minAccuracy = pi * 0.1,
+    double defAccuracy = pi * 0.3,
+    double maxAccuracy = pi * 0.4,
+  }) =>
+      fromCompassHeadingStream(
+        stream: stream,
+        minAccuracy: minAccuracy,
+        defAccuracy: defAccuracy,
+        maxAccuracy: maxAccuracy,
+      );
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
