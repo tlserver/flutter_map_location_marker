@@ -31,6 +31,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
         options: MapOptions(
           center: LatLng(0, 0),
           zoom: 8,
+          minZoom: 0,
           maxZoom: 19,
         ),
         nonRotatedChildren: [

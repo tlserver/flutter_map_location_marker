@@ -37,6 +37,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
         options: MapOptions(
           center: LatLng(0, 0),
           zoom: 1,
+          minZoom: 0,
           maxZoom: 19,
           // Stop centering the location marker on the map if user interacted with the map.
           onPositionChanged: (MapPosition position, bool hasGesture) {
