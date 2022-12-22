@@ -48,7 +48,7 @@ class LocationMarkerLayer extends StatelessWidget {
                 point: position.latLng,
                 width: style.headingSectorRadius * 2,
                 height: style.headingSectorRadius * 2,
-                builder: (_) {
+                builder: (BuildContext context) {
                   return IgnorePointer(
                     child: CustomPaint(
                       size: Size.fromRadius(
@@ -67,7 +67,7 @@ class LocationMarkerLayer extends StatelessWidget {
               point: position.latLng,
               width: style.markerSize.width,
               height: style.markerSize.height,
-              builder: (_) {
+              builder: (BuildContext context) {
                 switch (style.markerDirection) {
                   case MarkerDirection.north:
                     return style.marker;
