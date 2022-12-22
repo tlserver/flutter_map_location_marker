@@ -92,7 +92,7 @@ class _SelectableDistanceFilterExampleState
 
   void _subscriptPositionStream() {
     streamSubscription = const LocationMarkerDataStreamFactory()
-        .geolocatorPositionStream(
+        .fromGeolocatorPositionStream(
       stream: Geolocator.getPositionStream(
         locationSettings: LocationSettings(
           distanceFilter: distanceFilters[_selectedIndex],
