@@ -45,6 +45,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         options: MapOptions(
           center: LatLng(0, 0),
           zoom: 1,
+          minZoom: 0,
           maxZoom: 19,
           onPointerDown: _onPointerDown,
           onPointerUp: _onPointerUp,

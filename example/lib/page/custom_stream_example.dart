@@ -60,6 +60,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
             options: MapOptions(
               center: LatLng(0, 0),
               zoom: 1,
+              minZoom: 0,
               maxZoom: 19,
             ),
             // ignore: sort_child_properties_last
