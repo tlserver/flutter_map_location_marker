@@ -11,7 +11,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter:
     sdk: flutter
-  flutter_joystick: ^0.0.2
+  flutter_joystick: ^0.0.3
   flutter_map: any
   flutter_map_location_marker:
     path: ../
