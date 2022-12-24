@@ -1,3 +1,7 @@
+## [5.1.0+1] - Update Readme
+
+* Update readme
+
 ## [5.1.0] - Improve Behavior
 
 * Use lastKnownPosition as initial value of default position stream (#49)
