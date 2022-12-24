@@ -112,6 +112,7 @@ or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_mark
    Rotate the map to keep heading pointing upward.
 
 8. [Default Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart) :
+   Share the default streams between your app and this plugin.
 
 ## FAQ
 
