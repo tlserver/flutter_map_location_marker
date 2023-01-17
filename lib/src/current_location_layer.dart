@@ -45,8 +45,8 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [CenterOnLocationUpdate.never].
   final CenterOnLocationUpdate centerOnLocationUpdate;
 
-  /// When should the plugin center the current location to the map. Default to
-  /// [TurnOnHeadingUpdate.never].
+  /// When should the plugin rotate the map to keep the heading upward. Default
+  /// to [TurnOnHeadingUpdate.never].
   final TurnOnHeadingUpdate turnOnHeadingUpdate;
 
   /// The duration of the animation of centering the map to the current
