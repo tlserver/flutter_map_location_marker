@@ -13,9 +13,9 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   late bool navigationMode;
   late int pointerCount;
-  late CenterOnLocationUpdate _centerOnLocationUpdate;
+  late FollowOnLocationUpdate _followOnLocationUpdate;
   late TurnOnHeadingUpdate _turnOnHeadingUpdate;
-  late StreamController<double?> _centerCurrentLocationStreamController;
+  late StreamController<double?> _followCurrentLocationStreamController;
   late StreamController<void> _turnHeadingUpStreamController;
 
   @override
@@ -23,15 +23,15 @@ class _NavigationExampleState extends State<NavigationExample> {
     super.initState();
     navigationMode = false;
     pointerCount = 0;
-    _centerOnLocationUpdate = CenterOnLocationUpdate.never;
+    _followOnLocationUpdate = FollowOnLocationUpdate.never;
     _turnOnHeadingUpdate = TurnOnHeadingUpdate.never;
-    _centerCurrentLocationStreamController = StreamController<double?>();
+    _followCurrentLocationStreamController = StreamController<double?>();
     _turnHeadingUpStreamController = StreamController<void>();
   }
 
   @override
   void dispose() {
-    _centerCurrentLocationStreamController.close();
+    _followCurrentLocationStreamController.close();
     super.dispose();
   }
 
@@ -61,10 +61,10 @@ class _NavigationExampleState extends State<NavigationExample> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            centerCurrentLocationStream:
-                _centerCurrentLocationStreamController.stream,
+            followCurrentLocationStream:
+                _followCurrentLocationStreamController.stream,
             turnHeadingUpLocationStream: _turnHeadingUpStreamController.stream,
-            centerOnLocationUpdate: _centerOnLocationUpdate,
+            followOnLocationUpdate: _followOnLocationUpdate,
             turnOnHeadingUpdate: _turnOnHeadingUpdate,
             style: const LocationMarkerStyle(
               marker: DefaultLocationMarker(
@@ -89,16 +89,16 @@ class _NavigationExampleState extends State<NavigationExample> {
                 setState(
                   () {
                     navigationMode = !navigationMode;
-                    _centerOnLocationUpdate = navigationMode
-                        ? CenterOnLocationUpdate.always
-                        : CenterOnLocationUpdate.never;
+                    _followOnLocationUpdate = navigationMode
+                        ? FollowOnLocationUpdate.always
+                        : FollowOnLocationUpdate.never;
                     _turnOnHeadingUpdate = navigationMode
                         ? TurnOnHeadingUpdate.always
                         : TurnOnHeadingUpdate.never;
                   },
                 );
                 if (navigationMode) {
-                  _centerCurrentLocationStreamController.add(18);
+                  _followCurrentLocationStreamController.add(18);
                   _turnHeadingUpStreamController.add(null);
                 }
               },
@@ -112,23 +112,23 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  // Disable center and turn temporarily when user is manipulating the map.
+  // Disable follow and turn temporarily when user is manipulating the map.
   void _onPointerDown(e, l) {
     pointerCount++;
     setState(() {
-      _centerOnLocationUpdate = CenterOnLocationUpdate.never;
+      _followOnLocationUpdate = FollowOnLocationUpdate.never;
       _turnOnHeadingUpdate = TurnOnHeadingUpdate.never;
     });
   }
 
-  // Enable center and turn again when user end manipulation.
+  // Enable follow and turn again when user end manipulation.
   void _onPointerUp(e, l) {
     if (--pointerCount == 0 && navigationMode) {
       setState(() {
-        _centerOnLocationUpdate = CenterOnLocationUpdate.always;
+        _followOnLocationUpdate = FollowOnLocationUpdate.always;
         _turnOnHeadingUpdate = TurnOnHeadingUpdate.always;
       });
-      _centerCurrentLocationStreamController.add(18);
+      _followCurrentLocationStreamController.add(18);
       _turnHeadingUpStreamController.add(null);
     }
   }

@@ -6,13 +6,13 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'animated_location_marker_layer.dart';
-import 'center_on_location_update.dart';
 import 'data.dart';
 import 'data_stream_factory.dart';
 import 'exception/incorrect_setup_exception.dart';
 import 'exception/permission_denied_exception.dart';
 import 'exception/permission_requesting_exception.dart';
 import 'exception/service_disabled_exception.dart';
+import 'follow_on_location_update.dart';
 import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
@@ -30,32 +30,32 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [LocationMarkerDataStreamFactory.fromCompassHeadingStream].
   final Stream<LocationMarkerHeading?> headingStream;
 
-  /// The event stream for centering current location. Add a zoom level into
-  /// this stream to center the current location at the provided zoom level or a
+  /// The event stream for follow current location. Add a zoom level into
+  /// this stream to follow the current location at the provided zoom level or a
   /// null if the zoom level should be unchanged. Default to null.
   ///
   /// For more details, see
-  /// [CenterFabExample](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart).
-  final Stream<double?>? centerCurrentLocationStream;
+  /// [FollowFabExample](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/follow_fab_example.dart).
+  final Stream<double?>? followCurrentLocationStream;
 
   /// The event stream for turning heading up. Default to null.
   final Stream<void>? turnHeadingUpLocationStream;
 
-  /// When should the plugin center the current location to the map. Default to
-  /// [CenterOnLocationUpdate.never].
-  final CenterOnLocationUpdate centerOnLocationUpdate;
+  /// When should the map follow current location. Default to
+  /// [FollowOnLocationUpdate.never].
+  final FollowOnLocationUpdate followOnLocationUpdate;
 
   /// When should the plugin rotate the map to keep the heading upward. Default
   /// to [TurnOnHeadingUpdate.never].
   final TurnOnHeadingUpdate turnOnHeadingUpdate;
 
-  /// The duration of the animation of centering the map to the current
+  /// The duration of the animation of following the map to the current
   /// location. Default to 200ms.
-  final Duration centerAnimationDuration;
+  final Duration followAnimationDuration;
 
-  /// The curve of the animation of centering the map to the current location.
+  /// The curve of the animation of following the map to the current location.
   /// Default to [Curves.fastOutSlowIn].
-  final Curve centerAnimationCurve;
+  final Curve followAnimationCurve;
 
   /// The duration of the animation of turning the map to align the heading.
   /// Default to 200ms.
@@ -85,12 +85,12 @@ class CurrentLocationLayer extends StatefulWidget {
     this.style = const LocationMarkerStyle(),
     Stream<LocationMarkerPosition?>? positionStream,
     Stream<LocationMarkerHeading?>? headingStream,
-    this.centerCurrentLocationStream,
+    this.followCurrentLocationStream,
     this.turnHeadingUpLocationStream,
-    this.centerOnLocationUpdate = CenterOnLocationUpdate.never,
+    this.followOnLocationUpdate = FollowOnLocationUpdate.never,
     this.turnOnHeadingUpdate = TurnOnHeadingUpdate.never,
-    this.centerAnimationDuration = const Duration(milliseconds: 200),
-    this.centerAnimationCurve = Curves.fastOutSlowIn,
+    this.followAnimationDuration = const Duration(milliseconds: 200),
+    this.followAnimationCurve = Curves.fastOutSlowIn,
     this.turnAnimationDuration = const Duration(milliseconds: 200),
     this.turnAnimationCurve = Curves.easeInOut,
     this.moveAnimationDuration = const Duration(milliseconds: 200),
@@ -112,7 +112,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   _Status _status = _Status.initialing;
   LocationMarkerPosition? _currentPosition;
   LocationMarkerHeading? _currentHeading;
-  double? _centeringZoom;
+  double? _followingZoom;
 
   late bool _isFirstLocationUpdate;
   late bool _isFirstHeadingUpdate;
@@ -120,9 +120,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
   late StreamSubscription<LocationMarkerHeading?> _headingStreamSubscription;
 
-  /// Subscription to a stream for centering single that also include a zoom level.
-  StreamSubscription<double?>? _centerCurrentLocationStreamSubscription;
-  AnimationController? _centerCurrentLocationAnimationController;
+  /// Subscription to a stream for following single that also include a zoom level.
+  StreamSubscription<double?>? _followCurrentLocationStreamSubscription;
+  AnimationController? _followCurrentLocationAnimationController;
 
   /// Subscription to a stream for single indicate turning the heading up.
   StreamSubscription<void>? _turnHeadingUpStreamSubscription;
@@ -135,7 +135,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _isFirstHeadingUpdate = true;
     _subscriptPositionStream();
     _subscriptHeadingStream();
-    _subscriptCenterCurrentLocationStream();
+    _subscriptFollowCurrentLocationStream();
     _subscriptTurnHeadingUpStream();
   }
 
@@ -150,10 +150,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       _headingStreamSubscription.cancel();
       _subscriptHeadingStream();
     }
-    if (widget.centerCurrentLocationStream !=
-        oldWidget.centerCurrentLocationStream) {
-      _centerCurrentLocationStreamSubscription?.cancel();
-      _subscriptCenterCurrentLocationStream();
+    if (widget.followCurrentLocationStream !=
+        oldWidget.followCurrentLocationStream) {
+      _followCurrentLocationStreamSubscription?.cancel();
+      _subscriptFollowCurrentLocationStream();
     }
     if (widget.turnHeadingUpLocationStream !=
         oldWidget.turnHeadingUpLocationStream) {
@@ -251,8 +251,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void dispose() {
     _positionStreamSubscription.cancel();
     _headingStreamSubscription.cancel();
-    _centerCurrentLocationStreamSubscription?.cancel();
-    _centerCurrentLocationAnimationController?.dispose();
+    _followCurrentLocationStreamSubscription?.cancel();
+    _followCurrentLocationAnimationController?.dispose();
     _turnHeadingUpStreamSubscription?.cancel();
     _turnHeadingUpAnimationController?.dispose();
     super.dispose();
@@ -266,23 +266,23 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           _currentPosition = position;
         });
 
-        bool centerCurrentLocation;
-        switch (widget.centerOnLocationUpdate) {
-          case CenterOnLocationUpdate.always:
-            centerCurrentLocation = true;
+        bool followCurrentLocation;
+        switch (widget.followOnLocationUpdate) {
+          case FollowOnLocationUpdate.always:
+            followCurrentLocation = true;
             break;
-          case CenterOnLocationUpdate.once:
-            centerCurrentLocation = _isFirstLocationUpdate;
+          case FollowOnLocationUpdate.once:
+            followCurrentLocation = _isFirstLocationUpdate;
             _isFirstLocationUpdate = false;
             break;
-          case CenterOnLocationUpdate.never:
-            centerCurrentLocation = false;
+          case FollowOnLocationUpdate.never:
+            followCurrentLocation = false;
             break;
         }
-        if (centerCurrentLocation) {
+        if (followCurrentLocation) {
           _moveMap(
             LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            _centeringZoom,
+            _followingZoom,
           );
         }
       },
@@ -331,15 +331,15 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     );
   }
 
-  void _subscriptCenterCurrentLocationStream() {
-    _centerCurrentLocationStreamSubscription =
-        widget.centerCurrentLocationStream?.listen((double? zoom) {
+  void _subscriptFollowCurrentLocationStream() {
+    _followCurrentLocationStreamSubscription =
+        widget.followCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
-        _centeringZoom = zoom;
+        _followingZoom = zoom;
         _moveMap(
           LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
           zoom,
-        ).whenComplete(() => _centeringZoom = null);
+        ).whenComplete(() => _followingZoom = null);
       }
     });
   }
@@ -356,14 +356,14 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   TickerFuture _moveMap(LatLng latLng, [double? zoom]) {
     final map = FlutterMapState.maybeOf(context)!;
     zoom ??= map.zoom;
-    _centerCurrentLocationAnimationController?.dispose();
-    _centerCurrentLocationAnimationController = AnimationController(
-      duration: widget.centerAnimationDuration,
+    _followCurrentLocationAnimationController?.dispose();
+    _followCurrentLocationAnimationController = AnimationController(
+      duration: widget.followAnimationDuration,
       vsync: this,
     );
     final animation = CurvedAnimation(
-      parent: _centerCurrentLocationAnimationController!,
-      curve: widget.centerAnimationCurve,
+      parent: _followCurrentLocationAnimationController!,
+      curve: widget.followAnimationCurve,
     );
     final latTween = Tween(
       begin: map.center.latitude,
@@ -378,7 +378,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       end: zoom,
     );
 
-    _centerCurrentLocationAnimationController!.addListener(() {
+    _followCurrentLocationAnimationController!.addListener(() {
       map.move(
         LatLng(
           latTween.evaluate(animation),
@@ -389,16 +389,16 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       );
     });
 
-    _centerCurrentLocationAnimationController!
+    _followCurrentLocationAnimationController!
         .addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed ||
           status == AnimationStatus.dismissed) {
-        _centerCurrentLocationAnimationController!.dispose();
-        _centerCurrentLocationAnimationController = null;
+        _followCurrentLocationAnimationController!.dispose();
+        _followCurrentLocationAnimationController = null;
       }
     });
 
-    return _centerCurrentLocationAnimationController!.forward();
+    return _followCurrentLocationAnimationController!.forward();
   }
 
   TickerFuture _rotateMap(double angle) {
