@@ -5,25 +5,25 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
-class CenterFabExample extends StatefulWidget {
+class FollowFabExample extends StatefulWidget {
   @override
-  _CenterFabExampleState createState() => _CenterFabExampleState();
+  _FollowFabExampleState createState() => _FollowFabExampleState();
 }
 
-class _CenterFabExampleState extends State<CenterFabExample> {
-  late CenterOnLocationUpdate _centerOnLocationUpdate;
-  late StreamController<double?> _centerCurrentLocationStreamController;
+class _FollowFabExampleState extends State<FollowFabExample> {
+  late FollowOnLocationUpdate _followOnLocationUpdate;
+  late StreamController<double?> _followCurrentLocationStreamController;
 
   @override
   void initState() {
     super.initState();
-    _centerOnLocationUpdate = CenterOnLocationUpdate.always;
-    _centerCurrentLocationStreamController = StreamController<double?>();
+    _followOnLocationUpdate = FollowOnLocationUpdate.always;
+    _followCurrentLocationStreamController = StreamController<double?>();
   }
 
   @override
   void dispose() {
-    _centerCurrentLocationStreamController.close();
+    _followCurrentLocationStreamController.close();
     super.dispose();
   }
 
@@ -31,7 +31,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Center FAB Example'),
+        title: const Text('Follow FAB Example'),
       ),
       body: FlutterMap(
         options: MapOptions(
@@ -39,11 +39,11 @@ class _CenterFabExampleState extends State<CenterFabExample> {
           zoom: 1,
           minZoom: 0,
           maxZoom: 19,
-          // Stop centering the location marker on the map if user interacted with the map.
+          // Stop following the location marker on the map if user interacted with the map.
           onPositionChanged: (MapPosition position, bool hasGesture) {
             if (hasGesture) {
               setState(
-                () => _centerOnLocationUpdate = CenterOnLocationUpdate.never,
+                () => _followOnLocationUpdate = FollowOnLocationUpdate.never,
               );
             }
           },
@@ -58,9 +58,9 @@ class _CenterFabExampleState extends State<CenterFabExample> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            centerCurrentLocationStream:
-                _centerCurrentLocationStreamController.stream,
-            centerOnLocationUpdate: _centerOnLocationUpdate,
+            followCurrentLocationStream:
+                _followCurrentLocationStreamController.stream,
+            followOnLocationUpdate: _followOnLocationUpdate,
           ),
         ],
         nonRotatedChildren: [
@@ -69,12 +69,12 @@ class _CenterFabExampleState extends State<CenterFabExample> {
             bottom: 20,
             child: FloatingActionButton(
               onPressed: () {
-                // Automatically center the location marker on the map when location updated until user interact with the map.
+                // Follow the location marker on the map when location updated until user interact with the map.
                 setState(
-                  () => _centerOnLocationUpdate = CenterOnLocationUpdate.always,
+                  () => _followOnLocationUpdate = FollowOnLocationUpdate.always,
                 );
-                // Center the location marker on the map and zoom the map to level 18.
-                _centerCurrentLocationStreamController.add(18);
+                // Follow the location marker on the map and zoom the map to level 18.
+                _followCurrentLocationStreamController.add(18);
               },
               child: const Icon(
                 Icons.my_location,
