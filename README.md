@@ -21,7 +21,7 @@ about `flutter_map_location_marker`, get and give help in #plugins channel.
   the [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
   streams from other source are also supported.
 
-* **Auto-centering**: The map center on the new location when location is updated. This feature is
+* **Auto-following**: The map follow the new location when location is updated. This feature is
   disabled by default.
 
 * **Auto-rotating**: The map can be rotated automatically as navigation mode. This feature is
@@ -66,7 +66,7 @@ in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_mar
 ```dart
 Widget build() {
   return CurrentLocationLayer(
-    centerOnLocationUpdate: CenterOnLocationUpdate.always,
+    followOnLocationUpdate: FollowOnLocationUpdate.always,
     turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
     style: LocationMarkerStyle(
       marker: const DefaultLocationMarker(
@@ -92,7 +92,7 @@ or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_mark
 1. [Marker Customization](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/customize_marker_example.dart) :
    Change the marker to any widget you want.
 
-2. [Floating Action Button for Centering Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart) :
+2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart) :
    Use a floating action button to move and zoom the map to current location.
 
 3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart) :
