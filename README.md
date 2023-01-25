@@ -69,7 +69,7 @@ Widget build() {
     centerOnLocationUpdate: CenterOnLocationUpdate.always,
     turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
     style: LocationMarkerStyle(
-      mainMarker: const DefaultLocationMarker(
+      marker: const DefaultLocationMarker(
         child: Icon(
           Icons.navigation,
           color: Colors.white,
