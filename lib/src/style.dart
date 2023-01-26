@@ -36,7 +36,7 @@ class LocationMarkerStyle {
   /// Create a LocationMarkerStyle.
   const LocationMarkerStyle({
     this.marker = const DefaultLocationMarker(),
-    this.markerSize = const Size(20, 20),
+    this.markerSize = const Size.square(20),
     this.markerDirection = MarkerDirection.top,
     this.showAccuracyCircle = true,
     this.accuracyCircleColor = const Color.fromARGB(0x18, 0x21, 0x96, 0xF3),

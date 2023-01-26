@@ -24,7 +24,7 @@ class HeadingSector extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final radius = min(size.width, size.height) / 2;
+    final radius = size.shortestSide / 2;
     final rect = Rect.fromCircle(
       center: Offset(radius, radius),
       radius: radius,
