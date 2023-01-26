@@ -34,7 +34,7 @@ class CustomizeMarkerExample extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              markerSize: const Size(40, 40),
+              markerSize: const Size.square(40),
               accuracyCircleColor: Colors.green.withOpacity(0.1),
               headingSectorColor: Colors.green.withOpacity(0.8),
               headingSectorRadius: 120,
