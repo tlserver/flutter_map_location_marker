@@ -50,6 +50,7 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
         begin: position,
         end: position,
       ),
+      curve: moveAnimationCurve,
       duration: moveAnimationDuration,
       builder: (
         BuildContext context,
@@ -62,7 +63,8 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
               begin: heading!,
               end: heading!,
             ),
-            duration: moveAnimationDuration,
+            curve: rotateAnimationCurve,
+            duration: rotateAnimationDuration,
             builder: (
               BuildContext context,
               LocationMarkerHeading heading,
