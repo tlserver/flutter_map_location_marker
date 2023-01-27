@@ -9,12 +9,9 @@ import 'data.dart';
 class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
   /// Creates a tween.
   LocationMarkerPositionTween({
-    required LocationMarkerPosition begin,
-    required LocationMarkerPosition end,
-  }) : super(
-          begin: begin,
-          end: end,
-        );
+    required super.begin,
+    required super.end,
+  });
 
   @override
   LocationMarkerPosition lerp(double t) {
@@ -33,12 +30,9 @@ class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
 class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
   /// Creates a tween.
   LocationMarkerHeadingTween({
-    required LocationMarkerHeading begin,
-    required LocationMarkerHeading end,
-  }) : super(
-          begin: begin,
-          end: end,
-        );
+    required super.begin,
+    required super.end,
+  });
 
   @override
   LocationMarkerHeading lerp(double t) {
