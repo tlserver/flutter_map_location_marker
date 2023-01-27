@@ -60,8 +60,8 @@ class DegreeTween extends Tween<double> {
     required double begin,
     required double end,
   }) : super(
-          begin: begin,
-          end: end,
+          begin: begin % 360,
+          end: end % 360,
         );
 
   @override
