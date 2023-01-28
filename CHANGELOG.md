@@ -1,3 +1,19 @@
+## [5.2.0] - Improve Behavior
+
+* Add follow screen point control feature,
+  see [CurrentLocationLayer.followScreenPoint](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/followScreenPoint.html)
+  and [CurrentLocationLayer.followScreenPointOffset](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/followScreenPointOffset.html)
+* Update example project
+* Fix
+  [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/5.2.0/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
+  curve and duration
+* Rename
+  [CenterOnLocationUpdate](https://pub.dev/documentation/flutter_map_location_marker/5.2.0/flutter_map_location_marker/CenterOnLocationUpdate.html)
+  to [FollowOnLocationUpdate](https://pub.dev/documentation/flutter_map_location_marker/5.2.0/flutter_map_location_marker/FollowOnLocationUpdate.html)
+* Update documentation
+
+Thank to ch-muhammad-adil
+
 ## [5.1.0+1] - Update Readme
 
 * Update readme
