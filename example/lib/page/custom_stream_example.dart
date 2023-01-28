@@ -85,7 +85,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
             child: Joystick(
               listener: (details) {
                 _currentLat -= details.y;
-                _currentLat = _currentLat.clamp(-90, 90);
+                _currentLat = _currentLat.clamp(-85, 85);
                 _currentLng += details.x;
                 _currentLng = _currentLng.clamp(-180, 180);
                 positionStreamController.add(
@@ -98,7 +98,8 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
                 if (details.x != 0 || details.y != 0) {
                   headingStreamController.add(
                     LocationMarkerHeading(
-                      heading: atan2(details.y, details.x) + pi * 0.5,
+                      heading:
+                          (atan2(details.y, details.x) + pi * 0.5) % (pi * 2),
                       accuracy: pi * 0.2,
                     ),
                   );
