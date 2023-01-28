@@ -23,6 +23,14 @@ class LocationMarkerPosition {
 
   /// Convert to LatLng object
   LatLng get latLng => LatLng(latitude, longitude);
+
+  @override
+  String toString() {
+    return 'LocationMarkerPosition('
+        'latitude: $latitude, '
+        'longitude: $longitude, '
+        'accuracy: $accuracy)';
+  }
 }
 
 /// A angle with accuracy for marker rendering.
@@ -40,4 +48,11 @@ class LocationMarkerHeading {
     required this.heading,
     required this.accuracy,
   });
+
+  @override
+  String toString() {
+    return 'LocationMarkerHeading('
+        'heading: $heading, '
+        'accuracy: $accuracy)';
+  }
 }
