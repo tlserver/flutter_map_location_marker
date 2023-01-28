@@ -62,6 +62,23 @@ class DegreeTween extends Tween<double> {
   double lerp(double t) => _degreeLerp(begin!, end!, t);
 }
 
+/// A linear interpolation between a beginning and ending value for radius
+/// value. This value turn for both clockwise or anti-clockwise according to the
+/// shorter direction.
+class RadiusTween extends Tween<double> {
+  /// Creates a tween.
+  RadiusTween({
+    required double begin,
+    required double end,
+  }) : super(
+          begin: begin % (2 * pi),
+          end: end % (2 * pi),
+        );
+
+  @override
+  double lerp(double t) => _radiusLerp(begin!, end!, t);
+}
+
 double _doubleLerp(double begin, double end, double t) =>
     begin + (end - begin) * t;
 
