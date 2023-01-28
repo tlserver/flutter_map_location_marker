@@ -1,3 +1,7 @@
+## [5.2.0+2] - Update Documentation
+
+* Update documentation
+
 ## [5.2.0+1] - Update Changelog
 
 * Update changelog
