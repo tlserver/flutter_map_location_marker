@@ -35,14 +35,14 @@ class CurrentLocationLayer extends StatefulWidget {
   /// (+1.0, +1.0) indicate the bottom-right corner of the map widget. The point
   /// (0.0, 0.0) indicate the center of the map widget. The final screen point
   /// is offset by [followScreenPointOffset], i.e. (_mapWidgetWidth_ *
-  /// [followScreenPoint.x] / 2 + [followScreenPointOffset.x], _mapWidgetHeight_
-  /// * [followScreenPoint.y] / 2 + [followScreenPointOffset.y]).
+  /// [followScreenPoint.x] / 2 + [followScreenPointOffset.x],
+  /// _mapWidgetHeight_ * [followScreenPoint.y] / 2 + [followScreenPointOffset.y]).
   final CustomPoint followScreenPoint;
 
   /// An offset value that when the map follow to the marker. The final screen
   /// point is (_mapWidgetWidth_ * [followScreenPoint.x] / 2 +
-  /// [followScreenPointOffset.x], _mapWidgetHeight_ * [followScreenPoint.y] / 2
-  /// + [followScreenPointOffset.y]).
+  /// [followScreenPointOffset.x], _mapWidgetHeight_ * [followScreenPoint.y] /
+  /// 2 + [followScreenPointOffset.y]).
   final CustomPoint followScreenPointOffset;
 
   /// The event stream for follow current location. Add a zoom level into
