@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -61,6 +62,8 @@ class _NavigationExampleState extends State<NavigationExample> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
+            followScreenPoint: const CustomPoint(0.0, 1.0),
+            followScreenPointOffset: const CustomPoint(0.0, -60.0),
             followCurrentLocationStream:
                 _followCurrentLocationStreamController.stream,
             turnHeadingUpLocationStream: _turnHeadingUpStreamController.stream,
