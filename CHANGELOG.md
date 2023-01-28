@@ -1,3 +1,7 @@
+## [5.2.0+1] - Update Changelog
+
+* Update changelog
+
 ## [5.2.0] - Improve Behavior
 
 * Add follow screen point control feature,
