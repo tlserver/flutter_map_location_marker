@@ -60,8 +60,8 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
         if (heading != null) {
           return TweenAnimationBuilder(
             tween: LocationMarkerHeadingTween(
-              begin: heading!,
-              end: heading!,
+              begin: heading,
+              end: heading,
             ),
             curve: rotateAnimationCurve,
             duration: rotateAnimationDuration,
