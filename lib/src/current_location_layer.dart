@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'animated_location_marker_layer.dart';
 import 'data.dart';
 import 'data_stream_factory.dart';
 import 'exception/incorrect_setup_exception.dart';
@@ -13,6 +12,7 @@ import 'exception/permission_denied_exception.dart';
 import 'exception/permission_requesting_exception.dart';
 import 'exception/service_disabled_exception.dart';
 import 'follow_on_location_update.dart';
+import 'location_marker_layer.dart';
 import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
@@ -29,6 +29,21 @@ class CurrentLocationLayer extends StatefulWidget {
   /// A Stream that provide heading data for this marker. Default to
   /// [LocationMarkerDataStreamFactory.fromCompassHeadingStream].
   final Stream<LocationMarkerHeading?> headingStream;
+
+  /// A screen point that when the map follow to the marker. The point
+  /// (-1.0, -1.0) indicate the top-left corner of the map widget. The point
+  /// (+1.0, +1.0) indicate the bottom-right corner of the map widget. The point
+  /// (0.0, 0.0) indicate the center of the map widget. The final screen point
+  /// is offset by [followScreenPointOffset], i.e. (_mapWidgetWidth_ *
+  /// [followScreenPoint.x] / 2 + [followScreenPointOffset.x], _mapWidgetHeight_
+  /// * [followScreenPoint.y] / 2 + [followScreenPointOffset.y]).
+  final CustomPoint followScreenPoint;
+
+  /// An offset value that when the map follow to the marker. The final screen
+  /// point is (_mapWidgetWidth_ * [followScreenPoint.x] / 2 +
+  /// [followScreenPointOffset.x], _mapWidgetHeight_ * [followScreenPoint.y] / 2
+  /// + [followScreenPointOffset.y]).
+  final CustomPoint followScreenPointOffset;
 
   /// The event stream for follow current location. Add a zoom level into
   /// this stream to follow the current location at the provided zoom level or a
@@ -85,6 +100,8 @@ class CurrentLocationLayer extends StatefulWidget {
     this.style = const LocationMarkerStyle(),
     Stream<LocationMarkerPosition?>? positionStream,
     Stream<LocationMarkerHeading?>? headingStream,
+    this.followScreenPoint = const CustomPoint(0.0, 0.0),
+    this.followScreenPointOffset = const CustomPoint(0.0, 0.0),
     this.followCurrentLocationStream,
     this.turnHeadingUpLocationStream,
     this.followOnLocationUpdate = FollowOnLocationUpdate.never,
@@ -120,13 +137,17 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
   late StreamSubscription<LocationMarkerHeading?> _headingStreamSubscription;
 
-  /// Subscription to a stream for following single that also include a zoom level.
+  /// Subscription to a stream for following single that also include a zoom
+  /// level.
   StreamSubscription<double?>? _followCurrentLocationStreamSubscription;
-  AnimationController? _followCurrentLocationAnimationController;
 
   /// Subscription to a stream for single indicate turning the heading up.
   StreamSubscription<void>? _turnHeadingUpStreamSubscription;
-  AnimationController? _turnHeadingUpAnimationController;
+
+  AnimationController? _moveMapAnimationController;
+  AnimationController? _moveMarkerAnimationController;
+  AnimationController? _rotateMapAnimationController;
+  AnimationController? _rotateMarkerAnimationController;
 
   @override
   void initState() {
@@ -169,14 +190,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         return const SizedBox.shrink();
       case _Status.ready:
         if (_currentPosition != null) {
-          return AnimatedLocationMarkerLayer(
+          return LocationMarkerLayer(
             position: _currentPosition!,
             heading: _currentHeading,
             style: widget.style,
-            moveAnimationDuration: widget.moveAnimationDuration,
-            moveAnimationCurve: widget.moveAnimationCurve,
-            rotateAnimationDuration: widget.rotateAnimationDuration,
-            rotateAnimationCurve: widget.rotateAnimationCurve,
           );
         } else {
           return const SizedBox.shrink();
@@ -252,38 +269,47 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _positionStreamSubscription.cancel();
     _headingStreamSubscription.cancel();
     _followCurrentLocationStreamSubscription?.cancel();
-    _followCurrentLocationAnimationController?.dispose();
     _turnHeadingUpStreamSubscription?.cancel();
-    _turnHeadingUpAnimationController?.dispose();
+    _moveMapAnimationController?.dispose();
+    _moveMarkerAnimationController?.dispose();
+    _rotateMapAnimationController?.dispose();
+    _rotateMarkerAnimationController?.dispose();
     super.dispose();
   }
 
   void _subscriptPositionStream() {
     _positionStreamSubscription = widget.positionStream.listen(
       (LocationMarkerPosition? position) {
-        setState(() {
-          _status = _Status.ready;
-          _currentPosition = position;
-        });
+        if (position == null) {
+          setState(() {
+            _status = _Status.initialing;
+            _currentPosition = null;
+          });
+        } else {
+          setState(() {
+            _status = _Status.ready;
+          });
+          _moveMarker(position);
 
-        bool followCurrentLocation;
-        switch (widget.followOnLocationUpdate) {
-          case FollowOnLocationUpdate.always:
-            followCurrentLocation = true;
-            break;
-          case FollowOnLocationUpdate.once:
-            followCurrentLocation = _isFirstLocationUpdate;
-            _isFirstLocationUpdate = false;
-            break;
-          case FollowOnLocationUpdate.never:
-            followCurrentLocation = false;
-            break;
-        }
-        if (followCurrentLocation) {
-          _moveMap(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            _followingZoom,
-          );
+          bool followCurrentLocation;
+          switch (widget.followOnLocationUpdate) {
+            case FollowOnLocationUpdate.always:
+              followCurrentLocation = true;
+              break;
+            case FollowOnLocationUpdate.once:
+              followCurrentLocation = _isFirstLocationUpdate;
+              _isFirstLocationUpdate = false;
+              break;
+            case FollowOnLocationUpdate.never:
+              followCurrentLocation = false;
+              break;
+          }
+          if (followCurrentLocation) {
+            _moveMap(
+              position.latLng,
+              _followingZoom,
+            );
+          }
         }
       },
       onError: (error) {
@@ -308,7 +334,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptHeadingStream() {
     _headingStreamSubscription = widget.headingStream.listen(
       (LocationMarkerHeading? heading) {
-        setState(() => _currentHeading = heading);
+        _rotateMarker(heading!);
 
         bool turnHeadingUp;
         switch (widget.turnOnHeadingUpdate) {
@@ -324,7 +350,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             break;
         }
         if (turnHeadingUp) {
-          _rotateMap(-_currentHeading!.heading / pi * 180);
+          _rotateMap(-heading.heading % (2 * pi));
         }
       },
       onError: (_) => setState(() => _currentHeading = null),
@@ -348,29 +374,75 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _turnHeadingUpStreamSubscription =
         widget.turnHeadingUpLocationStream?.listen((_) {
       if (_currentHeading != null) {
-        _rotateMap(-_currentHeading!.heading / pi * 180);
+        _rotateMap(-_currentHeading!.heading % (2 * pi));
       }
     });
+  }
+
+  TickerFuture _moveMarker(LocationMarkerPosition position) {
+    _moveMarkerAnimationController?.dispose();
+    _moveMarkerAnimationController = AnimationController(
+      duration: widget.moveAnimationDuration,
+      vsync: this,
+    );
+    final animation = CurvedAnimation(
+      parent: _moveMarkerAnimationController!,
+      curve: widget.moveAnimationCurve,
+    );
+    final positionTween = LocationMarkerPositionTween(
+      begin: _currentPosition ?? position,
+      end: position,
+    );
+
+    _moveMarkerAnimationController!.addListener(() {
+      setState(() => _currentPosition = positionTween.evaluate(animation));
+    });
+
+    _moveMarkerAnimationController!.addStatusListener((AnimationStatus status) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
+        _moveMarkerAnimationController!.dispose();
+        _moveMarkerAnimationController = null;
+      }
+    });
+
+    return _moveMarkerAnimationController!.forward();
   }
 
   TickerFuture _moveMap(LatLng latLng, [double? zoom]) {
     final map = FlutterMapState.maybeOf(context)!;
     zoom ??= map.zoom;
-    _followCurrentLocationAnimationController?.dispose();
-    _followCurrentLocationAnimationController = AnimationController(
+
+    final LatLng beginLatLng;
+    if (widget.followScreenPoint == const CustomPoint(0, 0) &&
+        widget.followScreenPointOffset == const CustomPoint(0, 0)) {
+      beginLatLng = map.center;
+    } else {
+      final crs = map.options.crs;
+      final followOffset = map.nonrotatedSize!
+              .multiplyBy(0.5)
+              .scaleBy(widget.followScreenPoint) +
+          widget.followScreenPointOffset;
+      final mapCenter = crs.latLngToPoint(map.center, map.zoom);
+      final followPoint = map.rotatePoint(mapCenter, mapCenter + followOffset);
+      beginLatLng = crs.pointToLatLng(followPoint, map.zoom)!;
+    }
+
+    _moveMapAnimationController?.dispose();
+    _moveMapAnimationController = AnimationController(
       duration: widget.followAnimationDuration,
       vsync: this,
     );
     final animation = CurvedAnimation(
-      parent: _followCurrentLocationAnimationController!,
+      parent: _moveMapAnimationController!,
       curve: widget.followAnimationCurve,
     );
     final latTween = Tween(
-      begin: map.center.latitude,
+      begin: beginLatLng.latitude,
       end: latLng.latitude,
     );
     final lngTween = Tween(
-      begin: map.center.longitude,
+      begin: beginLatLng.longitude,
       end: latLng.longitude,
     );
     final zoomTween = Tween(
@@ -378,62 +450,142 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       end: zoom,
     );
 
-    _followCurrentLocationAnimationController!.addListener(() {
+    _moveMapAnimationController!.addListener(() {
+      final evaluatedLatLng = LatLng(
+        latTween.evaluate(animation),
+        lngTween.evaluate(animation),
+      );
+      final evaluatedZoom = zoomTween.evaluate(animation);
+
+      final LatLng mapCenter;
+      if (widget.followScreenPoint == const CustomPoint(0, 0) &&
+          widget.followScreenPointOffset == const CustomPoint(0, 0)) {
+        mapCenter = evaluatedLatLng;
+      } else {
+        final crs = map.options.crs;
+        final followOffset = map.nonrotatedSize!
+                .multiplyBy(0.5)
+                .scaleBy(widget.followScreenPoint) +
+            widget.followScreenPointOffset;
+        final followPoint = crs.latLngToPoint(evaluatedLatLng, evaluatedZoom);
+        final mapCenterPoint = map.rotatePoint(
+          followPoint,
+          followPoint - followOffset,
+        );
+        mapCenter = crs.pointToLatLng(mapCenterPoint, evaluatedZoom)!;
+      }
+
       map.move(
-        LatLng(
-          latTween.evaluate(animation),
-          lngTween.evaluate(animation),
-        ),
-        zoomTween.evaluate(animation),
+        mapCenter,
+        evaluatedZoom,
         source: MapEventSource.mapController,
       );
     });
 
-    _followCurrentLocationAnimationController!
-        .addStatusListener((AnimationStatus status) {
+    _moveMapAnimationController!.addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed ||
           status == AnimationStatus.dismissed) {
-        _followCurrentLocationAnimationController!.dispose();
-        _followCurrentLocationAnimationController = null;
+        _moveMapAnimationController!.dispose();
+        _moveMapAnimationController = null;
       }
     });
 
-    return _followCurrentLocationAnimationController!.forward();
+    return _moveMapAnimationController!.forward();
+  }
+
+  TickerFuture _rotateMarker(LocationMarkerHeading heading) {
+    _rotateMarkerAnimationController?.dispose();
+    _rotateMarkerAnimationController = AnimationController(
+      duration: widget.rotateAnimationDuration,
+      vsync: this,
+    );
+    final animation = CurvedAnimation(
+      parent: _rotateMarkerAnimationController!,
+      curve: widget.rotateAnimationCurve,
+    );
+    final headingTween = LocationMarkerHeadingTween(
+      begin: _currentHeading ?? heading,
+      end: heading,
+    );
+
+    _rotateMarkerAnimationController!.addListener(() {
+      setState(() => _currentHeading = headingTween.evaluate(animation));
+    });
+
+    _rotateMarkerAnimationController!
+        .addStatusListener((AnimationStatus status) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
+        _rotateMarkerAnimationController!.dispose();
+        _rotateMarkerAnimationController = null;
+      }
+    });
+
+    return _rotateMarkerAnimationController!.forward();
   }
 
   TickerFuture _rotateMap(double angle) {
     final map = FlutterMapState.maybeOf(context)!;
-    _turnHeadingUpAnimationController?.dispose();
-    _turnHeadingUpAnimationController = AnimationController(
+    _rotateMapAnimationController?.dispose();
+    if ((map.rotationRad - angle).abs() < 0.006) {
+      _rotateMapAnimationController = null;
+      return TickerFuture.complete();
+    }
+    _rotateMapAnimationController = AnimationController(
       duration: widget.turnAnimationDuration,
       vsync: this,
     );
     final animation = CurvedAnimation(
-      parent: _turnHeadingUpAnimationController!,
+      parent: _rotateMapAnimationController!,
       curve: widget.turnAnimationCurve,
     );
-    final angleTween = DegreeTween(
-      begin: map.rotation,
+    final angleTween = RadiusTween(
+      begin: map.rotationRad,
       end: angle,
     );
 
-    _turnHeadingUpAnimationController!.addListener(() {
-      map.rotate(
-        angleTween.evaluate(animation),
-        source: MapEventSource.mapController,
-      );
-    });
-
-    _turnHeadingUpAnimationController!
-        .addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed ||
-          status == AnimationStatus.dismissed) {
-        _turnHeadingUpAnimationController!.dispose();
-        _turnHeadingUpAnimationController = null;
+    _rotateMapAnimationController!.addListener(() {
+      if (widget.followScreenPoint == const CustomPoint(0, 0) &&
+          widget.followScreenPointOffset == const CustomPoint(0, 0)) {
+        map.rotate(
+          angleTween.evaluate(animation) / pi * 180,
+          source: MapEventSource.mapController,
+        );
+      } else {
+        final crs = map.options.crs;
+        final followOffset = map.nonrotatedSize!
+                .multiplyBy(0.5)
+                .scaleBy(widget.followScreenPoint) +
+            widget.followScreenPointOffset;
+        final mapCenter = crs.latLngToPoint(map.center, map.zoom);
+        final followPoint =
+            map.rotatePoint(mapCenter, mapCenter + followOffset);
+        map.rotate(
+          angleTween.evaluate(animation) / pi * 180,
+          source: MapEventSource.mapController,
+        );
+        final mapCenterPoint = map.rotatePoint(
+          followPoint,
+          followPoint - followOffset,
+        );
+        final offsetMapCenter = crs.pointToLatLng(mapCenterPoint, map.zoom)!;
+        map.move(
+          offsetMapCenter,
+          map.zoom,
+          source: MapEventSource.mapController,
+        );
       }
     });
 
-    return _turnHeadingUpAnimationController!.forward();
+    _rotateMapAnimationController!.addStatusListener((AnimationStatus status) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
+        _rotateMapAnimationController!.dispose();
+        _rotateMapAnimationController = null;
+      }
+    });
+
+    return _rotateMapAnimationController!.forward();
   }
 }
 
