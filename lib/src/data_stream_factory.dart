@@ -63,10 +63,12 @@ class LocationMarkerDataStreamFactory {
             break;
           case LocationPermission.whileInUse:
           case LocationPermission.always:
-            final lastKnown = await Geolocator.getLastKnownPosition();
-            if (lastKnown != null) {
-              streamController.sink.add(lastKnown);
-            }
+            try {
+              final lastKnown = await Geolocator.getLastKnownPosition();
+              if (lastKnown != null) {
+                streamController.sink.add(lastKnown);
+              }
+            } catch(_) {};
             streamController.sink.addStream(Geolocator.getPositionStream());
             break;
           case LocationPermission.unableToDetermine:
