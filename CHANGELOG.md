@@ -1,3 +1,8 @@
+## [5.2.1] - Fix Bug
+
+* Fix web supporting (#52)
+* Update pubspec to specify supported platforms
+
 ## [5.2.0+2] - Update Documentation
 
 * Update documentation
