@@ -17,6 +17,8 @@ import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
 
+typedef OnPositionChanged = void Function(LocationMarkerPosition position);
+
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
   /// The style to use for this location marker.
@@ -94,6 +96,9 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [Curves.easeInOut].
   final Curve rotateAnimationCurve;
 
+  /// The callback when the location is changed.
+  final OnPositionChanged? onPositionhanged;
+
   /// Create a CurrentLocationLayer.
   CurrentLocationLayer({
     super.key,
@@ -114,6 +119,7 @@ class CurrentLocationLayer extends StatefulWidget {
     this.moveAnimationCurve = Curves.fastOutSlowIn,
     this.rotateAnimationDuration = const Duration(milliseconds: 200),
     this.rotateAnimationCurve = Curves.easeInOut,
+    this.onPositionhanged,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory()
                 .fromGeolocatorPositionStream(),
@@ -290,6 +296,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             _status = _Status.ready;
           });
           _moveMarker(position);
+          widget.onPositionhanged?.call(position);
 
           bool followCurrentLocation;
           switch (widget.followOnLocationUpdate) {
