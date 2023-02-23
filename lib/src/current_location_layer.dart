@@ -98,6 +98,7 @@ class CurrentLocationLayer extends StatefulWidget {
 
   /// The callback when the location is changed.
   final OnPositionChanged? onPositionhanged;
+  final double? followOnLocationUpdateZoom;
 
   /// Create a CurrentLocationLayer.
   CurrentLocationLayer({
@@ -120,6 +121,7 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 200),
     this.rotateAnimationCurve = Curves.easeInOut,
     this.onPositionhanged,
+    this.followOnLocationUpdateZoom,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory()
                 .fromGeolocatorPositionStream(),
@@ -158,6 +160,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   @override
   void initState() {
     super.initState();
+    _followingZoom = widget.followOnLocationUpdateZoom ?? _followingZoom;
     _isFirstLocationUpdate = true;
     _isFirstHeadingUpdate = true;
     _subscriptPositionStream();
