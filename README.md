@@ -40,7 +40,7 @@ dependencies:
 ```
 
 Add permission, please follow the instruction
-from [geolocator](https://pub.dev/packages/geolocator#permissions) package.
+from [geolocator](https://pub.dev/packages/geolocator#usage) package.
 
 Add the layer widget into `FlutterMap`:
 
