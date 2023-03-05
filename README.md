@@ -4,43 +4,45 @@
 [![github tag](https://img.shields.io/github/v/tag/tlserver/flutter_map_location_marker?include_prereleases&sort=semver)](https://github.com/tlserver/flutter_map_location_marker)
 [![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/master/LICENSE)
 
-A [flutter_map](https://pub.dev/packages/flutter_map) plugin for displaying device current location.
+`flutter_map_location_marker` is a [flutter_map](https://pub.dev/packages/flutter_map) plugin for
+displaying device's current location on a map. It provides a simple and flexible way to add a 
+customizable location marker to your map.
 <br>
 <img src="https://github.com/tlserver/flutter_map_location_marker/raw/master/assets/interface.jpg" alt="Interface preview" width="400">
 
-Join [flutter_map Discord server](https://discord.gg/egEGeByf4q). Talk
-about `flutter_map_location_marker`, get and give help in #plugins channel.
+Join [flutter_map Discord server](https://discord.gg/egEGeByf4q) to talk
+about `flutter_map_location_marker`, get help and help others in the #plugins channel.
 
 ## Features
 
-* **Simple**: The only thing to do is adding a `CurrentLocationLayer()` in to your map because all
-  parameters have good default values.
+* **Simple**: The only thing you need to do is to add a `CurrentLocationLayer()` in to your map
+  because all parameters have good default values.
 
-* **Flexible**: The default implementation is receiving device's position from
-  the [geolocator](https://pub.dev/packages/geolocator) package and receiving device's heading from
+* **Flexible**: The default implementation receives the device's position from
+  the [geolocator](https://pub.dev/packages/geolocator) package and the device's heading from
   the [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
-  streams from other source are also supported.
+  streams from other sources are also supported.
 
-* **Auto-following**: The map follow the new location when location is updated. This feature is
+* **Auto-following**: The map follows the new location when location is updated. This feature is
   disabled by default.
 
 * **Auto-rotating**: The map can be rotated automatically as navigation mode. This feature is
   disabled by default.
 
-* **Customization**: The location marker can be fully customized, even the colors of accuracy circle
-  and header.
+* **Customization**: The location marker can be fully customized, including the colors of the
+  accuracy circle and header.
 
 ## Usage
 
-Add flutter_map_location_marker to your pubspec.yaml:
+Add `flutter_map_location_marker` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_map_location_marker: any // or latest verion
+  flutter_map_location_marker: any # or latest verion
 ```
 
-Add permission, please follow the instruction
-from [geolocator](https://pub.dev/packages/geolocator#usage) package.
+Add permission by following the instructions
+from the [geolocator](https://pub.dev/packages/geolocator#usage) package.
 
 Add the layer widget into `FlutterMap`:
 
@@ -82,10 +84,11 @@ Widget build() {
 }
 ```
 
-If multiple location markers is needed to display, consider
-using [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
-or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html)
-.
+Consider using either 
+the [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
+or
+the [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html)
+if multiple location markers need to be displayed.
 
 ## Examples
 
@@ -93,7 +96,7 @@ or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_mark
    Change the marker to any widget you want.
 
 2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/follow_fab_example.dart) :
-   Use a floating action button to move and zoom the map to current location.
+   Use a floating action button to move and zoom the map to the current location.
 
 3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart) :
    Define Geolocator settings yourself.
@@ -102,7 +105,7 @@ or [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_mark
    Change Geolocator settings at the runtime.
 
 5. [Custom Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/custom_stream_example.dart) :
-   Use your own stream, such as position stream from other library or predefined route, as the
+   Use your own stream, such as position stream from another library or predefined route, as the
    source.
 
 6. [No Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/no_stream_example.dart) :
@@ -121,7 +124,10 @@ the [positionStream](https://pub.dev/documentation/flutter_map_location_marker/5
 , [headingStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/headingStream.html)
 or their origin streams from a CurrentLocationLayer widget?
 
-*A*: No. You should not get value from a widget, instead, create the stream you need and also pass
-it to the widget. You may
+*A*: No, you should not get these streams from a CurrentLocationLayer widget. Instead, create you
+own streams with the the same types and also pass it to all the widgets which need them.
+CurrentLocationLayer doesn't own the streams; it just listens to them. You can use any
+implementation of position and heading streams, as long as the stream types are Stream<Position> and
+Stream<double>, respectively. You may
 see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart)
 to know about how to do this.
