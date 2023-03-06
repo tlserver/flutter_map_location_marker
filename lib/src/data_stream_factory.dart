@@ -16,6 +16,7 @@ import 'exception/permission_requesting_exception.dart' as lm;
 class LocationMarkerDataStreamFactory {
   /// Create a LocationMarkerDataStreamFactory.
   const LocationMarkerDataStreamFactory();
+  static bool _permissionRequestIsRunning = false;
 
   /// Cast to a position stream from
   /// [geolocator](https://pub.dev/packages/geolocator) stream.
@@ -50,9 +51,11 @@ class LocationMarkerDataStreamFactory {
     Future.microtask(() async {
       try {
         LocationPermission permission = await Geolocator.checkPermission();
-        if (permission == LocationPermission.denied) {
+        if (permission == LocationPermission.denied &&
+            !_permissionRequestIsRunning) {
           streamController.sink
               .addError(const lm.PermissionRequestingException());
+          _permissionRequestIsRunning = true;
           permission = await Geolocator.requestPermission();
         }
         switch (permission) {

@@ -6,6 +6,7 @@ import 'page/default_stream_example.dart';
 import 'page/follow_fab_example.dart';
 import 'page/geolocator_settings_example.dart';
 import 'page/minimum_example.dart';
+import 'page/multiple_example.dart';
 import 'page/navigation_example.dart';
 import 'page/no_stream_example.dart';
 import 'page/selectable_distance_filter_example.dart';
@@ -146,6 +147,17 @@ class Home extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => DefaultStreamExample(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Multiple Example'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MultipleExample(),
                 ),
               );
             },
