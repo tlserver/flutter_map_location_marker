@@ -41,7 +41,7 @@ class _FollowFabExampleState extends State<FollowFabExample> {
           maxZoom: 19,
           // Stop following the location marker on the map if user interacted with the map.
           onPositionChanged: (MapPosition position, bool hasGesture) {
-            if (hasGesture) {
+            if (hasGesture && _followOnLocationUpdate != FollowOnLocationUpdate.never) {
               setState(
                 () => _followOnLocationUpdate = FollowOnLocationUpdate.never,
               );
