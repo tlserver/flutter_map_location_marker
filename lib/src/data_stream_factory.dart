@@ -10,6 +10,7 @@ import 'data.dart';
 import 'exception/incorrect_setup_exception.dart';
 import 'exception/permission_denied_exception.dart' as lm;
 import 'exception/permission_requesting_exception.dart' as lm;
+import 'exception/service_disabled_exception.dart';
 
 /// Helper class for converting the data stream which provide data in required
 /// format from stream created by some existing plugin.
@@ -46,8 +47,12 @@ class LocationMarkerDataStreamFactory {
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
   Stream<Position?> defaultPositionStreamSource() {
-    final streamController = StreamController<Position?>();
-    Future.microtask(() async {
+    final List<AsyncCallback> cancelFunctions = [];
+    final streamController = StreamController<Position?>.broadcast(
+      onCancel: () =>
+          Future.wait(cancelFunctions.map((callback) => callback())),
+    );
+    streamController.onListen = () async {
       try {
         LocationPermission permission = await Geolocator.checkPermission();
         if (permission == LocationPermission.denied) {
@@ -59,17 +64,45 @@ class LocationMarkerDataStreamFactory {
           case LocationPermission.denied:
           case LocationPermission.deniedForever:
             streamController.sink
-                .addError(const lm.PermissionDeniedException());
+              ..addError(const lm.PermissionDeniedException())
+              ..close();
             break;
           case LocationPermission.whileInUse:
           case LocationPermission.always:
+            try {
+              final serviceEnabled =
+                  await Geolocator.isLocationServiceEnabled();
+              if (!serviceEnabled) {
+                streamController.sink
+                    .addError(const ServiceDisabledException());
+              }
+            } catch (_) {}
+            try {
+              final subscription =
+                  Geolocator.getServiceStatusStream().listen((serviceStatus) {
+                if (serviceStatus == ServiceStatus.enabled) {
+                  streamController.sink.add(null);
+                } else {
+                  streamController.sink
+                      .addError(const ServiceDisabledException());
+                }
+              });
+              cancelFunctions.add(subscription.cancel);
+            } catch (_) {}
             try {
               final lastKnown = await Geolocator.getLastKnownPosition();
               if (lastKnown != null) {
                 streamController.sink.add(lastKnown);
               }
             } catch (_) {}
-            streamController.sink.addStream(Geolocator.getPositionStream());
+            try {
+              streamController.sink.add(await Geolocator.getCurrentPosition());
+            } catch (_) {}
+            final subscription =
+                Geolocator.getPositionStream().listen((position) {
+              streamController.sink.add(position);
+            });
+            cancelFunctions.add(subscription.cancel);
             break;
           case LocationPermission.unableToDetermine:
             break;
@@ -77,7 +110,7 @@ class LocationMarkerDataStreamFactory {
       } on PermissionDefinitionsNotFoundException {
         streamController.sink.addError(const IncorrectSetupException());
       }
-    });
+    };
     return streamController.stream;
   }
 
