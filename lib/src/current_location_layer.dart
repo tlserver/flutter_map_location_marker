@@ -509,7 +509,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     );
 
     _rotateMarkerAnimationController!.addListener(() {
-      setState(() => _currentHeading = headingTween.evaluate(animation));
+      if (_status == _Status.ready) {
+        setState(() => _currentHeading = headingTween.evaluate(animation));
+      }
     });
 
     _rotateMarkerAnimationController!
