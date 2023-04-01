@@ -281,14 +281,18 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _positionStreamSubscription = widget.positionStream.listen(
       (LocationMarkerPosition? position) {
         if (position == null) {
-          setState(() {
-            _status = _Status.initialing;
-            _currentPosition = null;
-          });
+          if (_status != _Status.initialing) {
+            setState(() {
+              _status = _Status.initialing;
+              _currentPosition = null;
+            });
+          }
         } else {
-          setState(() {
-            _status = _Status.ready;
-          });
+          if (_status != _Status.ready) {
+            setState(() {
+              _status = _Status.ready;
+            });
+          }
           _moveMarker(position);
 
           bool followCurrentLocation;
