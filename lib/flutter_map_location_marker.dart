@@ -8,6 +8,7 @@ export 'src/data_stream_factory.dart';
 export 'src/drawing/default_location_marker.dart';
 export 'src/drawing/heading_sector.dart';
 export 'src/follow_on_location_update.dart';
+export 'src/indicators.dart';
 export 'src/location_marker_layer.dart';
 export 'src/marker_direction.dart';
 export 'src/style.dart';
