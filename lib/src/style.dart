@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'drawing/default_location_marker.dart';
 import 'marker_direction.dart';
 
-/// An immutable style describing how to format and paint text.
+/// An immutable style describing how to format and paint the location marker.
 @immutable
 class LocationMarkerStyle {
   /// The main marker widget. Default to [DefaultLocationMarker]
