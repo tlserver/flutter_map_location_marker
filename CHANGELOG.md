@@ -1,3 +1,11 @@
+## [5.3.0] - Improve Behavior
+
+* Reduce unnecessary widget rebuild of
+  [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Add customize-able indicators feature,
+  see [CurrentLocationLayer.indicators](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer/indicators.html)
+* Update example project
+
 ## [5.2.1] - Fix Bug
 
 * Fix web supporting (#52)
