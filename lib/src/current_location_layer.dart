@@ -12,7 +12,9 @@ import 'exception/permission_denied_exception.dart';
 import 'exception/permission_requesting_exception.dart';
 import 'exception/service_disabled_exception.dart';
 import 'follow_on_location_update.dart';
+import 'indicators.dart';
 import 'location_marker_layer.dart';
+import 'non_rotation_container.dart';
 import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
@@ -94,6 +96,9 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [Curves.easeInOut].
   final Curve rotateAnimationCurve;
 
+  /// The indicators which will display when in special status.
+  final LocationMarkerIndicators indicators;
+
   /// Create a CurrentLocationLayer.
   CurrentLocationLayer({
     super.key,
@@ -114,6 +119,7 @@ class CurrentLocationLayer extends StatefulWidget {
     this.moveAnimationCurve = Curves.fastOutSlowIn,
     this.rotateAnimationDuration = const Duration(milliseconds: 200),
     this.rotateAnimationCurve = Curves.easeInOut,
+    this.indicators = const LocationMarkerIndicators(),
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory()
                 .fromGeolocatorPositionStream(),
@@ -200,15 +206,17 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       case _Status.incorrectSetup:
         if (kDebugMode) {
-          return SizedBox.expand(
-            child: ColoredBox(
-              color: Colors.red.withAlpha(0x80),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'LocationMarker plugin has not been setup correctly. '
-                  'Please follow the instructions in the documentation.',
-                  style: TextStyle(fontSize: 26),
+          return NonRotationContainer(
+            child: SizedBox.expand(
+              child: ColoredBox(
+                color: Colors.red.withAlpha(0x80),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'LocationMarker plugin has not been setup correctly. '
+                    'Please follow the instructions in the documentation.',
+                    style: TextStyle(fontSize: 26),
+                  ),
                 ),
               ),
             ),
@@ -217,14 +225,22 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           return const SizedBox.shrink();
         }
       case _Status.permissionRequesting:
+        if (widget.indicators.permissionRequesting != null) {
+          return NonRotationContainer(
+            child: widget.indicators.permissionRequesting!,
+          );
+        }
         if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Text(
-                '(Debug Only)\nLocation Access Permission Requesting',
-                textAlign: TextAlign.right,
+          return const NonRotationContainer(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(
+                  'Location Access Permission Requesting\n'
+                  '(Debug Mode Only)',
+                  textAlign: TextAlign.right,
+                ),
               ),
             ),
           );
@@ -232,14 +248,22 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           return const SizedBox.shrink();
         }
       case _Status.permissionDenied:
+        if (widget.indicators.permissionDenied != null) {
+          return NonRotationContainer(
+            child: widget.indicators.permissionDenied!,
+          );
+        }
         if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Text(
-                '(Debug Only)\nLocation Access Permission Denied',
-                textAlign: TextAlign.right,
+          return const NonRotationContainer(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(
+                  'Location Access Permission Denied\n'
+                  '(Debug Mode Only)',
+                  textAlign: TextAlign.right,
+                ),
               ),
             ),
           );
@@ -247,14 +271,22 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           return const SizedBox.shrink();
         }
       case _Status.serviceDisabled:
+        if (widget.indicators.serviceDisabled != null) {
+          return NonRotationContainer(
+            child: widget.indicators.serviceDisabled!,
+          );
+        }
         if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Text(
-                '(Debug Only)\nLocation Service Disabled',
-                textAlign: TextAlign.right,
+          return const NonRotationContainer(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(
+                  'Location Service Disabled\n'
+                  '(Debug Mode Only)',
+                  textAlign: TextAlign.right,
+                ),
               ),
             ),
           );
