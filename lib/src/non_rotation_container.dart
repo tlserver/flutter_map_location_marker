@@ -15,13 +15,8 @@ class NonRotationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final map = FlutterMapState.maybeOf(context)!;
     final size = Size(
-      map.nonrotatedSize!.x.toDouble(),
-      map.nonrotatedSize!.y.toDouble(),
-      // todo Use the following code block after flutter_map#1482 is accepted
-      /*
       map.nonrotatedSize.x,
       map.nonrotatedSize.y,
-       */
     );
     return Transform.rotate(
       angle: -map.rotationRad,
