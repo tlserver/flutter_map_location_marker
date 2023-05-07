@@ -11,12 +11,12 @@ class AnimationDebugger extends StatefulWidget {
 }
 
 class _AnimationDebuggerState extends State<AnimationDebugger> {
-  LocationMarkerPosition locationMarkerPosition = LocationMarkerPosition(
+  LocationMarkerPosition _locationMarkerPosition = LocationMarkerPosition(
     latitude: 0,
     longitude: 0,
     accuracy: 20000,
   );
-  LocationMarkerHeading locationMarkerHeading = LocationMarkerHeading(
+  LocationMarkerHeading _locationMarkerHeading = LocationMarkerHeading(
     heading: 0,
     accuracy: 1,
   );
@@ -44,7 +44,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
                   onPressed: () {
                     final random = Random();
                     setState(() {
-                      locationMarkerPosition = LocationMarkerPosition(
+                      _locationMarkerPosition = LocationMarkerPosition(
                         latitude: random.nextDouble() - 0.5,
                         longitude: random.nextDouble() - 0.5,
                         accuracy: random.nextDouble() * 80000 + 20000,
@@ -64,7 +64,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
                   onPressed: () {
                     final random = Random();
                     setState(() {
-                      locationMarkerHeading = LocationMarkerHeading(
+                      _locationMarkerHeading = LocationMarkerHeading(
                         heading: random.nextDouble() * pi * 2,
                         accuracy: random.nextDouble() * 0.8 + 0.2,
                       );
@@ -89,8 +89,8 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
             maxZoom: 19,
           ),
           AnimatedLocationMarkerLayer(
-            position: locationMarkerPosition,
-            heading: locationMarkerHeading,
+            position: _locationMarkerPosition,
+            heading: _locationMarkerHeading,
             moveAnimationDuration: const Duration(seconds: 2),
           ),
         ],

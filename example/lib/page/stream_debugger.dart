@@ -11,8 +11,8 @@ class StreamDebugger extends StatefulWidget {
 }
 
 class _StreamDebuggerState extends State<StreamDebugger> {
-  late Stream<LocationMarkerPosition> stream;
-  LocationMarkerPosition locationMarkerPosition = LocationMarkerPosition(
+  late Stream<LocationMarkerPosition> _stream;
+  LocationMarkerPosition _locationMarkerPosition = LocationMarkerPosition(
     latitude: 0,
     longitude: 0,
     accuracy: 20000,
@@ -21,7 +21,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
   @override
   void initState() {
     super.initState();
-    stream = Stream.value(locationMarkerPosition);
+    _stream = Stream.value(_locationMarkerPosition);
   }
 
   @override
@@ -47,10 +47,10 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                   onPressed: () {
                     final random = Random();
                     setState(() {
-                      stream = Stream.periodic(const Duration(seconds: 1), (_) {
-                        return locationMarkerPosition = LocationMarkerPosition(
-                          latitude: locationMarkerPosition.latitude - 0.05,
-                          longitude: locationMarkerPosition.longitude,
+                      _stream = Stream.periodic(const Duration(seconds: 1), (_) {
+                        return _locationMarkerPosition = LocationMarkerPosition(
+                          latitude: _locationMarkerPosition.latitude - 0.05,
+                          longitude: _locationMarkerPosition.longitude,
                           accuracy: random.nextDouble() * 80000 + 20000,
                         );
                       });
@@ -69,10 +69,10 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                   onPressed: () {
                     final random = Random();
                     setState(() {
-                      stream = Stream.periodic(const Duration(seconds: 2), (_) {
-                        return locationMarkerPosition = LocationMarkerPosition(
-                          latitude: locationMarkerPosition.latitude + 0.1,
-                          longitude: locationMarkerPosition.longitude,
+                      _stream = Stream.periodic(const Duration(seconds: 2), (_) {
+                        return _locationMarkerPosition = LocationMarkerPosition(
+                          latitude: _locationMarkerPosition.latitude + 0.1,
+                          longitude: _locationMarkerPosition.longitude,
                           accuracy: random.nextDouble() * 80000 + 20000,
                         );
                       });
@@ -97,7 +97,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            positionStream: stream,
+            positionStream: _stream,
             moveAnimationDuration: const Duration(seconds: 2),
           ),
         ],
