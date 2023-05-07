@@ -1,3 +1,7 @@
+## [6.0.0] - Migrate to Flutter Map v4
+
+* Migrate to `flutter_map` v4
+
 ## [5.3.0] - Improve Behavior
 
 * Reduce unnecessary widget rebuild of
