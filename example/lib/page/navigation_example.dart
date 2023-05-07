@@ -12,8 +12,8 @@ class NavigationExample extends StatefulWidget {
 }
 
 class _NavigationExampleState extends State<NavigationExample> {
-  late bool navigationMode;
-  late int pointerCount;
+  late bool _navigationMode;
+  late int _pointerCount;
   late FollowOnLocationUpdate _followOnLocationUpdate;
   late TurnOnHeadingUpdate _turnOnHeadingUpdate;
   late StreamController<double?> _followCurrentLocationStreamController;
@@ -22,8 +22,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   void initState() {
     super.initState();
-    navigationMode = false;
-    pointerCount = 0;
+    _navigationMode = false;
+    _pointerCount = 0;
     _followOnLocationUpdate = FollowOnLocationUpdate.never;
     _turnOnHeadingUpdate = TurnOnHeadingUpdate.never;
     _followCurrentLocationStreamController = StreamController<double?>();
@@ -33,6 +33,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   void dispose() {
     _followCurrentLocationStreamController.close();
+    _turnHeadingUpStreamController.close();
     super.dispose();
   }
 
@@ -86,21 +87,21 @@ class _NavigationExampleState extends State<NavigationExample> {
             right: 20,
             bottom: 20,
             child: FloatingActionButton(
-              backgroundColor: navigationMode ? Colors.blue : Colors.grey,
+              backgroundColor: _navigationMode ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
               onPressed: () {
                 setState(
                   () {
-                    navigationMode = !navigationMode;
-                    _followOnLocationUpdate = navigationMode
+                    _navigationMode = !_navigationMode;
+                    _followOnLocationUpdate = _navigationMode
                         ? FollowOnLocationUpdate.always
                         : FollowOnLocationUpdate.never;
-                    _turnOnHeadingUpdate = navigationMode
+                    _turnOnHeadingUpdate = _navigationMode
                         ? TurnOnHeadingUpdate.always
                         : TurnOnHeadingUpdate.never;
                   },
                 );
-                if (navigationMode) {
+                if (_navigationMode) {
                   _followCurrentLocationStreamController.add(18);
                   _turnHeadingUpStreamController.add(null);
                 }
@@ -117,7 +118,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   // Disable follow and turn temporarily when user is manipulating the map.
   void _onPointerDown(e, l) {
-    pointerCount++;
+    _pointerCount++;
     setState(() {
       _followOnLocationUpdate = FollowOnLocationUpdate.never;
       _turnOnHeadingUpdate = TurnOnHeadingUpdate.never;
@@ -126,7 +127,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   // Enable follow and turn again when user end manipulation.
   void _onPointerUp(e, l) {
-    if (--pointerCount == 0 && navigationMode) {
+    if (--_pointerCount == 0 && _navigationMode) {
       setState(() {
         _followOnLocationUpdate = FollowOnLocationUpdate.always;
         _turnOnHeadingUpdate = TurnOnHeadingUpdate.always;

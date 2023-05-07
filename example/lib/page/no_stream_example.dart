@@ -22,7 +22,7 @@ class _NoStreamExampleState extends State<NoStreamExample> {
   );
   LocationMarkerHeading _currentHeading = LocationMarkerHeading(
     heading: 0,
-    accuracy: 0.2,
+    accuracy: pi * 0.2,
   );
 
   @override

@@ -16,15 +16,15 @@ class CustomStreamExample extends StatefulWidget {
 }
 
 class _CustomStreamExampleState extends State<CustomStreamExample> {
-  late final StreamController<LocationMarkerPosition> positionStreamController;
-  late final StreamController<LocationMarkerHeading> headingStreamController;
+  late final StreamController<LocationMarkerPosition> _positionStreamController;
+  late final StreamController<LocationMarkerHeading> _headingStreamController;
   double _currentLat = 0;
   double _currentLng = 0;
 
   @override
   void initState() {
     super.initState();
-    positionStreamController = StreamController()
+    _positionStreamController = StreamController()
       ..add(
         LocationMarkerPosition(
           latitude: _currentLat,
@@ -32,7 +32,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
           accuracy: 0,
         ),
       );
-    headingStreamController = StreamController()
+    _headingStreamController = StreamController()
       ..add(
         LocationMarkerHeading(
           heading: 0,
@@ -43,8 +43,8 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
 
   @override
   void dispose() {
-    positionStreamController.close();
-    headingStreamController.close();
+    _positionStreamController.close();
+    _headingStreamController.close();
     super.dispose();
   }
 
@@ -74,8 +74,8 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
                 maxZoom: 19,
               ),
               CurrentLocationLayer(
-                positionStream: positionStreamController.stream,
-                headingStream: headingStreamController.stream,
+                positionStream: _positionStreamController.stream,
+                headingStream: _headingStreamController.stream,
               ),
             ],
           ),
@@ -88,7 +88,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
                 _currentLat = _currentLat.clamp(-85, 85);
                 _currentLng += details.x;
                 _currentLng = _currentLng.clamp(-180, 180);
-                positionStreamController.add(
+                _positionStreamController.add(
                   LocationMarkerPosition(
                     latitude: _currentLat,
                     longitude: _currentLng,
@@ -96,7 +96,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
                   ),
                 );
                 if (details.x != 0 || details.y != 0) {
-                  headingStreamController.add(
+                  _headingStreamController.add(
                     LocationMarkerHeading(
                       heading:
                           (atan2(details.y, details.x) + pi * 0.5) % (pi * 2),
