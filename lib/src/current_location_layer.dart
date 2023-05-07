@@ -19,6 +19,8 @@ import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
 
+const _originPoint = CustomPoint<double>(0, 0);
+
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
   /// The style to use for this location marker.
@@ -39,13 +41,13 @@ class CurrentLocationLayer extends StatefulWidget {
   /// is offset by [followScreenPointOffset], i.e. (_mapWidgetWidth_ *
   /// [followScreenPoint.x] / 2 + [followScreenPointOffset.x],
   /// _mapWidgetHeight_ * [followScreenPoint.y] / 2 + [followScreenPointOffset.y]).
-  final CustomPoint followScreenPoint;
+  final CustomPoint<double> followScreenPoint;
 
   /// An offset value that when the map follow to the marker. The final screen
   /// point is (_mapWidgetWidth_ * [followScreenPoint.x] / 2 +
   /// [followScreenPointOffset.x], _mapWidgetHeight_ * [followScreenPoint.y] /
   /// 2 + [followScreenPointOffset.y]).
-  final CustomPoint followScreenPointOffset;
+  final CustomPoint<double> followScreenPointOffset;
 
   /// The event stream for follow current location. Add a zoom level into
   /// this stream to follow the current location at the provided zoom level or a
@@ -105,8 +107,8 @@ class CurrentLocationLayer extends StatefulWidget {
     this.style = const LocationMarkerStyle(),
     Stream<LocationMarkerPosition?>? positionStream,
     Stream<LocationMarkerHeading?>? headingStream,
-    this.followScreenPoint = const CustomPoint(0.0, 0.0),
-    this.followScreenPointOffset = const CustomPoint(0.0, 0.0),
+    this.followScreenPoint = _originPoint,
+    this.followScreenPointOffset = _originPoint,
     this.followCurrentLocationStream,
     this.turnHeadingUpLocationStream,
     this.followOnLocationUpdate = FollowOnLocationUpdate.never,
@@ -450,15 +452,14 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     zoom ??= map.zoom;
 
     final LatLng beginLatLng;
-    if (widget.followScreenPoint == const CustomPoint(0, 0) &&
-        widget.followScreenPointOffset == const CustomPoint(0, 0)) {
+    if (widget.followScreenPoint == _originPoint &&
+        widget.followScreenPointOffset == _originPoint) {
       beginLatLng = map.center;
     } else {
       final crs = map.options.crs;
-      final followOffset = map.nonrotatedSize!
-              .multiplyBy(0.5)
-              .scaleBy(widget.followScreenPoint) +
-          widget.followScreenPointOffset;
+      final followOffset =
+          map.nonrotatedSize.multiplyBy(0.5).scaleBy(widget.followScreenPoint) +
+              widget.followScreenPointOffset;
       final mapCenter = crs.latLngToPoint(map.center, map.zoom);
       final followPoint = map.rotatePoint(mapCenter, mapCenter + followOffset);
       beginLatLng = crs.pointToLatLng(followPoint, map.zoom)!;
@@ -494,12 +495,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       final evaluatedZoom = zoomTween.evaluate(animation);
 
       final LatLng mapCenter;
-      if (widget.followScreenPoint == const CustomPoint(0, 0) &&
-          widget.followScreenPointOffset == const CustomPoint(0, 0)) {
+      if (widget.followScreenPoint == _originPoint &&
+          widget.followScreenPointOffset == _originPoint) {
         mapCenter = evaluatedLatLng;
       } else {
         final crs = map.options.crs;
-        final followOffset = map.nonrotatedSize!
+        final followOffset = map.nonrotatedSize
                 .multiplyBy(0.5)
                 .scaleBy(widget.followScreenPoint) +
             widget.followScreenPointOffset;
@@ -583,15 +584,15 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     );
 
     _rotateMapAnimationController!.addListener(() {
-      if (widget.followScreenPoint == const CustomPoint(0, 0) &&
-          widget.followScreenPointOffset == const CustomPoint(0, 0)) {
+      if (widget.followScreenPoint == _originPoint &&
+          widget.followScreenPointOffset == _originPoint) {
         map.rotate(
           angleTween.evaluate(animation) / pi * 180,
           source: MapEventSource.mapController,
         );
       } else {
         final crs = map.options.crs;
-        final followOffset = map.nonrotatedSize!
+        final followOffset = map.nonrotatedSize
                 .multiplyBy(0.5)
                 .scaleBy(widget.followScreenPoint) +
             widget.followScreenPointOffset;
