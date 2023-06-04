@@ -333,14 +333,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           switch (widget.followOnLocationUpdate) {
             case FollowOnLocationUpdate.always:
               followCurrentLocation = true;
-              break;
             case FollowOnLocationUpdate.once:
               followCurrentLocation = _isFirstLocationUpdate;
               _isFirstLocationUpdate = false;
-              break;
             case FollowOnLocationUpdate.never:
               followCurrentLocation = false;
-              break;
           }
           if (followCurrentLocation) {
             _moveMap(
@@ -354,16 +351,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         switch (error.runtimeType) {
           case IncorrectSetupException:
             setState(() => _status = _Status.incorrectSetup);
-            break;
           case PermissionRequestingException:
             setState(() => _status = _Status.permissionRequesting);
-            break;
           case PermissionDeniedException:
             setState(() => _status = _Status.permissionDenied);
-            break;
           case ServiceDisabledException:
             setState(() => _status = _Status.serviceDisabled);
-            break;
         }
       },
     );
@@ -378,14 +371,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         switch (widget.turnOnHeadingUpdate) {
           case TurnOnHeadingUpdate.always:
             turnHeadingUp = true;
-            break;
           case TurnOnHeadingUpdate.once:
             turnHeadingUp = _isFirstHeadingUpdate;
             _isFirstHeadingUpdate = false;
-            break;
           case TurnOnHeadingUpdate.never:
             turnHeadingUp = false;
-            break;
         }
         if (turnHeadingUp) {
           _rotateMap(-heading.heading % (2 * pi));
@@ -458,11 +448,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     } else {
       final crs = map.options.crs;
       final followOffset =
-          map.nonrotatedSize.multiplyBy(0.5).scaleBy(widget.followScreenPoint) +
+          (map.nonrotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
               widget.followScreenPointOffset;
       final mapCenter = crs.latLngToPoint(map.center, map.zoom);
       final followPoint = map.rotatePoint(mapCenter, mapCenter + followOffset);
-      beginLatLng = crs.pointToLatLng(followPoint, map.zoom)!;
+      beginLatLng = crs.pointToLatLng(followPoint, map.zoom);
     }
 
     _moveMapAnimationController?.dispose();
@@ -500,16 +490,15 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         mapCenter = evaluatedLatLng;
       } else {
         final crs = map.options.crs;
-        final followOffset = map.nonrotatedSize
-                .multiplyBy(0.5)
-                .scaleBy(widget.followScreenPoint) +
-            widget.followScreenPointOffset;
+        final followOffset =
+            (map.nonrotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
+                widget.followScreenPointOffset;
         final followPoint = crs.latLngToPoint(evaluatedLatLng, evaluatedZoom);
         final mapCenterPoint = map.rotatePoint(
           followPoint,
           followPoint - followOffset,
         );
-        mapCenter = crs.pointToLatLng(mapCenterPoint, evaluatedZoom)!;
+        mapCenter = crs.pointToLatLng(mapCenterPoint, evaluatedZoom);
       }
 
       map.move(
@@ -592,10 +581,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         );
       } else {
         final crs = map.options.crs;
-        final followOffset = map.nonrotatedSize
-                .multiplyBy(0.5)
-                .scaleBy(widget.followScreenPoint) +
-            widget.followScreenPointOffset;
+        final followOffset =
+            (map.nonrotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
+                widget.followScreenPointOffset;
         final mapCenter = crs.latLngToPoint(map.center, map.zoom);
         final followPoint =
             map.rotatePoint(mapCenter, mapCenter + followOffset);
@@ -607,7 +595,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           followPoint,
           followPoint - followOffset,
         );
-        final offsetMapCenter = crs.pointToLatLng(mapCenterPoint, map.zoom)!;
+        final offsetMapCenter = crs.pointToLatLng(mapCenterPoint, map.zoom);
         map.move(
           offsetMapCenter,
           map.zoom,

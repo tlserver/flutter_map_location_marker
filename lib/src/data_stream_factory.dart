@@ -66,7 +66,6 @@ class LocationMarkerDataStreamFactory {
             streamController.sink
               ..addError(const lm.PermissionDeniedException())
               ..close();
-            break;
           case LocationPermission.whileInUse:
           case LocationPermission.always:
             try {
@@ -103,7 +102,6 @@ class LocationMarkerDataStreamFactory {
               streamController.sink.add(position);
             });
             cancelFunctions.add(subscription.cancel);
-            break;
           case LocationPermission.unableToDetermine:
             break;
         }
