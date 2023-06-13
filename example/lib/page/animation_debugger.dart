@@ -15,6 +15,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
     latitude: 0,
     longitude: 0,
     accuracy: 20000,
+    altitude: 0,
   );
   LocationMarkerHeading _locationMarkerHeading = LocationMarkerHeading(
     heading: 0,
@@ -48,6 +49,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
                         latitude: random.nextDouble() - 0.5,
                         longitude: random.nextDouble() - 0.5,
                         accuracy: random.nextDouble() * 80000 + 20000,
+                        altitude: random.nextDouble() * 1000,
                       );
                     });
                   },

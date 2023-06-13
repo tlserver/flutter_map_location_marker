@@ -10,6 +10,10 @@ class LocationMarkerPosition {
   /// (inclusive).
   final double longitude;
 
+  /// The altitude of the device in meters.
+  /// The altitude is not available on all devices. In these cases the value will be 0.
+  final double altitude;
+
   /// The estimated horizontal accuracy of this location, radial, in meters. The
   /// smaller value, the better accuracy.
   final double accuracy;
@@ -19,6 +23,7 @@ class LocationMarkerPosition {
     required this.latitude,
     required this.longitude,
     required this.accuracy,
+    required this.altitude,
   });
 
   /// Convert to LatLng object
@@ -29,6 +34,7 @@ class LocationMarkerPosition {
     return 'LocationMarkerPosition('
         'latitude: $latitude, '
         'longitude: $longitude, '
+        'altitude: $altitude, '
         'accuracy: $accuracy)';
   }
 }

@@ -29,6 +29,7 @@ class LocationMarkerDataStreamFactory {
               latitude: position.latitude,
               longitude: position.longitude,
               accuracy: position.accuracy,
+              altitude: position.altitude,
             )
           : null;
     });

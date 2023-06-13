@@ -16,6 +16,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
     latitude: 0,
     longitude: 0,
     accuracy: 20000,
+    altitude: 0,
   );
 
   @override
@@ -52,6 +53,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                           latitude: _locationMarkerPosition.latitude - 0.05,
                           longitude: _locationMarkerPosition.longitude,
                           accuracy: random.nextDouble() * 80000 + 20000,
+                          altitude: random.nextDouble() * 1000,
                         );
                       });
                     });
@@ -74,6 +76,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                           latitude: _locationMarkerPosition.latitude + 0.1,
                           longitude: _locationMarkerPosition.longitude,
                           accuracy: random.nextDouble() * 80000 + 20000,
+                          altitude: random.nextDouble() * 1000,
                         );
                       });
                     });

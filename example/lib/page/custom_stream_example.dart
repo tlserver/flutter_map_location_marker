@@ -30,6 +30,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
           latitude: _currentLat,
           longitude: _currentLng,
           accuracy: 0,
+          altitude: 0,
         ),
       );
     _headingStreamController = StreamController()
@@ -93,6 +94,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
                     latitude: _currentLat,
                     longitude: _currentLng,
                     accuracy: 0,
+                    altitude: 0,
                   ),
                 );
                 if (details.x != 0 || details.y != 0) {

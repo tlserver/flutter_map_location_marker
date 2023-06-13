@@ -21,6 +21,7 @@ class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
       latitude: _doubleLerp(begin.latitude, end.latitude, t),
       longitude: _doubleLerp(begin.longitude, end.longitude, t),
       accuracy: _doubleLerp(begin.accuracy, end.accuracy, t),
+      altitude: _doubleLerp(begin.altitude, end.altitude, t),
     );
   }
 }

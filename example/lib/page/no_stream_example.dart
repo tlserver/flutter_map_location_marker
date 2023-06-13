@@ -19,6 +19,7 @@ class _NoStreamExampleState extends State<NoStreamExample> {
     latitude: 0,
     longitude: 0,
     accuracy: 0,
+    altitude: 0,
   );
   LocationMarkerHeading _currentHeading = LocationMarkerHeading(
     heading: 0,
@@ -68,6 +69,7 @@ class _NoStreamExampleState extends State<NoStreamExample> {
                     longitude: (_currentPosition.longitude + details.x)
                         .clamp(-180, 180),
                     accuracy: 0,
+                    altitude: 0,
                   );
                   if (details.x != 0 || details.y != 0) {
                     _currentHeading = LocationMarkerHeading(
