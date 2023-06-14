@@ -1,3 +1,7 @@
+## [7.0.0] - Migrate to Flutter Map v5
+
+* Migrate to `flutter_map` v5
+
 ## [6.0.0] - Migrate to Flutter Map v4
 
 * Migrate to `flutter_map` v4
