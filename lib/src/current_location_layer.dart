@@ -349,13 +349,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       },
       onError: (error) {
         switch (error.runtimeType) {
-          case IncorrectSetupException:
+          case IncorrectSetupException _:
             setState(() => _status = _Status.incorrectSetup);
-          case PermissionRequestingException:
+          case PermissionRequestingException _:
             setState(() => _status = _Status.permissionRequesting);
-          case PermissionDeniedException:
+          case PermissionDeniedException _:
             setState(() => _status = _Status.permissionDenied);
-          case ServiceDisabledException:
+          case ServiceDisabledException _:
             setState(() => _status = _Status.serviceDisabled);
         }
       },
