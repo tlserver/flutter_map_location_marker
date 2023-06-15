@@ -36,7 +36,7 @@ class _NoStreamExampleState extends State<NoStreamExample> {
         children: [
           FlutterMap(
             options: MapOptions(
-              center: LatLng(0, 0),
+              center: const LatLng(0, 0),
               zoom: 1,
               minZoom: 0,
               maxZoom: 19,
