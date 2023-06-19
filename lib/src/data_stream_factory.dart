@@ -127,10 +127,9 @@ class LocationMarkerDataStreamFactory {
         return e != null
             ? LocationMarkerHeading(
                 heading: degToRadian(e.heading!),
-                accuracy: (e.accuracy ?? defAccuracy).clamp(
-                  minAccuracy,
-                  maxAccuracy,
-                ),
+                accuracy: e.accuracy != null
+                    ? degToRadian(e.accuracy!).clamp(minAccuracy, maxAccuracy)
+                    : defAccuracy,
               )
             : null;
       },
