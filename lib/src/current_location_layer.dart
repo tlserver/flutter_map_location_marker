@@ -365,7 +365,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptHeadingStream() {
     _headingStreamSubscription = widget.headingStream.listen(
       (LocationMarkerHeading? heading) {
-        _rotateMarker(heading!);
+        if (heading == null) return;
+
+        _rotateMarker(heading);
 
         bool turnHeadingUp;
         switch (widget.turnOnHeadingUpdate) {
