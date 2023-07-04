@@ -1,3 +1,7 @@
+## [7.0.1] - Fix Bug
+
+* Fix heading accuracy (#72)
+
 ## [7.0.0] - Migrate to Flutter Map v5
 
 * Migrate to `flutter_map` v5
