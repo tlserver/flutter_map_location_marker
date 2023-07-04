@@ -381,7 +381,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           _rotateMap(-heading.heading % (2 * pi));
         }
       },
-      onError: (_) => setState(() => _currentHeading = null),
+      onError: (_) {
+        if (_currentHeading != null) {
+          setState(() => _currentHeading = null);
+        }
+      },
     );
   }
 
