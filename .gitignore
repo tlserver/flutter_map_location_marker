@@ -108,10 +108,16 @@ unlinked_spec.ds
 **/macos/Flutter/ephemeral
 
 # windows
-**/windows/Flutter/generated_plugin_registrant.cc
-**/windows/Flutter/generated_plugin_registrant.h
-**/windows/Flutter/generated_plugins.cmake
-**/windows/Flutter/ephemeral
+**/windows/flutter/generated_plugin_registrant.cc
+**/windows/flutter/generated_plugin_registrant.h
+**/windows/flutter/generated_plugins.cmake
+**/windows/flutter/ephemeral
+
+# linux
+**/linux/flutter/generated_plugin_registrant.cc
+**/linux/flutter/generated_plugin_registrant.h
+**/linux/flutter/generated_plugins.cmake
+**/linux/flutter/ephemeral
 
 # Coverage
 coverage/
