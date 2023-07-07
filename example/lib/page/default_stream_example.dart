@@ -62,9 +62,9 @@ class _DefaultStreamExampleState extends State<DefaultStreamExample> {
           Expanded(
             flex: 2,
             child: FlutterMap(
-              options: MapOptions(
-                center: const LatLng(0, 0),
-                zoom: 1,
+              options: const MapOptions(
+                initialCenter: LatLng(0, 0),
+                initialZoom: 1,
                 minZoom: 0,
                 maxZoom: 19,
               ),
@@ -200,7 +200,7 @@ class _PulseAnimationBoxState extends State<PulseAnimationBox>
   @override
   void didUpdateWidget(PulseAnimationBox oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.stream != widget.stream){
+    if (oldWidget.stream != widget.stream) {
       _subscription?.cancel();
       _subscript();
     }

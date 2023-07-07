@@ -31,9 +31,9 @@ class _StreamDebuggerState extends State<StreamDebugger> {
         title: const Text('Stream Debugger'),
       ),
       body: FlutterMap(
-        options: MapOptions(
-          center: const LatLng(0, 0),
-          zoom: 8,
+        options: const MapOptions(
+          initialCenter: LatLng(0, 0),
+          initialZoom: 8,
           minZoom: 0,
           maxZoom: 19,
         ),
@@ -47,7 +47,8 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                   onPressed: () {
                     final random = Random();
                     setState(() {
-                      _stream = Stream.periodic(const Duration(seconds: 1), (_) {
+                      _stream =
+                          Stream.periodic(const Duration(seconds: 1), (_) {
                         return _locationMarkerPosition = LocationMarkerPosition(
                           latitude: _locationMarkerPosition.latitude - 0.05,
                           longitude: _locationMarkerPosition.longitude,
@@ -69,7 +70,8 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                   onPressed: () {
                     final random = Random();
                     setState(() {
-                      _stream = Stream.periodic(const Duration(seconds: 2), (_) {
+                      _stream =
+                          Stream.periodic(const Duration(seconds: 2), (_) {
                         return _locationMarkerPosition = LocationMarkerPosition(
                           latitude: _locationMarkerPosition.latitude + 0.1,
                           longitude: _locationMarkerPosition.longitude,

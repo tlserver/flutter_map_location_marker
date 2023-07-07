@@ -35,13 +35,14 @@ class _FollowFabExampleState extends State<FollowFabExample> {
       ),
       body: FlutterMap(
         options: MapOptions(
-          center: const LatLng(0, 0),
-          zoom: 1,
+          initialCenter: const LatLng(0, 0),
+          initialZoom: 1,
           minZoom: 0,
           maxZoom: 19,
           // Stop following the location marker on the map if user interacted with the map.
           onPositionChanged: (MapPosition position, bool hasGesture) {
-            if (hasGesture && _followOnLocationUpdate != FollowOnLocationUpdate.never) {
+            if (hasGesture &&
+                _followOnLocationUpdate != FollowOnLocationUpdate.never) {
               setState(
                 () => _followOnLocationUpdate = FollowOnLocationUpdate.never,
               );
