@@ -312,7 +312,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptPositionStream() {
-    _positionStreamSubscription = widget.positionStream.listen(
+    _positionStreamSubscription = widget.positionStream.protectedListen(
       (LocationMarkerPosition? position) {
         if (position == null) {
           if (_status != _Status.initialing) {
@@ -363,7 +363,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptHeadingStream() {
-    _headingStreamSubscription = widget.headingStream.listen(
+    _headingStreamSubscription = widget.headingStream.protectedListen(
       (LocationMarkerHeading? heading) {
         _rotateMarker(heading!);
 
@@ -627,4 +627,22 @@ enum _Status {
   permissionRequesting,
   permissionDenied,
   ready,
+}
+
+extension _StreamExtension<T> on Stream<T> {
+  StreamSubscription<T> protectedListen(
+    void Function(T event) onData, {
+    required Function(dynamic error) onError,
+  }) {
+    return listen(
+      (event) {
+        try {
+          onData(event);
+        } catch (e) {
+          onError(e);
+        }
+      },
+      onError: onError,
+    );
+  }
 }
