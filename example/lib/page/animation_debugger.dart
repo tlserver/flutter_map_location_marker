@@ -28,9 +28,9 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
         title: const Text('Animation Debugger'),
       ),
       body: FlutterMap(
-        options: MapOptions(
-          center: const LatLng(0, 0),
-          zoom: 8,
+        options: const MapOptions(
+          initialCenter: LatLng(0, 0),
+          initialZoom: 8,
           minZoom: 0,
           maxZoom: 19,
         ),

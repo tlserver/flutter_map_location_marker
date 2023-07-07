@@ -27,7 +27,8 @@ class LocationMarkerLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mapState = FlutterMapState.maybeOf(context)!;
+    final camera = MapCamera.maybeOf(context)!;
+
     return Stack(
       children: [
         if (style.showAccuracyCircle)
@@ -73,7 +74,7 @@ class LocationMarkerLayer extends StatelessWidget {
                     return style.marker;
                   case MarkerDirection.top:
                     return Transform.rotate(
-                      angle: -mapState.rotationRad,
+                      angle: -camera.rotationRad,
                       child: style.marker,
                     );
                   case MarkerDirection.heading:
@@ -84,7 +85,7 @@ class LocationMarkerLayer extends StatelessWidget {
                       );
                     } else {
                       return Transform.rotate(
-                        angle: -mapState.rotationRad,
+                        angle: -camera.rotationRad,
                         child: style.marker,
                       );
                     }

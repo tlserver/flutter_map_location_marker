@@ -45,8 +45,8 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: FlutterMap(
         options: MapOptions(
-          center: const LatLng(0, 0),
-          zoom: 1,
+          initialCenter: const LatLng(0, 0),
+          initialZoom: 1,
           minZoom: 0,
           maxZoom: 19,
           onPointerDown: _onPointerDown,

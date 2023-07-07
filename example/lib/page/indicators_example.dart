@@ -15,7 +15,8 @@ class IndicatorsExample extends StatelessWidget {
             onPressed: () => showDialog(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                content: const Text('Try to disable the location service, and you will '
+                content: const Text(
+                    'Try to disable the location service, and you will '
                     'see an indicator on the top of the map.'),
                 actions: [
                   TextButton(
@@ -29,9 +30,9 @@ class IndicatorsExample extends StatelessWidget {
         ],
       ),
       body: FlutterMap(
-        options: MapOptions(
-          center: const LatLng(0, 0),
-          zoom: 1,
+        options: const MapOptions(
+          initialCenter: LatLng(0, 0),
+          initialZoom: 1,
           minZoom: 0,
           maxZoom: 19,
         ),
