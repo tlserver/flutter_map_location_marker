@@ -365,20 +365,26 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptHeadingStream() {
     _headingStreamSubscription = widget.headingStream.listen(
       (LocationMarkerHeading? heading) {
-        _rotateMarker(heading!);
+        if (heading == null) {
+          if (_currentHeading != null) {
+            setState(() => _currentHeading = null);
+          }
+        } else {
+          _rotateMarker(heading);
 
-        bool turnHeadingUp;
-        switch (widget.turnOnHeadingUpdate) {
-          case TurnOnHeadingUpdate.always:
-            turnHeadingUp = true;
-          case TurnOnHeadingUpdate.once:
-            turnHeadingUp = _isFirstHeadingUpdate;
-            _isFirstHeadingUpdate = false;
-          case TurnOnHeadingUpdate.never:
-            turnHeadingUp = false;
-        }
-        if (turnHeadingUp) {
-          _rotateMap(-heading.heading % (2 * pi));
+          bool turnHeadingUp;
+          switch (widget.turnOnHeadingUpdate) {
+            case TurnOnHeadingUpdate.always:
+              turnHeadingUp = true;
+            case TurnOnHeadingUpdate.once:
+              turnHeadingUp = _isFirstHeadingUpdate;
+              _isFirstHeadingUpdate = false;
+            case TurnOnHeadingUpdate.never:
+              turnHeadingUp = false;
+          }
+          if (turnHeadingUp) {
+            _rotateMap(-heading.heading % (2 * pi));
+          }
         }
       },
       onError: (_) {
