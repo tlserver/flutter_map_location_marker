@@ -11,9 +11,9 @@ class CustomizeMarkerExample extends StatelessWidget {
         title: const Text('Customize Marker Example'),
       ),
       body: FlutterMap(
-        options: MapOptions(
-          center: const LatLng(0, 0),
-          zoom: 1,
+        options: const MapOptions(
+          initialCenter: LatLng(0, 0),
+          initialZoom: 1,
           minZoom: 0,
           maxZoom: 19,
         ),
