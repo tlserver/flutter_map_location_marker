@@ -1,3 +1,9 @@
+## [7.0.2] - Fix Bug
+
+* Fix error with null heading (#74)
+
+Thank to LeonTenorio
+
 ## [7.0.1] - Fix Bug
 
 * Fix heading accuracy (#72)
