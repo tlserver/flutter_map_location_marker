@@ -28,7 +28,6 @@ class LocationMarkerLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final camera = MapCamera.maybeOf(context)!;
-
     return Stack(
       children: [
         if (style.showAccuracyCircle)
