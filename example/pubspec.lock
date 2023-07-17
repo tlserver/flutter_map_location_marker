@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -81,19 +89,18 @@ packages:
   flutter_map:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "52c7fa350c045acd6ae5800c0d16eee2030a2f59"
-      url: "https://github.com/fleaflet/flutter_map.git"
-    source: git
-    version: "6.0.0-dev.1"
+      name: flutter_map
+      sha256: "79a378f59b94bfdc2081779e18bc6031d1e6a245001c66f45c930fd285b44f87"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0-dev.2"
   flutter_map_location_marker:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "8.0.0-dev.1"
+    version: "8.0.0-dev.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -116,10 +123,10 @@ packages:
     dependency: transitive
     description:
       name: geolocator_android
-      sha256: "6cd3c622df085a79fd61f5c14fa024c3ba593aa6b1df2ee809ac59f45e6a9861"
+      sha256: b06c72853c993ae533f482d81a12805d7a441f5231d9668718bc7131d7464082
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.8"
+    version: "4.2.0"
   geolocator_apple:
     dependency: transitive
     description:
@@ -156,10 +163,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "4c3f04bfb64d3efd508d06b41b825542f08122d30bda4933fb95c069d22a4fa3"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:
@@ -341,6 +348,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:
