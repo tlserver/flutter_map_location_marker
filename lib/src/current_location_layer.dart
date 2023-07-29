@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
 
-const _originPoint = CustomPoint<double>(0, 0);
+const _originPoint = Point<double>(0, 0);
 
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
@@ -41,13 +42,13 @@ class CurrentLocationLayer extends StatefulWidget {
   /// is offset by [followScreenPointOffset], i.e. (_mapWidgetWidth_ *
   /// [followScreenPoint.x] / 2 + [followScreenPointOffset.x],
   /// _mapWidgetHeight_ * [followScreenPoint.y] / 2 + [followScreenPointOffset.y]).
-  final CustomPoint<double> followScreenPoint;
+  final Point<double> followScreenPoint;
 
   /// An offset value that when the map follow to the marker. The final screen
   /// point is (_mapWidgetWidth_ * [followScreenPoint.x] / 2 +
   /// [followScreenPointOffset.x], _mapWidgetHeight_ * [followScreenPoint.y] /
   /// 2 + [followScreenPointOffset.y]).
-  final CustomPoint<double> followScreenPointOffset;
+  final Point<double> followScreenPointOffset;
 
   /// The event stream for follow current location. Add a zoom level into
   /// this stream to follow the current location at the provided zoom level or a
