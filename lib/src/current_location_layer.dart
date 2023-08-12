@@ -122,9 +122,13 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 200),
     this.rotateAnimationCurve = Curves.easeInOut,
     this.indicators = const LocationMarkerIndicators(),
+    bool enabledLocationPermissionRequest = true,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory()
-                .fromGeolocatorPositionStream(),
+                .fromGeolocatorPositionStream(
+              enabledLocationPermissionRequest:
+                  enabledLocationPermissionRequest,
+            ),
         headingStream = headingStream ??
             const LocationMarkerDataStreamFactory().fromCompassHeadingStream();
 

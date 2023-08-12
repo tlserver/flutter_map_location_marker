@@ -22,16 +22,24 @@ class LocationMarkerDataStreamFactory {
   /// [geolocator](https://pub.dev/packages/geolocator) stream.
   Stream<LocationMarkerPosition?> fromGeolocatorPositionStream({
     Stream<Position?>? stream,
+    bool enabledLocationPermissionRequest = true,
   }) {
-    return (stream ?? defaultPositionStreamSource()).map((Position? position) {
-      return position != null
-          ? LocationMarkerPosition(
-              latitude: position.latitude,
-              longitude: position.longitude,
-              accuracy: position.accuracy,
-            )
-          : null;
-    });
+    final rawStream = stream ??
+        defaultPositionStreamSource(
+          enabledLocationPermissionRequest: enabledLocationPermissionRequest,
+        );
+
+    return rawStream.map(
+      (Position? position) {
+        return position != null
+            ? LocationMarkerPosition(
+                latitude: position.latitude,
+                longitude: position.longitude,
+                accuracy: position.accuracy,
+              )
+            : null;
+      },
+    );
   }
 
   /// Cast to a position stream from
@@ -46,20 +54,30 @@ class LocationMarkerDataStreamFactory {
 
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
-  Stream<Position?> defaultPositionStreamSource() {
+  Stream<Position?> defaultPositionStreamSource({
+    required bool enabledLocationPermissionRequest,
+  }) {
     final List<AsyncCallback> cancelFunctions = [];
     final streamController = StreamController<Position?>.broadcast(
-      onCancel: () =>
-          Future.wait(cancelFunctions.map((callback) => callback())),
+      onCancel: () => Future.wait(
+        cancelFunctions.map((callback) => callback()),
+      ),
     );
+
     streamController.onListen = () async {
       try {
         LocationPermission permission = await Geolocator.checkPermission();
+
         if (permission == LocationPermission.denied) {
-          streamController.sink
-              .addError(const lm.PermissionRequestingException());
-          permission = await Geolocator.requestPermission();
+          streamController.sink.addError(
+            const lm.PermissionRequestingException(),
+          );
+
+          if (enabledLocationPermissionRequest) {
+            permission = await Geolocator.requestPermission();
+          }
         }
+
         switch (permission) {
           case LocationPermission.denied:
           case LocationPermission.deniedForever:
