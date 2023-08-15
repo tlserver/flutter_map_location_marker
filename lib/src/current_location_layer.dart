@@ -349,7 +349,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       },
       onError: (error) {
-        switch (error.runtimeType) {
+        switch (error) {
           case IncorrectSetupException _:
             setState(() => _status = _Status.incorrectSetup);
           case PermissionRequestingException _:
