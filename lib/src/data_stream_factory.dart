@@ -12,6 +12,9 @@ import 'exception/permission_denied_exception.dart' as lm;
 import 'exception/permission_requesting_exception.dart' as lm;
 import 'exception/service_disabled_exception.dart';
 
+/// Signature for callbacks of permission request.
+typedef RequestPermissionCallback = FutureOr<LocationPermission> Function();
+
 /// Helper class for converting the data stream which provide data in required
 /// format from stream created by some existing plugin.
 class LocationMarkerDataStreamFactory {
@@ -47,7 +50,8 @@ class LocationMarkerDataStreamFactory {
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
   Stream<Position?> defaultPositionStreamSource({
-    bool shouldRequestPermission = true,
+    RequestPermissionCallback? requestPermissionCallback =
+        Geolocator.requestPermission,
   }) {
     final List<AsyncCallback> cancelFunctions = [];
     final streamController = StreamController<Position?>.broadcast(
@@ -57,11 +61,11 @@ class LocationMarkerDataStreamFactory {
     streamController.onListen = () async {
       try {
         LocationPermission permission = await Geolocator.checkPermission();
-        if (shouldRequestPermission &&
-            permission == LocationPermission.denied) {
+        if (permission == LocationPermission.denied &&
+            requestPermissionCallback != null) {
           streamController.sink
               .addError(const lm.PermissionRequestingException());
-          permission = await Geolocator.requestPermission();
+          permission = await requestPermissionCallback();
         }
         switch (permission) {
           case LocationPermission.denied:
