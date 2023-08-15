@@ -46,7 +46,9 @@ class LocationMarkerDataStreamFactory {
 
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
-  Stream<Position?> defaultPositionStreamSource() {
+  Stream<Position?> defaultPositionStreamSource({
+    bool shouldRequestPermission = true,
+  }) {
     final List<AsyncCallback> cancelFunctions = [];
     final streamController = StreamController<Position?>.broadcast(
       onCancel: () =>
@@ -55,7 +57,8 @@ class LocationMarkerDataStreamFactory {
     streamController.onListen = () async {
       try {
         LocationPermission permission = await Geolocator.checkPermission();
-        if (permission == LocationPermission.denied) {
+        if (shouldRequestPermission &&
+            permission == LocationPermission.denied) {
           streamController.sink
               .addError(const lm.PermissionRequestingException());
           permission = await Geolocator.requestPermission();
