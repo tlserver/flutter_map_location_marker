@@ -54,10 +54,7 @@ class LocationMarkerDataStreamFactory {
         Geolocator.requestPermission,
   }) {
     final List<AsyncCallback> cancelFunctions = [];
-    final streamController = StreamController<Position?>.broadcast(
-      onCancel: () =>
-          Future.wait(cancelFunctions.map((callback) => callback())),
-    );
+    final streamController = StreamController<Position?>.broadcast();
     streamController.onListen = () async {
       try {
         LocationPermission permission = await Geolocator.checkPermission();
@@ -70,14 +67,20 @@ class LocationMarkerDataStreamFactory {
         switch (permission) {
           case LocationPermission.denied:
           case LocationPermission.deniedForever:
+            if (streamController.isClosed) {
+              break;
+            }
             streamController.sink
-              ..addError(const lm.PermissionDeniedException())
-              ..close();
+                .addError(const lm.PermissionDeniedException());
+            streamController.close();
           case LocationPermission.whileInUse:
           case LocationPermission.always:
             try {
               final serviceEnabled =
                   await Geolocator.isLocationServiceEnabled();
+              if (streamController.isClosed) {
+                break;
+              }
               if (!serviceEnabled) {
                 streamController.sink
                     .addError(const ServiceDisabledException());
@@ -97,12 +100,19 @@ class LocationMarkerDataStreamFactory {
             } catch (_) {}
             try {
               final lastKnown = await Geolocator.getLastKnownPosition();
+              if (streamController.isClosed) {
+                break;
+              }
               if (lastKnown != null) {
                 streamController.sink.add(lastKnown);
               }
             } catch (_) {}
             try {
-              streamController.sink.add(await Geolocator.getCurrentPosition());
+              final position = await Geolocator.getCurrentPosition();
+              if (streamController.isClosed) {
+                break;
+              }
+              streamController.sink.add(position);
             } catch (_) {}
             final subscription =
                 Geolocator.getPositionStream().listen((position) {
@@ -115,6 +125,10 @@ class LocationMarkerDataStreamFactory {
       } on PermissionDefinitionsNotFoundException {
         streamController.sink.addError(const IncorrectSetupException());
       }
+    };
+    streamController.onCancel = () async {
+      Future.wait(cancelFunctions.map((callback) => callback()));
+      await streamController.close();
     };
     return streamController.stream;
   }
