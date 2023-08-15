@@ -1,3 +1,10 @@
+## [7.0.4] - Improve Behavior
+
+* add parameter `requestPermissionCallback` to [LocationMarkerDataStreamFactory.defaultPositionStreamSource()](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerDataStreamFactory/defaultPositionStreamSource.html) (#78)
+* Fix indicators
+
+Thank to SalihCanBinboga
+
 ## [7.0.2] - Fix Bug
 
 * Fix error with null heading (#74)
