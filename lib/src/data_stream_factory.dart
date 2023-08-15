@@ -37,16 +37,6 @@ class LocationMarkerDataStreamFactory {
     });
   }
 
-  /// Cast to a position stream from
-  /// [geolocator](https://pub.dev/packages/geolocator) stream.
-  @Deprecated('Use fromGeolocatorPositionStream instead')
-  Stream<LocationMarkerPosition?> geolocatorPositionStream({
-    Stream<Position?>? stream,
-  }) =>
-      fromGeolocatorPositionStream(
-        stream: stream,
-      );
-
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
   Stream<Position?> defaultPositionStreamSource({
@@ -156,22 +146,6 @@ class LocationMarkerDataStreamFactory {
       },
     );
   }
-
-  /// Cast to a heading stream from
-  /// [flutter_compass](https://pub.dev/packages/flutter_compass) stream.
-  @Deprecated('Use fromCompassHeadingStream instead')
-  Stream<LocationMarkerHeading?> compassHeadingStream({
-    Stream<CompassEvent?>? stream,
-    double minAccuracy = pi * 0.1,
-    double defAccuracy = pi * 0.3,
-    double maxAccuracy = pi * 0.4,
-  }) =>
-      fromCompassHeadingStream(
-        stream: stream,
-        minAccuracy: minAccuracy,
-        defAccuracy: defAccuracy,
-        maxAccuracy: maxAccuracy,
-      );
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].

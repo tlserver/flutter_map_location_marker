@@ -10,7 +10,3 @@ enum FollowOnLocationUpdate {
   /// Always follow the new location.
   always,
 }
-
-/// Should the map follow the new location when location is updated.
-@Deprecated('Use FollowOnLocationUpdate instead')
-typedef CenterOnLocationUpdate = FollowOnLocationUpdate;
