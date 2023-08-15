@@ -1,3 +1,8 @@
+## [7.0.3] - Improve Behavior
+
+* add parameter `shouldRequestPermission` to [LocationMarkerDataStreamFactory.defaultPositionStreamSource()](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerDataStreamFactory/defaultPositionStreamSource.html) (#78)
+* Fix indicators
+
 ## [7.0.2] - Fix Bug
 
 * Fix error with null heading (#74)
