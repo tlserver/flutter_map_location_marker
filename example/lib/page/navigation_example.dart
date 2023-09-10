@@ -110,7 +110,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                 Icons.navigation_outlined,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
