@@ -100,7 +100,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "7.0.4"
+    version: "7.0.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -123,10 +123,10 @@ packages:
     dependency: transitive
     description:
       name: geolocator_android
-      sha256: "835ff5b4888a2f8eba128996494faf9c5d422785322a81dc0565b99e0f6c379d"
+      sha256: "55c4a81ea15b664a2fdbfd39ba37f2e9c31e1b57237bbeb8deeeaea9979bc97c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.2"
+    version: "4.2.3"
   geolocator_apple:
     dependency: transitive
     description:
