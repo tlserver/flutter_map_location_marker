@@ -1,3 +1,9 @@
+## [7.0.5] - Update Dependencies
+
+* Update dependencies
+
+Thank to dpatrongomez
+
 ## [7.0.4] - Improve Behavior
 
 * Add parameter `requestPermissionCallback` to [LocationMarkerDataStreamFactory.defaultPositionStreamSource()](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerDataStreamFactory/defaultPositionStreamSource.html) (#78)
