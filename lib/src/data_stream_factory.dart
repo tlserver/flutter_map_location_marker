@@ -176,6 +176,6 @@ class LocationMarkerDataStreamFactory {
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
   Stream<CompassEvent?> defaultHeadingStreamSource() {
-    return !kIsWeb ? FlutterCompass.events! : const Stream.empty();
+    return FlutterCompass.events!;
   }
 }
