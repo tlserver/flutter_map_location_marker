@@ -51,8 +51,7 @@ Widget build(BuildContext context) {
   return FlutterMap(
     children: [
       TileLayer(
-        urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        subdomains: ['a', 'b', 'c'],
+        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         maxZoom: 19,
       ),
       CurrentLocationLayer(), // <-- add layer here
