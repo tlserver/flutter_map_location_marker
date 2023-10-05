@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
 
-const _originPoint = CustomPoint<double>(0, 0);
+const _originPoint = Point<double>(0, 0);
 
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
@@ -41,13 +42,13 @@ class CurrentLocationLayer extends StatefulWidget {
   /// is offset by [followScreenPointOffset], i.e. (_mapWidgetWidth_ *
   /// [followScreenPoint.x] / 2 + [followScreenPointOffset.x],
   /// _mapWidgetHeight_ * [followScreenPoint.y] / 2 + [followScreenPointOffset.y]).
-  final CustomPoint<double> followScreenPoint;
+  final Point<double> followScreenPoint;
 
   /// An offset value that when the map follow to the marker. The final screen
   /// point is (_mapWidgetWidth_ * [followScreenPoint.x] / 2 +
   /// [followScreenPointOffset.x], _mapWidgetHeight_ * [followScreenPoint.y] /
   /// 2 + [followScreenPointOffset.y]).
-  final CustomPoint<double> followScreenPointOffset;
+  final Point<double> followScreenPointOffset;
 
   /// The event stream for follow current location. Add a zoom level into
   /// this stream to follow the current location at the provided zoom level or a
@@ -448,21 +449,23 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   TickerFuture _moveMap(LatLng latLng, [double? zoom]) {
-    final map = FlutterMapState.maybeOf(context)!;
-    zoom ??= map.zoom;
+    final mapCamera = MapCamera.of(context);
+    final mapController = MapController.of(context);
+    zoom ??= mapCamera.zoom;
 
     final LatLng beginLatLng;
     if (widget.followScreenPoint == _originPoint &&
         widget.followScreenPointOffset == _originPoint) {
-      beginLatLng = map.center;
+      beginLatLng = mapCamera.center;
     } else {
-      final crs = map.options.crs;
+      final crs = mapCamera.crs;
       final followOffset =
-          (map.nonrotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
+          (mapCamera.nonRotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
               widget.followScreenPointOffset;
-      final mapCenter = crs.latLngToPoint(map.center, map.zoom);
-      final followPoint = map.rotatePoint(mapCenter, mapCenter + followOffset);
-      beginLatLng = crs.pointToLatLng(followPoint, map.zoom);
+      final mapCenter = crs.latLngToPoint(mapCamera.center, mapCamera.zoom);
+      final followPoint =
+          mapCamera.rotatePoint(mapCenter, mapCenter + followOffset);
+      beginLatLng = crs.pointToLatLng(followPoint, mapCamera.zoom);
     }
 
     _moveMapAnimationController?.dispose();
@@ -483,7 +486,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       end: latLng.longitude,
     );
     final zoomTween = Tween(
-      begin: map.zoom,
+      begin: mapCamera.zoom,
       end: zoom,
     );
 
@@ -499,22 +502,21 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           widget.followScreenPointOffset == _originPoint) {
         mapCenter = evaluatedLatLng;
       } else {
-        final crs = map.options.crs;
+        final crs = mapCamera.crs;
         final followOffset =
-            (map.nonrotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
+            (mapCamera.nonRotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
                 widget.followScreenPointOffset;
         final followPoint = crs.latLngToPoint(evaluatedLatLng, evaluatedZoom);
-        final mapCenterPoint = map.rotatePoint(
+        final mapCenterPoint = mapCamera.rotatePoint(
           followPoint,
           followPoint - followOffset,
         );
         mapCenter = crs.pointToLatLng(mapCenterPoint, evaluatedZoom);
       }
 
-      map.move(
+      mapController.move(
         mapCenter,
         evaluatedZoom,
-        source: MapEventSource.mapController,
       );
     });
 
@@ -563,9 +565,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   TickerFuture _rotateMap(double angle) {
-    final map = FlutterMapState.maybeOf(context)!;
+    final mapCamera = MapCamera.of(context);
+    final mapController = MapController.of(context);
+
     _rotateMapAnimationController?.dispose();
-    if ((map.rotationRad - angle).abs() < 0.006) {
+    if ((mapCamera.rotationRad - angle).abs() < 0.006) {
       _rotateMapAnimationController = null;
       return TickerFuture.complete();
     }
@@ -578,38 +582,36 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       curve: widget.turnAnimationCurve,
     );
     final angleTween = RadiusTween(
-      begin: map.rotationRad,
+      begin: mapCamera.rotationRad,
       end: angle,
     );
 
     _rotateMapAnimationController!.addListener(() {
       if (widget.followScreenPoint == _originPoint &&
           widget.followScreenPointOffset == _originPoint) {
-        map.rotate(
+        mapController.rotate(
           angleTween.evaluate(animation) / pi * 180,
-          source: MapEventSource.mapController,
         );
       } else {
-        final crs = map.options.crs;
+        final crs = mapCamera.crs;
         final followOffset =
-            (map.nonrotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
+            (mapCamera.nonRotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
                 widget.followScreenPointOffset;
-        final mapCenter = crs.latLngToPoint(map.center, map.zoom);
+        final mapCenter = crs.latLngToPoint(mapCamera.center, mapCamera.zoom);
         final followPoint =
-            map.rotatePoint(mapCenter, mapCenter + followOffset);
-        map.rotate(
+            mapCamera.rotatePoint(mapCenter, mapCenter + followOffset);
+        mapController.rotate(
           angleTween.evaluate(animation) / pi * 180,
-          source: MapEventSource.mapController,
         );
-        final mapCenterPoint = map.rotatePoint(
+        final mapCenterPoint = mapCamera.rotatePoint(
           followPoint,
           followPoint - followOffset,
         );
-        final offsetMapCenter = crs.pointToLatLng(mapCenterPoint, map.zoom);
-        map.move(
+        final offsetMapCenter =
+            crs.pointToLatLng(mapCenterPoint, mapCamera.zoom);
+        mapController.move(
           offsetMapCenter,
-          map.zoom,
-          source: MapEventSource.mapController,
+          mapCamera.zoom,
         );
       }
     });

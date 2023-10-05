@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -62,8 +63,8 @@ class _NavigationExampleState extends State<NavigationExample> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            followScreenPoint: const CustomPoint(0.0, 1.0),
-            followScreenPointOffset: const CustomPoint(0.0, -60.0),
+            followScreenPoint: const Point(0.0, 1.0),
+            followScreenPointOffset: const Point(0.0, -60.0),
             followCurrentLocationStream:
                 _followCurrentLocationStreamController.stream,
             turnHeadingUpLocationStream: _turnHeadingUpStreamController.stream,

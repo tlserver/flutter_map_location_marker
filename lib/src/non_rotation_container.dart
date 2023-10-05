@@ -13,13 +13,13 @@ class NonRotationContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final map = FlutterMapState.maybeOf(context)!;
+    final mapCamera = MapCamera.of(context);
     final size = Size(
-      map.nonrotatedSize.x,
-      map.nonrotatedSize.y,
+      mapCamera.nonRotatedSize.x,
+      mapCamera.nonRotatedSize.y,
     );
     return Transform.rotate(
-      angle: -map.rotationRad,
+      angle: -mapCamera.rotationRad,
       child: OverflowBox(
         maxWidth: size.width,
         maxHeight: size.height,
