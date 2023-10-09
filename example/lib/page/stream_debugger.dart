@@ -37,59 +37,6 @@ class _StreamDebuggerState extends State<StreamDebugger> {
           minZoom: 0,
           maxZoom: 19,
         ),
-        nonRotatedChildren: [
-          Positioned(
-            right: 20,
-            bottom: 20,
-            child: Column(
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    final random = Random();
-                    setState(() {
-                      _stream =
-                          Stream.periodic(const Duration(seconds: 1), (_) {
-                        return _locationMarkerPosition = LocationMarkerPosition(
-                          latitude: _locationMarkerPosition.latitude - 0.05,
-                          longitude: _locationMarkerPosition.longitude,
-                          accuracy: random.nextDouble() * 80000 + 20000,
-                        );
-                      });
-                    });
-                  },
-                  heroTag: null,
-                  child: const Icon(
-                    Icons.vertical_align_bottom,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FloatingActionButton(
-                  onPressed: () {
-                    final random = Random();
-                    setState(() {
-                      _stream =
-                          Stream.periodic(const Duration(seconds: 2), (_) {
-                        return _locationMarkerPosition = LocationMarkerPosition(
-                          latitude: _locationMarkerPosition.latitude + 0.1,
-                          longitude: _locationMarkerPosition.longitude,
-                          accuracy: random.nextDouble() * 80000 + 20000,
-                        );
-                      });
-                    });
-                  },
-                  heroTag: null,
-                  child: const Icon(
-                    Icons.vertical_align_top,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -100,6 +47,61 @@ class _StreamDebuggerState extends State<StreamDebugger> {
           CurrentLocationLayer(
             positionStream: _stream,
             moveAnimationDuration: const Duration(seconds: 2),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      final random = Random();
+                      setState(() {
+                        _stream =
+                            Stream.periodic(const Duration(seconds: 1), (_) {
+                          return _locationMarkerPosition =
+                              LocationMarkerPosition(
+                            latitude: _locationMarkerPosition.latitude - 0.05,
+                            longitude: _locationMarkerPosition.longitude,
+                            accuracy: random.nextDouble() * 80000 + 20000,
+                          );
+                        });
+                      });
+                    },
+                    heroTag: null,
+                    child: const Icon(
+                      Icons.vertical_align_bottom,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      final random = Random();
+                      setState(() {
+                        _stream =
+                            Stream.periodic(const Duration(seconds: 2), (_) {
+                          return _locationMarkerPosition =
+                              LocationMarkerPosition(
+                            latitude: _locationMarkerPosition.latitude + 0.1,
+                            longitude: _locationMarkerPosition.longitude,
+                            accuracy: random.nextDouble() * 80000 + 20000,
+                          );
+                        });
+                      });
+                    },
+                    heroTag: null,
+                    child: const Icon(
+                      Icons.vertical_align_top,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

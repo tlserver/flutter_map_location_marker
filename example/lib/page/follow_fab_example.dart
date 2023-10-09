@@ -62,23 +62,23 @@ class _FollowFabExampleState extends State<FollowFabExample> {
                 _followCurrentLocationStreamController.stream,
             followOnLocationUpdate: _followOnLocationUpdate,
           ),
-        ],
-        nonRotatedChildren: [
-          Positioned(
-            right: 20,
-            bottom: 20,
-            child: FloatingActionButton(
-              onPressed: () {
-                // Follow the location marker on the map when location updated until user interact with the map.
-                setState(
-                  () => _followOnLocationUpdate = FollowOnLocationUpdate.always,
-                );
-                // Follow the location marker on the map and zoom the map to level 18.
-                _followCurrentLocationStreamController.add(18);
-              },
-              child: const Icon(
-                Icons.my_location,
-                color: Colors.white,
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  // Follow the location marker on the map when location updated until user interact with the map.
+                  setState(
+                    () => _followOnLocationUpdate = FollowOnLocationUpdate.always,
+                  );
+                  // Follow the location marker on the map and zoom the map to level 18.
+                  _followCurrentLocationStreamController.add(18);
+                },
+                child: const Icon(
+                  Icons.my_location,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
