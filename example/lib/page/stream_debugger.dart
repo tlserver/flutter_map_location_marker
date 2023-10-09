@@ -39,7 +39,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
         ),
         children: [
           TileLayer(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName:
                 'net.tlserver6y.flutter_map_location_marker.example',
             maxZoom: 19,
