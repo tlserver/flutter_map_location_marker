@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -81,33 +80,33 @@ class _NavigationExampleState extends State<NavigationExample> {
               markerDirection: MarkerDirection.heading,
             ),
           ),
-        ],
-        nonRotatedChildren: [
-          Positioned(
-            right: 20,
-            bottom: 20,
-            child: FloatingActionButton(
-              backgroundColor: _navigationMode ? Colors.blue : Colors.grey,
-              foregroundColor: Colors.white,
-              onPressed: () {
-                setState(
-                  () {
-                    _navigationMode = !_navigationMode;
-                    _followOnLocationUpdate = _navigationMode
-                        ? FollowOnLocationUpdate.always
-                        : FollowOnLocationUpdate.never;
-                    _turnOnHeadingUpdate = _navigationMode
-                        ? TurnOnHeadingUpdate.always
-                        : TurnOnHeadingUpdate.never;
-                  },
-                );
-                if (_navigationMode) {
-                  _followCurrentLocationStreamController.add(18);
-                  _turnHeadingUpStreamController.add(null);
-                }
-              },
-              child: const Icon(
-                Icons.navigation_outlined,
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: FloatingActionButton(
+                backgroundColor: _navigationMode ? Colors.blue : Colors.grey,
+                foregroundColor: Colors.white,
+                onPressed: () {
+                  setState(
+                    () {
+                      _navigationMode = !_navigationMode;
+                      _followOnLocationUpdate = _navigationMode
+                          ? FollowOnLocationUpdate.always
+                          : FollowOnLocationUpdate.never;
+                      _turnOnHeadingUpdate = _navigationMode
+                          ? TurnOnHeadingUpdate.always
+                          : TurnOnHeadingUpdate.never;
+                    },
+                  );
+                  if (_navigationMode) {
+                    _followCurrentLocationStreamController.add(18);
+                    _turnHeadingUpStreamController.add(null);
+                  }
+                },
+                child: const Icon(
+                  Icons.navigation_outlined,
+                ),
               ),
             ),
           ),

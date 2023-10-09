@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'data.dart';
 import 'drawing/heading_sector.dart';
@@ -48,47 +48,33 @@ class LocationMarkerLayer extends StatelessWidget {
                 point: position.latLng,
                 width: style.headingSectorRadius * 2,
                 height: style.headingSectorRadius * 2,
-                builder: (BuildContext context) {
-                  return IgnorePointer(
-                    child: CustomPaint(
-                      size: Size.fromRadius(
-                        style.headingSectorRadius,
-                      ),
-                      painter: HeadingSector(
-                        style.headingSectorColor,
-                        heading!.heading,
-                        heading!.accuracy,
-                      ),
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    size: Size.fromRadius(
+                      style.headingSectorRadius,
                     ),
-                  );
-                },
+                    painter: HeadingSector(
+                      style.headingSectorColor,
+                      heading!.heading,
+                      heading!.accuracy,
+                    ),
+                  ),
+                ),
               ),
             Marker(
               point: position.latLng,
               width: style.markerSize.width,
               height: style.markerSize.height,
-              builder: (BuildContext context) {
-                switch (style.markerDirection) {
-                  case MarkerDirection.north:
-                    return style.marker;
-                  case MarkerDirection.top:
-                    return Transform.rotate(
-                      angle: -camera.rotationRad,
-                      child: style.marker,
-                    );
-                  case MarkerDirection.heading:
-                    if (heading != null) {
-                      return Transform.rotate(
-                        angle: heading!.heading,
-                        child: style.marker,
-                      );
-                    } else {
-                      return Transform.rotate(
-                        angle: -camera.rotationRad,
-                        child: style.marker,
-                      );
-                    }
-                }
+              child: switch (style.markerDirection) {
+                MarkerDirection.north => style.marker,
+                MarkerDirection.top => Transform.rotate(
+                    angle: -camera.rotationRad,
+                    child: style.marker,
+                  ),
+                MarkerDirection.heading => Transform.rotate(
+                    angle: heading?.heading ?? -camera.rotationRad,
+                    child: style.marker,
+                  ),
               },
             ),
           ],
