@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -82,8 +81,6 @@ class _NavigationExampleState extends State<NavigationExample> {
               markerDirection: MarkerDirection.heading,
             ),
           ),
-        ],
-        nonRotatedChildren: [
           Positioned(
             right: 20,
             bottom: 20,

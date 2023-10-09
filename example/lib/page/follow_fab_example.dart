@@ -63,8 +63,6 @@ class _FollowFabExampleState extends State<FollowFabExample> {
                 _followCurrentLocationStreamController.stream,
             followOnLocationUpdate: _followOnLocationUpdate,
           ),
-        ],
-        nonRotatedChildren: [
           Positioned(
             right: 20,
             bottom: 20,

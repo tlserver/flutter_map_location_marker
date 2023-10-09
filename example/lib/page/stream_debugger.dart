@@ -37,7 +37,17 @@ class _StreamDebuggerState extends State<StreamDebugger> {
           minZoom: 0,
           maxZoom: 19,
         ),
-        nonRotatedChildren: [
+        children: [
+          TileLayer(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName:
+                'net.tlserver6y.flutter_map_location_marker.example',
+            maxZoom: 19,
+          ),
+          CurrentLocationLayer(
+            positionStream: _stream,
+            moveAnimationDuration: const Duration(seconds: 2),
+          ),
           Positioned(
             right: 20,
             bottom: 20,
@@ -88,19 +98,6 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                 ),
               ],
             ),
-          ),
-        ],
-        children: [
-          TileLayer(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: const ['a', 'b', 'c'],
-            userAgentPackageName:
-                'net.tlserver6y.flutter_map_location_marker.example',
-            maxZoom: 19,
-          ),
-          CurrentLocationLayer(
-            positionStream: _stream,
-            moveAnimationDuration: const Duration(seconds: 2),
           ),
         ],
       ),

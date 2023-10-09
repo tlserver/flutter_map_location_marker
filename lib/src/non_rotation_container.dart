@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 /// A container that revert the rotation in Flutter Map. This container can be
 /// used in a rotation child only. By using this container, the widget inside
