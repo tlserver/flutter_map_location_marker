@@ -1,3 +1,10 @@
+## [8.0.0] - Migrate to Flutter Map v6
+
+* Migrate to `flutter_map` v6
+* Shorten default heading sector animation duration
+
+Thank to bramp
+
 ## [7.0.5] - Update Dependencies
 
 * Update dependencies
