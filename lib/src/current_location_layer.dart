@@ -77,7 +77,7 @@ class CurrentLocationLayer extends StatefulWidget {
   final Curve followAnimationCurve;
 
   /// The duration of the animation of turning the map to align the heading.
-  /// Default to 200ms.
+  /// Default to 50ms.
   final Duration turnAnimationDuration;
 
   /// The curve of the animation of turning the map to align the heading.
@@ -91,7 +91,7 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [Curves.fastOutSlowIn].
   final Curve moveAnimationCurve;
 
-  /// The duration of the heading sector rotate animation. Default to 200ms.
+  /// The duration of the heading sector rotate animation. Default to 50ms.
   final Duration rotateAnimationDuration;
 
   /// The curve of the heading sector rotate animation. Default to
@@ -115,11 +115,11 @@ class CurrentLocationLayer extends StatefulWidget {
     this.turnOnHeadingUpdate = TurnOnHeadingUpdate.never,
     this.followAnimationDuration = const Duration(milliseconds: 200),
     this.followAnimationCurve = Curves.fastOutSlowIn,
-    this.turnAnimationDuration = const Duration(milliseconds: 200),
+    this.turnAnimationDuration = const Duration(milliseconds: 50),
     this.turnAnimationCurve = Curves.easeInOut,
     this.moveAnimationDuration = const Duration(milliseconds: 200),
     this.moveAnimationCurve = Curves.fastOutSlowIn,
-    this.rotateAnimationDuration = const Duration(milliseconds: 200),
+    this.rotateAnimationDuration = const Duration(milliseconds: 50),
     this.rotateAnimationCurve = Curves.easeInOut,
     this.indicators = const LocationMarkerIndicators(),
   })  : positionStream = positionStream ??
