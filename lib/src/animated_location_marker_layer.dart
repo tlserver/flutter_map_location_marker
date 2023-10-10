@@ -24,7 +24,7 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
   /// [Curves.fastOutSlowIn].
   final Curve moveAnimationCurve;
 
-  /// The duration of the heading sector rotate animation. Default to 200ms.
+  /// The duration of the heading sector rotate animation. Default to 50ms.
   final Duration rotateAnimationDuration;
 
   /// The curve of the heading sector rotate animation. Default to
@@ -39,7 +39,7 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
     this.style = const LocationMarkerStyle(),
     this.moveAnimationDuration = const Duration(milliseconds: 200),
     this.moveAnimationCurve = Curves.fastOutSlowIn,
-    this.rotateAnimationDuration = const Duration(milliseconds: 200),
+    this.rotateAnimationDuration = const Duration(milliseconds: 50),
     this.rotateAnimationCurve = Curves.easeInOut,
   });
 
