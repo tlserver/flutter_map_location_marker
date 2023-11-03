@@ -163,9 +163,6 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _isFirstLocationUpdate = true;
     _isFirstHeadingUpdate = true;
     _subscriptPositionStream();
-    _subscriptHeadingStream();
-    _subscriptFollowCurrentLocationStream();
-    _subscriptTurnHeadingUpStream();
   }
 
   @override
@@ -175,19 +172,21 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       _positionStreamSubscription.cancel();
       _subscriptPositionStream();
     }
-    if (widget.headingStream != oldWidget.headingStream) {
-      _headingStreamSubscription.cancel();
-      _subscriptHeadingStream();
-    }
-    if (widget.followCurrentLocationStream !=
-        oldWidget.followCurrentLocationStream) {
-      _followCurrentLocationStreamSubscription?.cancel();
-      _subscriptFollowCurrentLocationStream();
-    }
-    if (widget.turnHeadingUpLocationStream !=
-        oldWidget.turnHeadingUpLocationStream) {
-      _turnHeadingUpStreamSubscription?.cancel();
-      _subscriptTurnHeadingUpStream();
+    if (_status == _Status.ready) {
+      if (widget.headingStream != oldWidget.headingStream) {
+        _headingStreamSubscription.cancel();
+        _subscriptHeadingStream();
+      }
+      if (widget.followCurrentLocationStream !=
+          oldWidget.followCurrentLocationStream) {
+        _followCurrentLocationStreamSubscription?.cancel();
+        _subscriptFollowCurrentLocationStream();
+      }
+      if (widget.turnHeadingUpLocationStream !=
+          oldWidget.turnHeadingUpLocationStream) {
+        _turnHeadingUpStreamSubscription?.cancel();
+        _subscriptTurnHeadingUpStream();
+      }
     }
   }
 
@@ -309,6 +308,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           }
         } else {
           if (_status != _Status.ready) {
+            _subscriptHeadingStream();
+            _subscriptFollowCurrentLocationStream();
+            _subscriptTurnHeadingUpStream();
             setState(() {
               _status = _Status.ready;
             });
@@ -344,6 +346,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           case ServiceDisabledException _:
             setState(() => _status = _Status.serviceDisabled);
         }
+        _headingStreamSubscription.cancel();
       },
     );
   }
@@ -356,20 +359,24 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             setState(() => _currentHeading = null);
           }
         } else {
-          _rotateMarker(heading);
+          if (_status == _Status.ready) {
+            _rotateMarker(heading);
 
-          bool turnHeadingUp;
-          switch (widget.turnOnHeadingUpdate) {
-            case TurnOnHeadingUpdate.always:
-              turnHeadingUp = true;
-            case TurnOnHeadingUpdate.once:
-              turnHeadingUp = _isFirstHeadingUpdate;
-              _isFirstHeadingUpdate = false;
-            case TurnOnHeadingUpdate.never:
-              turnHeadingUp = false;
-          }
-          if (turnHeadingUp) {
-            _rotateMap(-heading.heading % (2 * pi));
+            bool turnHeadingUp;
+            switch (widget.turnOnHeadingUpdate) {
+              case TurnOnHeadingUpdate.always:
+                turnHeadingUp = true;
+              case TurnOnHeadingUpdate.once:
+                turnHeadingUp = _isFirstHeadingUpdate;
+                _isFirstHeadingUpdate = false;
+              case TurnOnHeadingUpdate.never:
+                turnHeadingUp = false;
+            }
+            if (turnHeadingUp) {
+              _rotateMap(-heading.heading % (2 * pi));
+            }
+          } else {
+            _currentHeading = heading;
           }
         }
       },
@@ -382,6 +389,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptFollowCurrentLocationStream() {
+    if (_followCurrentLocationStreamSubscription != null) {
+      return;
+    }
     _followCurrentLocationStreamSubscription =
         widget.followCurrentLocationStream?.listen((double? zoom) {
       if (_currentPosition != null) {
@@ -395,6 +405,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptTurnHeadingUpStream() {
+    if (_turnHeadingUpStreamSubscription != null) {
+      return;
+    }
     _turnHeadingUpStreamSubscription =
         widget.turnHeadingUpLocationStream?.listen((_) {
       if (_currentHeading != null) {
