@@ -126,7 +126,7 @@ or their origin streams from a CurrentLocationLayer widget?
 *A*: No, you should not get these streams from a CurrentLocationLayer widget. Instead, create you
 own streams with the the same types and also pass it to all the widgets which need them.
 CurrentLocationLayer doesn't own the streams; it just listens to them. You can use any
-implementation of position and heading streams, as long as the stream types are Stream<Position> and
-Stream<double>, respectively. You may
+implementation of position and heading streams, as long as the stream types are
+Stream&lt;Position&gt; and Stream&lt;double&gt;, respectively. You may
 see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart)
 to know about how to do this.
