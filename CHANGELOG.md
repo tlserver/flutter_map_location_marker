@@ -1,3 +1,8 @@
+## [8.0.1] - Fix Bug
+
+* Fix performance issue (#91)
+* Update dependencies
+
 ## [8.0.0] - Migrate to Flutter Map v6
 
 * Migrate to `flutter_map` v6
