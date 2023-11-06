@@ -16,8 +16,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   late int _pointerCount;
   late FollowOnLocationUpdate _followOnLocationUpdate;
   late TurnOnHeadingUpdate _turnOnHeadingUpdate;
-  late StreamController<double?> _followCurrentLocationStreamController;
-  late StreamController<void> _turnHeadingUpStreamController;
+  late final StreamController<double?> _followCurrentLocationStreamController;
+  late final StreamController<void> _turnHeadingUpStreamController;
 
   @override
   void initState() {

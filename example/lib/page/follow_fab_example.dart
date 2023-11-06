@@ -12,7 +12,7 @@ class FollowFabExample extends StatefulWidget {
 
 class _FollowFabExampleState extends State<FollowFabExample> {
   late FollowOnLocationUpdate _followOnLocationUpdate;
-  late StreamController<double?> _followCurrentLocationStreamController;
+  late final StreamController<double?> _followCurrentLocationStreamController;
 
   @override
   void initState() {
