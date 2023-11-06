@@ -34,60 +34,58 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
 
 ## Usage
 
-Add `flutter_map_location_marker` to your `pubspec.yaml`:
+1. Add `flutter_map_location_marker` to your `pubspec.yaml`:
+   ```yaml
+   dependencies:
+     flutter_map_location_marker: any # or latest verion
+   ```
 
-```yaml
-dependencies:
-  flutter_map_location_marker: any # or latest verion
-```
+2. Add permission by following the instructions from
+   the [geolocator](https://pub.dev/packages/geolocator#usage) package.
 
-Add permission by following the instructions
-from the [geolocator](https://pub.dev/packages/geolocator#usage) package.
+3. Add the layer widget into `FlutterMap`:
+   ```dart
+   Widget build(BuildContext context) {
+     return FlutterMap(
+       children: [
+         TileLayer(
+           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+           maxZoom: 19,
+         ),
+         CurrentLocationLayer(), // <-- add layer here
+       ],
+     );
+   }
+   ```
 
-Add the layer widget into `FlutterMap`:
+4. Discover more parameters
+   in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html)
+   .
 
-```dart
-Widget build(BuildContext context) {
-  return FlutterMap(
-    children: [
-      TileLayer(
-        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        maxZoom: 19,
-      ),
-      CurrentLocationLayer(), // <-- add layer here
-    ],
-  );
-}
-```
+   ```dart
+   Widget build() {
+     return CurrentLocationLayer(
+       followOnLocationUpdate: FollowOnLocationUpdate.always,
+       turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+       style: LocationMarkerStyle(
+         marker: const DefaultLocationMarker(
+           child: Icon(
+             Icons.navigation,
+             color: Colors.white,
+           ),
+         ),
+         markerSize: const Size(40, 40),
+         markerDirection: MarkerDirection.heading,
+       ),
+     );
+   }
+   ```
 
-Discover more parameters
-in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html)
-.
-
-```dart
-Widget build() {
-  return CurrentLocationLayer(
-    followOnLocationUpdate: FollowOnLocationUpdate.always,
-    turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
-    style: LocationMarkerStyle(
-      marker: const DefaultLocationMarker(
-        child: Icon(
-          Icons.navigation,
-          color: Colors.white,
-        ),
-      ),
-      markerSize: const Size(40, 40),
-      markerDirection: MarkerDirection.heading,
-    ),
-  );
-}
-```
-
-Consider using either 
-the [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
-or
-the [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html)
-if multiple location markers need to be displayed.
+5. Consider using either 
+   the [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
+   or
+   the [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html)
+   if multiple location markers need to be displayed.
 
 ## Examples
 
