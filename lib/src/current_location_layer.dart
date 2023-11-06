@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map/flutter_map.dart' hide DoublePointExtension;
 import 'package:latlong2/latlong.dart';
 
 import 'data.dart';
@@ -15,6 +15,7 @@ import 'exception/service_disabled_exception.dart';
 import 'follow_on_location_update.dart';
 import 'indicators.dart';
 import 'location_marker_layer.dart';
+import 'point_extension.dart';
 import 'style.dart';
 import 'turn_on_heading_update.dart';
 import 'tween.dart';
