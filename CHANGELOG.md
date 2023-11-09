@@ -1,3 +1,7 @@
+## [8.0.2] - Fix Bug
+
+* Fix LateInitializationError when requesting permission (#92)
+
 ## [8.0.1] - Fix Bug
 
 * Fix performance issue (#91)
