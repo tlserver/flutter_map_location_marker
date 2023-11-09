@@ -143,7 +143,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late bool _isFirstHeadingUpdate;
 
   late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
-  late StreamSubscription<LocationMarkerHeading?> _headingStreamSubscription;
+  StreamSubscription<LocationMarkerHeading?>? _headingStreamSubscription;
 
   /// Subscription to a stream for following single that also include a zoom
   /// level.
@@ -174,7 +174,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     }
     if (_status == _Status.ready) {
       if (widget.headingStream != oldWidget.headingStream) {
-        _headingStreamSubscription.cancel();
+        _headingStreamSubscription?.cancel();
         _subscriptHeadingStream();
       }
       if (widget.followCurrentLocationStream !=
@@ -286,7 +286,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   @override
   void dispose() {
     _positionStreamSubscription.cancel();
-    _headingStreamSubscription.cancel();
+    _headingStreamSubscription?.cancel();
     _followCurrentLocationStreamSubscription?.cancel();
     _turnHeadingUpStreamSubscription?.cancel();
     _moveMapAnimationController?.dispose();
@@ -346,7 +346,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           case ServiceDisabledException _:
             setState(() => _status = _Status.serviceDisabled);
         }
-        _headingStreamSubscription.cancel();
+        _headingStreamSubscription?.cancel();
       },
     );
   }
