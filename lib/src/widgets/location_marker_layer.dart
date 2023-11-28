@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
@@ -81,5 +82,14 @@ class LocationMarkerLayer extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('position', position))
+      ..add(DiagnosticsProperty('heading', heading))
+      ..add(DiagnosticsProperty('style', style));
   }
 }

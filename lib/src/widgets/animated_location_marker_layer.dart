@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
@@ -44,46 +45,61 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      tween: LocationMarkerPositionTween(
-        begin: position,
-        end: position,
-      ),
-      curve: moveAnimationCurve,
-      duration: moveAnimationDuration,
-      builder: (
-        BuildContext context,
-        LocationMarkerPosition position,
-        Widget? child,
-      ) {
-        if (heading != null) {
-          return TweenAnimationBuilder(
-            tween: LocationMarkerHeadingTween(
-              begin: heading,
-              end: heading,
-            ),
-            curve: rotateAnimationCurve,
-            duration: rotateAnimationDuration,
-            builder: (
-              BuildContext context,
-              LocationMarkerHeading heading,
-              Widget? child,
-            ) {
-              return LocationMarkerLayer(
+  Widget build(BuildContext context) => TweenAnimationBuilder(
+        tween: LocationMarkerPositionTween(
+          begin: position,
+          end: position,
+        ),
+        curve: moveAnimationCurve,
+        duration: moveAnimationDuration,
+        builder: (
+          context,
+          position,
+          child,
+        ) {
+          if (heading != null) {
+            return TweenAnimationBuilder(
+              tween: LocationMarkerHeadingTween(
+                begin: heading,
+                end: heading,
+              ),
+              curve: rotateAnimationCurve,
+              duration: rotateAnimationDuration,
+              builder: (
+                context,
+                heading,
+                child,
+              ) =>
+                  LocationMarkerLayer(
                 position: position,
                 heading: heading,
                 style: style,
-              );
-            },
-          );
-        } else {
-          return LocationMarkerLayer(
-            position: position,
-            style: style,
-          );
-        }
-      },
-    );
+              ),
+            );
+          } else {
+            return LocationMarkerLayer(
+              position: position,
+              style: style,
+            );
+          }
+        },
+      );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('position', position))
+      ..add(DiagnosticsProperty('heading', heading))
+      ..add(DiagnosticsProperty('style', style))
+      ..add(DiagnosticsProperty('moveAnimationDuration', moveAnimationDuration))
+      ..add(DiagnosticsProperty('moveAnimationCurve', moveAnimationCurve))
+      ..add(
+        DiagnosticsProperty(
+          'rotateAnimationDuration',
+          rotateAnimationDuration,
+        ),
+      )
+      ..add(DiagnosticsProperty('rotateAnimationCurve', rotateAnimationCurve));
   }
 }

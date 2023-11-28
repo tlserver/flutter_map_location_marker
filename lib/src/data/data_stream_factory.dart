@@ -25,17 +25,16 @@ class LocationMarkerDataStreamFactory {
   /// [geolocator](https://pub.dev/packages/geolocator) stream.
   Stream<LocationMarkerPosition?> fromGeolocatorPositionStream({
     Stream<Position?>? stream,
-  }) {
-    return (stream ?? defaultPositionStreamSource()).map((Position? position) {
-      return position != null
-          ? LocationMarkerPosition(
-              latitude: position.latitude,
-              longitude: position.longitude,
-              accuracy: position.accuracy,
-            )
-          : null;
-    });
-  }
+  }) =>
+      (stream ?? defaultPositionStreamSource()).map(
+        (position) => position != null
+            ? LocationMarkerPosition(
+                latitude: position.latitude,
+                longitude: position.longitude,
+                accuracy: position.accuracy,
+              )
+            : null,
+      );
 
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
@@ -43,83 +42,84 @@ class LocationMarkerDataStreamFactory {
     RequestPermissionCallback? requestPermissionCallback =
         Geolocator.requestPermission,
   }) {
-    final List<AsyncCallback> cancelFunctions = [];
+    final cancelFunctions = <AsyncCallback>[];
     final streamController = StreamController<Position?>.broadcast();
-    streamController.onListen = () async {
-      try {
-        LocationPermission permission = await Geolocator.checkPermission();
-        if (permission == LocationPermission.denied &&
-            requestPermissionCallback != null) {
-          streamController.sink
-              .addError(const lm.PermissionRequestingException());
-          permission = await requestPermissionCallback();
-        }
-        switch (permission) {
-          case LocationPermission.denied:
-          case LocationPermission.deniedForever:
-            if (streamController.isClosed) {
-              break;
-            }
+    streamController
+      ..onListen = () async {
+        try {
+          var permission = await Geolocator.checkPermission();
+          if (permission == LocationPermission.denied &&
+              requestPermissionCallback != null) {
             streamController.sink
-                .addError(const lm.PermissionDeniedException());
-            streamController.close();
-          case LocationPermission.whileInUse:
-          case LocationPermission.always:
-            try {
-              final serviceEnabled =
-                  await Geolocator.isLocationServiceEnabled();
+                .addError(const lm.PermissionRequestingException());
+            permission = await requestPermissionCallback();
+          }
+          switch (permission) {
+            case LocationPermission.denied:
+            case LocationPermission.deniedForever:
               if (streamController.isClosed) {
                 break;
               }
-              if (!serviceEnabled) {
-                streamController.sink
-                    .addError(const ServiceDisabledException());
-              }
-            } catch (_) {}
-            try {
-              final subscription =
-                  Geolocator.getServiceStatusStream().listen((serviceStatus) {
-                if (serviceStatus == ServiceStatus.enabled) {
-                  streamController.sink.add(null);
-                } else {
+              streamController.sink
+                  .addError(const lm.PermissionDeniedException());
+              await streamController.close();
+            case LocationPermission.whileInUse:
+            case LocationPermission.always:
+              try {
+                final serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (streamController.isClosed) {
+                  break;
+                }
+                if (!serviceEnabled) {
                   streamController.sink
                       .addError(const ServiceDisabledException());
                 }
+              } on Exception catch (_) {}
+              try {
+                final subscription =
+                    Geolocator.getServiceStatusStream().listen((serviceStatus) {
+                  if (serviceStatus == ServiceStatus.enabled) {
+                    streamController.sink.add(null);
+                  } else {
+                    streamController.sink
+                        .addError(const ServiceDisabledException());
+                  }
+                });
+                cancelFunctions.add(subscription.cancel);
+              } on Exception catch (_) {}
+              try {
+                final lastKnown = await Geolocator.getLastKnownPosition();
+                if (streamController.isClosed) {
+                  break;
+                }
+                if (lastKnown != null) {
+                  streamController.sink.add(lastKnown);
+                }
+              } on Exception catch (_) {}
+              try {
+                final position = await Geolocator.getCurrentPosition();
+                if (streamController.isClosed) {
+                  break;
+                }
+                streamController.sink.add(position);
+              } on Exception catch (_) {}
+              final subscription =
+                  Geolocator.getPositionStream().listen((position) {
+                streamController.sink.add(position);
               });
               cancelFunctions.add(subscription.cancel);
-            } catch (_) {}
-            try {
-              final lastKnown = await Geolocator.getLastKnownPosition();
-              if (streamController.isClosed) {
-                break;
-              }
-              if (lastKnown != null) {
-                streamController.sink.add(lastKnown);
-              }
-            } catch (_) {}
-            try {
-              final position = await Geolocator.getCurrentPosition();
-              if (streamController.isClosed) {
-                break;
-              }
-              streamController.sink.add(position);
-            } catch (_) {}
-            final subscription =
-                Geolocator.getPositionStream().listen((position) {
-              streamController.sink.add(position);
-            });
-            cancelFunctions.add(subscription.cancel);
-          case LocationPermission.unableToDetermine:
-            break;
+            case LocationPermission.unableToDetermine:
+              break;
+          }
+        } on PermissionDefinitionsNotFoundException {
+          streamController.sink.addError(const IncorrectSetupException());
         }
-      } on PermissionDefinitionsNotFoundException {
-        streamController.sink.addError(const IncorrectSetupException());
       }
-    };
-    streamController.onCancel = () async {
-      Future.wait(cancelFunctions.map((callback) => callback()));
-      await streamController.close();
-    };
+      ..onCancel = () async {
+        await Future.wait(cancelFunctions.map((callback) => callback()));
+        await streamController.close();
+      };
     return streamController.stream;
   }
 
@@ -130,26 +130,22 @@ class LocationMarkerDataStreamFactory {
     double minAccuracy = pi * 0.1,
     double defAccuracy = pi * 0.3,
     double maxAccuracy = pi * 0.4,
-  }) {
-    return (stream ?? defaultHeadingStreamSource())
-        .where((CompassEvent? e) => e == null || e.heading != null)
-        .map(
-      (CompassEvent? e) {
-        return e != null
-            ? LocationMarkerHeading(
-                heading: degToRadian(e.heading!),
-                accuracy: e.accuracy != null
-                    ? degToRadian(e.accuracy!).clamp(minAccuracy, maxAccuracy)
-                    : defAccuracy,
-              )
-            : null;
-      },
-    );
-  }
+  }) =>
+      (stream ?? defaultHeadingStreamSource())
+          .where((e) => e == null || e.heading != null)
+          .map(
+            (e) => e != null
+                ? LocationMarkerHeading(
+                    heading: degToRadian(e.heading!),
+                    accuracy: e.accuracy != null
+                        ? degToRadian(e.accuracy!)
+                            .clamp(minAccuracy, maxAccuracy)
+                        : defAccuracy,
+                  )
+                : null,
+          );
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
-  Stream<CompassEvent?> defaultHeadingStreamSource() {
-    return FlutterCompass.events!;
-  }
+  Stream<CompassEvent?> defaultHeadingStreamSource() => FlutterCompass.events!;
 }

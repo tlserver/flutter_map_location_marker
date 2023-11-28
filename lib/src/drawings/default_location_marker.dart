@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 /// The default [Widget] that shows the device's position. By default, it is a
 /// blue circle with a white border. The color can be changed and a child can be
@@ -13,27 +14,31 @@ class DefaultLocationMarker extends StatelessWidget {
   /// Create a DefaultLocationMarker.
   const DefaultLocationMarker({
     super.key,
-    this.color = const Color.fromARGB(0xFF, 0x21, 0x96, 0xF3),
+    this.color = const Color(0xFF2196F3),
     this.child,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(2),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-          child: child,
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: const BoxDecoration(
+          color: Color(0xFFFFFFFF),
+          shape: BoxShape.circle,
         ),
-      ),
-    );
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+            child: child,
+          ),
+        ),
+      );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(ColorProperty('color', color));
   }
 }

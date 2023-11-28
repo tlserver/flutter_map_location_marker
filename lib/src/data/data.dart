@@ -25,12 +25,10 @@ class LocationMarkerPosition {
   LatLng get latLng => LatLng(latitude, longitude);
 
   @override
-  String toString() {
-    return 'LocationMarkerPosition('
-        'latitude: $latitude, '
-        'longitude: $longitude, '
-        'accuracy: $accuracy)';
-  }
+  String toString() => 'LocationMarkerPosition('
+      'latitude: $latitude, '
+      'longitude: $longitude, '
+      'accuracy: $accuracy)';
 }
 
 /// A angle with accuracy for marker rendering.
@@ -50,9 +48,7 @@ class LocationMarkerHeading {
   });
 
   @override
-  String toString() {
-    return 'LocationMarkerHeading('
-        'heading: $heading, '
-        'accuracy: $accuracy)';
-  }
+  String toString() => 'LocationMarkerHeading('
+      'heading: $heading, '
+      'accuracy: $accuracy)';
 }

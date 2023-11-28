@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../drawings/default_location_marker.dart';
 import 'marker_direction.dart';
@@ -39,9 +39,9 @@ class LocationMarkerStyle {
     this.markerSize = const Size.square(20),
     this.markerDirection = MarkerDirection.top,
     this.showAccuracyCircle = true,
-    this.accuracyCircleColor = const Color.fromARGB(0x18, 0x21, 0x96, 0xF3),
+    this.accuracyCircleColor = const Color(0x182196F3),
     this.showHeadingSector = true,
     this.headingSectorRadius = 60,
-    this.headingSectorColor = const Color.fromARGB(0xCC, 0x21, 0x96, 0xF3),
+    this.headingSectorColor = const Color(0xCC2196F3),
   });
 }

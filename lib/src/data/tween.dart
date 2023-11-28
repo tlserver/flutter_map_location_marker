@@ -93,9 +93,7 @@ double _circularLerp(double begin, double end, double t, double oneCircle) {
   final crossZero = compareResult == 1 ||
       (compareResult == 0 && begin != end && begin >= halfCircle);
   if (crossZero) {
-    double opposite(double value) {
-      return (value + halfCircle) % oneCircle;
-    }
+    double opposite(double value) => (value + halfCircle) % oneCircle;
 
     return opposite(_doubleLerp(opposite(begin), opposite(end), t));
   } else {
