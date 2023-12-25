@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'data.dart';
-import 'data_stream_factory.dart';
-import 'exceptions/incorrect_setup_exception.dart';
-import 'exceptions/permission_denied_exception.dart';
-import 'exceptions/permission_requesting_exception.dart';
-import 'exceptions/service_disabled_exception.dart';
-import 'follow_on_location_update.dart';
-import 'indicators.dart';
+import '../data/data.dart';
+import '../data/data_stream_factory.dart';
+import '../data/tween.dart';
+import '../exceptions/incorrect_setup_exception.dart';
+import '../exceptions/permission_denied_exception.dart';
+import '../exceptions/permission_requesting_exception.dart';
+import '../exceptions/service_disabled_exception.dart';
+import '../options/follow_on_location_update.dart';
+import '../options/indicators.dart';
+import '../options/style.dart';
+import '../options/turn_on_heading_update.dart';
 import 'location_marker_layer.dart';
-import 'style.dart';
-import 'turn_on_heading_update.dart';
-import 'tween.dart';
 
 const _originPoint = Point<double>(0, 0);
 

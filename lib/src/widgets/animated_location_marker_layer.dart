@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-import 'data.dart';
+import '../data/data.dart';
+import '../data/tween.dart';
+import '../options/style.dart';
 import 'location_marker_layer.dart';
-import 'style.dart';
-import 'tween.dart';
 
 /// A layer for location marker in [FlutterMap] with animation.
 class AnimatedLocationMarkerLayer extends StatelessWidget {

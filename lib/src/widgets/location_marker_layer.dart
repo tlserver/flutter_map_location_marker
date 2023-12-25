@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-import 'data.dart';
-import 'drawings/heading_sector.dart';
-import 'marker_direction.dart';
-import 'style.dart';
+import '../data/data.dart';
+import '../drawings/heading_sector.dart';
+import '../options/marker_direction.dart';
+import '../options/style.dart';
 
 /// A layer for location marker in [FlutterMap].
 class LocationMarkerLayer extends StatelessWidget {
