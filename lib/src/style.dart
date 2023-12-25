@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'drawing/default_location_marker.dart';
+import 'drawings/default_location_marker.dart';
 import 'marker_direction.dart';
 
 /// An immutable style describing how to format and paint the location marker.

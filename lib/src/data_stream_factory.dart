@@ -7,10 +7,10 @@ import 'package:latlong2/latlong.dart';
 
 import 'current_location_layer.dart';
 import 'data.dart';
-import 'exception/incorrect_setup_exception.dart';
-import 'exception/permission_denied_exception.dart' as lm;
-import 'exception/permission_requesting_exception.dart' as lm;
-import 'exception/service_disabled_exception.dart';
+import 'exceptions/incorrect_setup_exception.dart';
+import 'exceptions/permission_denied_exception.dart' as lm;
+import 'exceptions/permission_requesting_exception.dart' as lm;
+import 'exceptions/service_disabled_exception.dart';
 
 /// Signature for callbacks of permission request.
 typedef RequestPermissionCallback = FutureOr<LocationPermission> Function();

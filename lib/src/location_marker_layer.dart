@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 import 'data.dart';
-import 'drawing/heading_sector.dart';
+import 'drawings/heading_sector.dart';
 import 'marker_direction.dart';
 import 'style.dart';
 

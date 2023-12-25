@@ -8,10 +8,10 @@ import 'package:latlong2/latlong.dart';
 
 import 'data.dart';
 import 'data_stream_factory.dart';
-import 'exception/incorrect_setup_exception.dart';
-import 'exception/permission_denied_exception.dart';
-import 'exception/permission_requesting_exception.dart';
-import 'exception/service_disabled_exception.dart';
+import 'exceptions/incorrect_setup_exception.dart';
+import 'exceptions/permission_denied_exception.dart';
+import 'exceptions/permission_requesting_exception.dart';
+import 'exceptions/service_disabled_exception.dart';
 import 'follow_on_location_update.dart';
 import 'indicators.dart';
 import 'location_marker_layer.dart';
