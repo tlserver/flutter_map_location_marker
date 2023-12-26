@@ -1,3 +1,37 @@
+## [8.0.3] - Improve Behavior
+
+* Combine [followScreenPoint](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  and [followScreenPointOffset](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [focalPoint](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/focalPoint.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+  class
+* Rename [followCurrentLocationStream](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignPositionStream](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/alignPositionStream.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [followOnLocationUpdate](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignPositionOnUpdate](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/alignPositionOnUpdate.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [followAnimationDuration](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignPositionAnimationDuration](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/alignPositionAnimationDuration.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [followAnimationCurve](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignPositionAnimationCurve](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/alignPositionAnimationCurve.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [turnHeadingUpLocationStream](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignDirectionStream](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [turnOnHeadingUpdate](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignDirectionOnUpdate](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [turnAnimationDuration](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignDirectionAnimationDuration](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/alignDirectionAnimationDuration.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Rename [turnAnimationCurve](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+  to [alignDirectionAnimationCurve](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/alignDirectionAnimationCurve.html)
+  in [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer-class.html)
+* Update dependencies
+* Update documentation
+
 ## [8.0.2] - Fix Bug
 
 * Fix LateInitializationError when requesting permission (#92)
