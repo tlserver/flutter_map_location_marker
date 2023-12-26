@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'page/center_fab_example.dart';
 import 'page/custom_stream_example.dart';
 import 'page/customize_marker_example.dart';
 import 'page/default_stream_example.dart';
-import 'page/follow_fab_example.dart';
 import 'page/geolocator_settings_example.dart';
 import 'page/indicators_example.dart';
 import 'page/minimum_example.dart';
@@ -73,12 +73,12 @@ class Home extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Follow FAB Example'),
+            title: const Text('Center FAB Example'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => FollowFabExample(),
+                  builder: (BuildContext context) => CenterFabExample(),
                 ),
               );
             },

@@ -5,12 +5,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
-class FollowFabExample extends StatefulWidget {
+class CenterFabExample extends StatefulWidget {
   @override
-  _FollowFabExampleState createState() => _FollowFabExampleState();
+  _CenterFabExampleState createState() => _CenterFabExampleState();
 }
 
-class _FollowFabExampleState extends State<FollowFabExample> {
+class _CenterFabExampleState extends State<CenterFabExample> {
   late AlignOnUpdate _alignPositionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
 
@@ -31,7 +31,7 @@ class _FollowFabExampleState extends State<FollowFabExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Follow FAB Example'),
+        title: const Text('Center FAB Example'),
       ),
       body: FlutterMap(
         options: MapOptions(

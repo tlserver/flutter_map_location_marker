@@ -49,7 +49,7 @@ class CurrentLocationLayer extends StatefulWidget {
   /// level remains unchanged. Defaults to null.
   ///
   /// For more details, see
-  /// [FollowFabExample](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/follow_fab_example.dart).
+  /// [CenterFabExample](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart).
   final Stream<double?>? alignPositionStream;
 
   /// When should the map follow current location. Default to
