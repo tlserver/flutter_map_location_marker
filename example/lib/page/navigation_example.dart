@@ -14,26 +14,26 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   late bool _navigationMode;
   late int _pointerCount;
-  late FollowOnLocationUpdate _followOnLocationUpdate;
-  late TurnOnHeadingUpdate _turnOnHeadingUpdate;
-  late final StreamController<double?> _followCurrentLocationStreamController;
-  late final StreamController<void> _turnHeadingUpStreamController;
+  late AlignOnUpdate _alignPositionOnUpdate;
+  late AlignOnUpdate _alignDirectionOnUpdate;
+  late final StreamController<double?> _alignPositionStreamController;
+  late final StreamController<void> _alignDirectionStreamController;
 
   @override
   void initState() {
     super.initState();
     _navigationMode = false;
     _pointerCount = 0;
-    _followOnLocationUpdate = FollowOnLocationUpdate.never;
-    _turnOnHeadingUpdate = TurnOnHeadingUpdate.never;
-    _followCurrentLocationStreamController = StreamController<double?>();
-    _turnHeadingUpStreamController = StreamController<void>();
+    _alignPositionOnUpdate = AlignOnUpdate.never;
+    _alignDirectionOnUpdate = AlignOnUpdate.never;
+    _alignPositionStreamController = StreamController<double?>();
+    _alignDirectionStreamController = StreamController<void>();
   }
 
   @override
   void dispose() {
-    _followCurrentLocationStreamController.close();
-    _turnHeadingUpStreamController.close();
+    _alignPositionStreamController.close();
+    _alignDirectionStreamController.close();
     super.dispose();
   }
 
@@ -62,13 +62,14 @@ class _NavigationExampleState extends State<NavigationExample> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            followScreenPoint: const Point(0.0, 1.0),
-            followScreenPointOffset: const Point(0.0, -60.0),
-            followCurrentLocationStream:
-                _followCurrentLocationStreamController.stream,
-            turnHeadingUpLocationStream: _turnHeadingUpStreamController.stream,
-            followOnLocationUpdate: _followOnLocationUpdate,
-            turnOnHeadingUpdate: _turnOnHeadingUpdate,
+            focalPoint: const FocalPoint(
+              ratio: Point(0.0, 1.0),
+              offset: Point(0.0, -60.0),
+            ),
+            alignPositionStream: _alignPositionStreamController.stream,
+            alignDirectionStream: _alignDirectionStreamController.stream,
+            alignPositionOnUpdate: _alignPositionOnUpdate,
+            alignDirectionOnUpdate: _alignDirectionOnUpdate,
             style: const LocationMarkerStyle(
               marker: DefaultLocationMarker(
                 child: Icon(
@@ -91,17 +92,17 @@ class _NavigationExampleState extends State<NavigationExample> {
                   setState(
                     () {
                       _navigationMode = !_navigationMode;
-                      _followOnLocationUpdate = _navigationMode
-                          ? FollowOnLocationUpdate.always
-                          : FollowOnLocationUpdate.never;
-                      _turnOnHeadingUpdate = _navigationMode
-                          ? TurnOnHeadingUpdate.always
-                          : TurnOnHeadingUpdate.never;
+                      _alignPositionOnUpdate = _navigationMode
+                          ? AlignOnUpdate.always
+                          : AlignOnUpdate.never;
+                      _alignDirectionOnUpdate = _navigationMode
+                          ? AlignOnUpdate.always
+                          : AlignOnUpdate.never;
                     },
                   );
                   if (_navigationMode) {
-                    _followCurrentLocationStreamController.add(18);
-                    _turnHeadingUpStreamController.add(null);
+                    _alignPositionStreamController.add(18);
+                    _alignDirectionStreamController.add(null);
                   }
                 },
                 child: const Icon(
@@ -115,24 +116,26 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  // Disable follow and turn temporarily when user is manipulating the map.
+  // Disable align position and align direction temporarily when user is
+  // manipulating the map.
   void _onPointerDown(e, l) {
     _pointerCount++;
     setState(() {
-      _followOnLocationUpdate = FollowOnLocationUpdate.never;
-      _turnOnHeadingUpdate = TurnOnHeadingUpdate.never;
+      _alignPositionOnUpdate = AlignOnUpdate.never;
+      _alignDirectionOnUpdate = AlignOnUpdate.never;
     });
   }
 
-  // Enable follow and turn again when user end manipulation.
+  // Enable align position and align direction again when user manipulation
+  // ended.
   void _onPointerUp(e, l) {
     if (--_pointerCount == 0 && _navigationMode) {
       setState(() {
-        _followOnLocationUpdate = FollowOnLocationUpdate.always;
-        _turnOnHeadingUpdate = TurnOnHeadingUpdate.always;
+        _alignPositionOnUpdate = AlignOnUpdate.always;
+        _alignDirectionOnUpdate = AlignOnUpdate.always;
       });
-      _followCurrentLocationStreamController.add(18);
-      _turnHeadingUpStreamController.add(null);
+      _alignPositionStreamController.add(18);
+      _alignDirectionStreamController.add(null);
     }
   }
 }

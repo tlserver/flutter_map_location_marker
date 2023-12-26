@@ -11,19 +11,19 @@ class FollowFabExample extends StatefulWidget {
 }
 
 class _FollowFabExampleState extends State<FollowFabExample> {
-  late FollowOnLocationUpdate _followOnLocationUpdate;
-  late final StreamController<double?> _followCurrentLocationStreamController;
+  late AlignOnUpdate _alignPositionOnUpdate;
+  late final StreamController<double?> _alignPositionStreamController;
 
   @override
   void initState() {
     super.initState();
-    _followOnLocationUpdate = FollowOnLocationUpdate.always;
-    _followCurrentLocationStreamController = StreamController<double?>();
+    _alignPositionOnUpdate = AlignOnUpdate.always;
+    _alignPositionStreamController = StreamController<double?>();
   }
 
   @override
   void dispose() {
-    _followCurrentLocationStreamController.close();
+    _alignPositionStreamController.close();
     super.dispose();
   }
 
@@ -39,12 +39,12 @@ class _FollowFabExampleState extends State<FollowFabExample> {
           initialZoom: 1,
           minZoom: 0,
           maxZoom: 19,
-          // Stop following the location marker on the map if user interacted with the map.
+          // Stop aligning the location marker to the center of the map widget
+          // if user interacted with the map.
           onPositionChanged: (MapPosition position, bool hasGesture) {
-            if (hasGesture &&
-                _followOnLocationUpdate != FollowOnLocationUpdate.never) {
+            if (hasGesture && _alignPositionOnUpdate != AlignOnUpdate.never) {
               setState(
-                () => _followOnLocationUpdate = FollowOnLocationUpdate.never,
+                () => _alignPositionOnUpdate = AlignOnUpdate.never,
               );
             }
           },
@@ -58,9 +58,8 @@ class _FollowFabExampleState extends State<FollowFabExample> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            followCurrentLocationStream:
-                _followCurrentLocationStreamController.stream,
-            followOnLocationUpdate: _followOnLocationUpdate,
+            alignPositionStream: _alignPositionStreamController.stream,
+            alignPositionOnUpdate: _alignPositionOnUpdate,
           ),
           Align(
             alignment: Alignment.bottomRight,
@@ -68,12 +67,14 @@ class _FollowFabExampleState extends State<FollowFabExample> {
               padding: const EdgeInsets.all(20.0),
               child: FloatingActionButton(
                 onPressed: () {
-                  // Follow the location marker on the map when location updated until user interact with the map.
+                  // Align the location marker to the center of the map widget
+                  // on location update until user interact with the map.
                   setState(
-                    () => _followOnLocationUpdate = FollowOnLocationUpdate.always,
+                    () => _alignPositionOnUpdate = AlignOnUpdate.always,
                   );
-                  // Follow the location marker on the map and zoom the map to level 18.
-                  _followCurrentLocationStreamController.add(18);
+                  // Align the location marker to the center of the map widget
+                  // and zoom the map to level 18.
+                  _alignPositionStreamController.add(18);
                 },
                 child: const Icon(
                   Icons.my_location,

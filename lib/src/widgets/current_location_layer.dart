@@ -13,77 +13,72 @@ import '../exceptions/incorrect_setup_exception.dart';
 import '../exceptions/permission_denied_exception.dart';
 import '../exceptions/permission_requesting_exception.dart';
 import '../exceptions/service_disabled_exception.dart';
-import '../options/follow_on_location_update.dart';
+import '../options/align_on_update.dart';
+import '../options/focal_point.dart';
 import '../options/indicators.dart';
 import '../options/style.dart';
-import '../options/turn_on_heading_update.dart';
 import 'location_marker_layer.dart';
-
-const _originPoint = Point<double>(0, 0);
 
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
   /// The style to use for this location marker.
   final LocationMarkerStyle style;
 
-  /// A Stream that provide position data for this marker. Default to
+  /// A stream that provide position data for this marker. Defaults to
   /// [LocationMarkerDataStreamFactory.fromGeolocatorPositionStream].
   final Stream<LocationMarkerPosition?> positionStream;
 
-  /// A Stream that provide heading data for this marker. Default to
+  /// A stream that provide heading data for this marker. Defaults to
   /// [LocationMarkerDataStreamFactory.fromCompassHeadingStream].
   final Stream<LocationMarkerHeading?> headingStream;
 
-  /// A screen point that when the map follow to the marker. The point
-  /// (-1.0, -1.0) indicate the top-left corner of the map widget. The point
-  /// (+1.0, +1.0) indicate the bottom-right corner of the map widget. The point
-  /// (0.0, 0.0) indicate the center of the map widget. The final screen point
-  /// is offset by [followScreenPointOffset], i.e. (_mapWidgetWidth_ *
-  /// [followScreenPoint].x / 2 + [followScreenPointOffset].x,
-  /// _mapWidgetHeight_ * [followScreenPoint].y / 2 +
-  /// [followScreenPointOffset].y).
-  final Point<double> followScreenPoint;
+  /// A screen point to align the marker when an 'align position event' is
+  /// emitted. An 'align position event' is emitted under the following
+  /// circumstances:
+  /// 1. The first location update occurs, and [alignPositionOnUpdate] is set
+  ///   to [AlignOnUpdate.once] or [AlignOnUpdate.always].
+  /// 2. Any subsequent location update occurs, and [alignPositionOnUpdate] is
+  ///   set to [AlignOnUpdate.always].
+  /// 3. An event from [alignPositionStream] is received.
+  /// Defaults to the center of the map widget.
+  final FocalPoint focalPoint;
 
-  /// An offset value that when the map follow to the marker. The final screen
-  /// point is (_mapWidgetWidth_ * [followScreenPoint].x / 2 +
-  /// [followScreenPointOffset].x, _mapWidgetHeight_ * [followScreenPoint].y /
-  /// 2 + [followScreenPointOffset].y).
-  final Point<double> followScreenPointOffset;
-
-  /// The event stream for follow current location. Add a zoom level into
-  /// this stream to follow the current location at the provided zoom level or a
-  /// null if the zoom level should be unchanged. Default to null.
+  /// A stream that emits an 'align position event'. Emit an event with a
+  /// optional zoom level to this stream to align the marker position to the
+  /// focal point at the specified zoom level. If null is emitted, the zoom
+  /// level remains unchanged. Defaults to null.
   ///
   /// For more details, see
   /// [FollowFabExample](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/follow_fab_example.dart).
-  final Stream<double?>? followCurrentLocationStream;
-
-  /// The event stream for turning heading up. Default to null.
-  final Stream<void>? turnHeadingUpLocationStream;
+  final Stream<double?>? alignPositionStream;
 
   /// When should the map follow current location. Default to
-  /// [FollowOnLocationUpdate.never].
-  final FollowOnLocationUpdate followOnLocationUpdate;
-
-  /// When should the plugin rotate the map to keep the heading upward. Default
-  /// to [TurnOnHeadingUpdate.never].
-  final TurnOnHeadingUpdate turnOnHeadingUpdate;
+  /// [AlignOnUpdate.never].
+  final AlignOnUpdate alignPositionOnUpdate;
 
   /// The duration of the animation of following the map to the current
   /// location. Default to 200ms.
-  final Duration followAnimationDuration;
+  final Duration alignPositionAnimationDuration;
 
   /// The curve of the animation of following the map to the current location.
   /// Default to [Curves.fastOutSlowIn].
-  final Curve followAnimationCurve;
+  final Curve alignPositionAnimationCurve;
+
+  /// A stream that emits an 'align direction event'. Emit an event to this
+  /// stream to align the marker direction upwards. Defaults to null.
+  final Stream<void>? alignDirectionStream;
+
+  /// When should the plugin rotate the map to keep the heading upward. Default
+  /// to [AlignOnUpdate.never].
+  final AlignOnUpdate alignDirectionOnUpdate;
 
   /// The duration of the animation of turning the map to align the heading.
   /// Default to 50ms.
-  final Duration turnAnimationDuration;
+  final Duration alignDirectionAnimationDuration;
 
   /// The curve of the animation of turning the map to align the heading.
   /// Default to [Curves.easeInOut].
-  final Curve turnAnimationCurve;
+  final Curve alignDirectionAnimationCurve;
 
   /// The duration of the marker's move animation. Default to 200ms.
   final Duration moveAnimationDuration;
@@ -108,26 +103,63 @@ class CurrentLocationLayer extends StatefulWidget {
     this.style = const LocationMarkerStyle(),
     Stream<LocationMarkerPosition?>? positionStream,
     Stream<LocationMarkerHeading?>? headingStream,
-    this.followScreenPoint = _originPoint,
-    this.followScreenPointOffset = _originPoint,
-    this.followCurrentLocationStream,
-    this.turnHeadingUpLocationStream,
-    this.followOnLocationUpdate = FollowOnLocationUpdate.never,
-    this.turnOnHeadingUpdate = TurnOnHeadingUpdate.never,
-    this.followAnimationDuration = const Duration(milliseconds: 200),
-    this.followAnimationCurve = Curves.fastOutSlowIn,
-    this.turnAnimationDuration = const Duration(milliseconds: 50),
-    this.turnAnimationCurve = Curves.easeInOut,
+    FocalPoint? focalPoint,
+    Stream<double?>? alignPositionStream,
+    AlignOnUpdate? alignPositionOnUpdate,
+    Stream<void>? alignDirectionStream,
+    AlignOnUpdate? alignDirectionOnUpdate,
+    Duration? alignPositionAnimationDuration,
+    Curve? alignPositionAnimationCurve,
+    Duration? alignDirectionAnimationDuration,
+    Curve? alignDirectionAnimationCurve,
     this.moveAnimationDuration = const Duration(milliseconds: 200),
     this.moveAnimationCurve = Curves.fastOutSlowIn,
     this.rotateAnimationDuration = const Duration(milliseconds: 50),
     this.rotateAnimationCurve = Curves.easeInOut,
     this.indicators = const LocationMarkerIndicators(),
+    @Deprecated("Use 'focalPoint' instead.") Point<double>? followScreenPoint,
+    @Deprecated("Use 'focalPoint' instead.")
+    Point<double>? followScreenPointOffset,
+    @Deprecated("Use 'alignPositionStream' instead.")
+    Stream<double?>? followCurrentLocationStream,
+    @Deprecated("Use 'alignDirectionStream' instead.")
+    Stream<void>? turnHeadingUpLocationStream,
+    @Deprecated("Use 'alignPositionOnUpdate' instead.")
+    AlignOnUpdate followOnLocationUpdate = AlignOnUpdate.never,
+    @Deprecated("Use 'alignDirectionOnUpdate' instead.")
+    AlignOnUpdate turnOnHeadingUpdate = AlignOnUpdate.never,
+    @Deprecated("Use 'alignPositionAnimationDuration' instead.")
+    Duration followAnimationDuration = const Duration(milliseconds: 200),
+    @Deprecated("Use 'alignPositionAnimationCurve' instead.")
+    Curve followAnimationCurve = Curves.fastOutSlowIn,
+    @Deprecated("Use 'alignDirectionAnimationDuration' instead.")
+    Duration turnAnimationDuration = const Duration(milliseconds: 50),
+    @Deprecated("Use 'alignDirectionAnimationCurve' instead.")
+    Curve turnAnimationCurve = Curves.easeInOut,
   })  : positionStream = positionStream ??
             const LocationMarkerDataStreamFactory()
                 .fromGeolocatorPositionStream(),
         headingStream = headingStream ??
-            const LocationMarkerDataStreamFactory().fromCompassHeadingStream();
+            const LocationMarkerDataStreamFactory().fromCompassHeadingStream(),
+        focalPoint = focalPoint ??
+            FocalPoint(
+              ratio: followScreenPoint ?? const Point<double>(0, 0),
+              offset: followScreenPointOffset ?? const Point<double>(0, 0),
+            ),
+        alignPositionStream =
+            alignPositionStream ?? followCurrentLocationStream,
+        alignPositionOnUpdate = alignPositionOnUpdate ?? followOnLocationUpdate,
+        alignPositionAnimationDuration =
+            alignPositionAnimationDuration ?? followAnimationDuration,
+        alignPositionAnimationCurve =
+            alignPositionAnimationCurve ?? followAnimationCurve,
+        alignDirectionStream =
+            alignDirectionStream ?? turnHeadingUpLocationStream,
+        alignDirectionOnUpdate = alignDirectionOnUpdate ?? turnOnHeadingUpdate,
+        alignDirectionAnimationDuration =
+            alignDirectionAnimationDuration ?? turnAnimationDuration,
+        alignDirectionAnimationCurve =
+            alignDirectionAnimationCurve ?? turnAnimationCurve;
 
   @override
   State<CurrentLocationLayer> createState() => _CurrentLocationLayerState();
@@ -139,36 +171,35 @@ class CurrentLocationLayer extends StatefulWidget {
       ..add(DiagnosticsProperty('style', style))
       ..add(DiagnosticsProperty('positionStream', positionStream))
       ..add(DiagnosticsProperty('headingStream', headingStream))
-      ..add(DiagnosticsProperty('followScreenPoint', followScreenPoint))
+      ..add(DiagnosticsProperty('focalPoint', focalPoint))
+      ..add(DiagnosticsProperty('alignPositionStream', alignPositionStream))
+      ..add(DiagnosticsProperty('alignDirectionStream', alignDirectionStream))
+      ..add(EnumProperty('alignPositionOnUpdate', alignPositionOnUpdate))
+      ..add(EnumProperty('alignDirectionOnUpdate', alignDirectionOnUpdate))
       ..add(
         DiagnosticsProperty(
-          'followScreenPointOffset',
-          followScreenPointOffset,
+          'alignPositionAnimationDuration',
+          alignPositionAnimationDuration,
         ),
       )
       ..add(
         DiagnosticsProperty(
-          'followCurrentLocationStream',
-          followCurrentLocationStream,
+          'alignPositionAnimationCurve',
+          alignPositionAnimationCurve,
         ),
       )
       ..add(
         DiagnosticsProperty(
-          'turnHeadingUpLocationStream',
-          turnHeadingUpLocationStream,
+          'alignDirectionAnimationDuration',
+          alignDirectionAnimationDuration,
         ),
       )
-      ..add(EnumProperty('followOnLocationUpdate', followOnLocationUpdate))
-      ..add(EnumProperty('turnOnHeadingUpdate', turnOnHeadingUpdate))
       ..add(
         DiagnosticsProperty(
-          'followAnimationDuration',
-          followAnimationDuration,
+          'alignDirectionAnimationCurve',
+          alignDirectionAnimationCurve,
         ),
       )
-      ..add(DiagnosticsProperty('followAnimationCurve', followAnimationCurve))
-      ..add(DiagnosticsProperty('turnAnimationDuration', turnAnimationDuration))
-      ..add(DiagnosticsProperty('turnAnimationCurve', turnAnimationCurve))
       ..add(DiagnosticsProperty('moveAnimationDuration', moveAnimationDuration))
       ..add(DiagnosticsProperty('moveAnimationCurve', moveAnimationCurve))
       ..add(
@@ -197,10 +228,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   /// Subscription to a stream for following single that also include a zoom
   /// level.
-  StreamSubscription<double?>? _followCurrentLocationStreamSubscription;
+  StreamSubscription<double?>? _alignPositionStreamSubscription;
 
   /// Subscription to a stream for single indicate turning the heading up.
-  StreamSubscription<void>? _turnHeadingUpStreamSubscription;
+  StreamSubscription<void>? _alignDirectionStreamSubscription;
 
   AnimationController? _moveMapAnimationController;
   AnimationController? _moveMarkerAnimationController;
@@ -227,15 +258,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         _headingStreamSubscription?.cancel();
         _subscriptHeadingStream();
       }
-      if (widget.followCurrentLocationStream !=
-          oldWidget.followCurrentLocationStream) {
-        _followCurrentLocationStreamSubscription?.cancel();
-        _subscriptFollowCurrentLocationStream();
+      if (widget.alignPositionStream != oldWidget.alignPositionStream) {
+        _alignPositionStreamSubscription?.cancel();
+        _subscriptAlignPositionStream();
       }
-      if (widget.turnHeadingUpLocationStream !=
-          oldWidget.turnHeadingUpLocationStream) {
-        _turnHeadingUpStreamSubscription?.cancel();
-        _subscriptTurnHeadingUpStream();
+      if (widget.alignDirectionStream != oldWidget.alignDirectionStream) {
+        _alignDirectionStreamSubscription?.cancel();
+        _subscriptAlignDirectionStream();
       }
     }
   }
@@ -337,8 +366,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void dispose() {
     _positionStreamSubscription.cancel();
     _headingStreamSubscription?.cancel();
-    _followCurrentLocationStreamSubscription?.cancel();
-    _turnHeadingUpStreamSubscription?.cancel();
+    _alignPositionStreamSubscription?.cancel();
+    _alignDirectionStreamSubscription?.cancel();
     _moveMapAnimationController?.dispose();
     _moveMarkerAnimationController?.dispose();
     _rotateMapAnimationController?.dispose();
@@ -359,25 +388,25 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         } else {
           if (_status != _Status.ready) {
             _subscriptHeadingStream();
-            _subscriptFollowCurrentLocationStream();
-            _subscriptTurnHeadingUpStream();
+            _subscriptAlignPositionStream();
+            _subscriptAlignDirectionStream();
             setState(() {
               _status = _Status.ready;
             });
           }
           _moveMarker(position);
 
-          bool followCurrentLocation;
-          switch (widget.followOnLocationUpdate) {
-            case FollowOnLocationUpdate.always:
-              followCurrentLocation = true;
-            case FollowOnLocationUpdate.once:
-              followCurrentLocation = _isFirstLocationUpdate;
+          bool alignPosition;
+          switch (widget.alignPositionOnUpdate) {
+            case AlignOnUpdate.always:
+              alignPosition = true;
+            case AlignOnUpdate.once:
+              alignPosition = _isFirstLocationUpdate;
               _isFirstLocationUpdate = false;
-            case FollowOnLocationUpdate.never:
-              followCurrentLocation = false;
+            case AlignOnUpdate.never:
+              alignPosition = false;
           }
-          if (followCurrentLocation) {
+          if (alignPosition) {
             _moveMap(
               position.latLng,
               _followingZoom,
@@ -412,17 +441,17 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           if (_status == _Status.ready) {
             _rotateMarker(heading);
 
-            bool turnHeadingUp;
-            switch (widget.turnOnHeadingUpdate) {
-              case TurnOnHeadingUpdate.always:
-                turnHeadingUp = true;
-              case TurnOnHeadingUpdate.once:
-                turnHeadingUp = _isFirstHeadingUpdate;
+            bool alignDirection;
+            switch (widget.alignDirectionOnUpdate) {
+              case AlignOnUpdate.always:
+                alignDirection = true;
+              case AlignOnUpdate.once:
+                alignDirection = _isFirstHeadingUpdate;
                 _isFirstHeadingUpdate = false;
-              case TurnOnHeadingUpdate.never:
-                turnHeadingUp = false;
+              case AlignOnUpdate.never:
+                alignDirection = false;
             }
-            if (turnHeadingUp) {
+            if (alignDirection) {
               _rotateMap(-heading.heading % (2 * pi));
             }
           } else {
@@ -438,12 +467,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     );
   }
 
-  void _subscriptFollowCurrentLocationStream() {
-    if (_followCurrentLocationStreamSubscription != null) {
+  void _subscriptAlignPositionStream() {
+    if (_alignPositionStreamSubscription != null) {
       return;
     }
-    _followCurrentLocationStreamSubscription =
-        widget.followCurrentLocationStream?.listen((zoom) {
+    _alignPositionStreamSubscription =
+        widget.alignPositionStream?.listen((zoom) {
       if (_currentPosition != null) {
         _followingZoom = zoom;
         _moveMap(
@@ -454,12 +483,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     });
   }
 
-  void _subscriptTurnHeadingUpStream() {
-    if (_turnHeadingUpStreamSubscription != null) {
+  void _subscriptAlignDirectionStream() {
+    if (_alignDirectionStreamSubscription != null) {
       return;
     }
-    _turnHeadingUpStreamSubscription =
-        widget.turnHeadingUpLocationStream?.listen((_) {
+    _alignDirectionStreamSubscription =
+        widget.alignDirectionStream?.listen((_) {
       if (_currentHeading != null) {
         _rotateMap(-_currentHeading!.heading % (2 * pi));
       }
@@ -501,29 +530,28 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     final options = MapOptions.of(context);
     zoom ??= camera.zoom;
 
+    final halfMapSize = camera.nonRotatedSize * 0.5;
+    final projectedFocalPoint = widget.focalPoint.project(halfMapSize);
+
     final LatLng beginLatLng;
-    if (widget.followScreenPoint == _originPoint &&
-        widget.followScreenPointOffset == _originPoint) {
+    if (projectedFocalPoint == halfMapSize) {
       beginLatLng = camera.center;
     } else {
       final crs = options.crs;
-      final followOffset =
-          (camera.nonRotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
-              widget.followScreenPointOffset;
       final mapCenter = crs.latLngToPoint(camera.center, camera.zoom);
       final followPoint =
-          camera.rotatePoint(mapCenter, mapCenter + followOffset);
+          camera.rotatePoint(mapCenter, mapCenter + projectedFocalPoint);
       beginLatLng = crs.pointToLatLng(followPoint, camera.zoom);
     }
 
     _moveMapAnimationController?.dispose();
     _moveMapAnimationController = AnimationController(
-      duration: widget.followAnimationDuration,
+      duration: widget.alignPositionAnimationDuration,
       vsync: this,
     );
     final animation = CurvedAnimation(
       parent: _moveMapAnimationController!,
-      curve: widget.followAnimationCurve,
+      curve: widget.alignPositionAnimationCurve,
     );
     final latTween = Tween(
       begin: beginLatLng.latitude,
@@ -545,21 +573,19 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       );
       final evaluatedZoom = zoomTween.evaluate(animation);
 
-      if (widget.followScreenPoint == _originPoint &&
-          widget.followScreenPointOffset == _originPoint) {
+      final halfMapSize = camera.nonRotatedSize * 0.5;
+      final projectedFocalPoint = widget.focalPoint.project(halfMapSize);
+
+      if (projectedFocalPoint == halfMapSize) {
         MapController.of(context).move(
           evaluatedLatLng,
           evaluatedZoom,
         );
       } else {
-        final followOffset =
-            ((camera.nonRotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
-                    widget.followScreenPointOffset)
-                .toOffset();
         MapController.of(context).move(
           evaluatedLatLng,
           evaluatedZoom,
-          offset: followOffset,
+          offset: projectedFocalPoint.toOffset(),
         );
       }
     });
@@ -616,12 +642,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       return TickerFuture.complete();
     }
     _rotateMapAnimationController = AnimationController(
-      duration: widget.turnAnimationDuration,
+      duration: widget.alignDirectionAnimationDuration,
       vsync: this,
     );
     final animation = CurvedAnimation(
       parent: _rotateMapAnimationController!,
-      curve: widget.turnAnimationCurve,
+      curve: widget.alignDirectionAnimationCurve,
     );
     final angleTween = RadiusTween(
       begin: camera.rotationRad,
@@ -631,17 +657,15 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _rotateMapAnimationController!.addListener(() {
       final evaluatedAngle = angleTween.evaluate(animation) / pi * 180;
 
-      if (widget.followScreenPoint == _originPoint &&
-          widget.followScreenPointOffset == _originPoint) {
+      final halfMapSize = camera.nonRotatedSize * 0.5;
+      final projectedFocalPoint = widget.focalPoint.project(halfMapSize);
+
+      if (projectedFocalPoint == halfMapSize) {
         MapController.of(context).rotate(evaluatedAngle);
       } else {
-        final followOffset =
-            ((camera.nonRotatedSize * 0.5).scaleBy(widget.followScreenPoint) +
-                    widget.followScreenPointOffset)
-                .toOffset();
         MapController.of(context).rotateAroundPoint(
           evaluatedAngle,
-          offset: followOffset,
+          offset: projectedFocalPoint.toOffset(),
         );
       }
     });
@@ -667,8 +691,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       ..add(DoubleProperty('_followingZoom', _followingZoom))
       ..add(
         DiagnosticsProperty(
-            '_isFirstLocationUpdate',
-            _isFirstLocationUpdate,
+          '_isFirstLocationUpdate',
+          _isFirstLocationUpdate,
         ),
       )
       ..add(DiagnosticsProperty('_isFirstHeadingUpdate', _isFirstHeadingUpdate))
@@ -686,14 +710,14 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       )
       ..add(
         DiagnosticsProperty(
-          '_followCurrentLocationStreamSubscription',
-          _followCurrentLocationStreamSubscription,
+          '_alignPositionStreamSubscription',
+          _alignPositionStreamSubscription,
         ),
       )
       ..add(
         DiagnosticsProperty(
-          '_turnHeadingUpStreamSubscription',
-          _turnHeadingUpStreamSubscription,
+          '_alignDirectionStreamSubscription',
+          _alignDirectionStreamSubscription,
         ),
       )
       ..add(
