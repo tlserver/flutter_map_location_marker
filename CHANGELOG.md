@@ -1,3 +1,7 @@
+## [8.0.4] - Fix Bug
+
+* Fix error about AnimationController be disposed more than once (#96)
+
 ## [8.0.3] - Improve Behavior
 
 * Combine [followScreenPoint](https://pub.dev/documentation/flutter_map_location_marker/8.0.3/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
