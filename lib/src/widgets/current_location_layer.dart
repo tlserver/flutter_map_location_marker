@@ -369,9 +369,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _alignPositionStreamSubscription?.cancel();
     _alignDirectionStreamSubscription?.cancel();
     _moveMapAnimationController?.dispose();
+    _moveMapAnimationController = null;
     _moveMarkerAnimationController?.dispose();
+    _moveMarkerAnimationController = null;
     _rotateMapAnimationController?.dispose();
+    _rotateMapAnimationController = null;
     _rotateMarkerAnimationController?.dispose();
+    _rotateMarkerAnimationController = null;
     super.dispose();
   }
 
