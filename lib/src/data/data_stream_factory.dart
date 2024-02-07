@@ -77,16 +77,20 @@ class LocationMarkerDataStreamFactory {
                 }
               } on Exception catch (_) {}
               try {
-                final subscription =
-                    Geolocator.getServiceStatusStream().listen((serviceStatus) {
-                  if (serviceStatus == ServiceStatus.enabled) {
-                    streamController.sink.add(null);
-                  } else {
-                    streamController.sink
-                        .addError(const ServiceDisabledException());
-                  }
-                });
-                cancelFunctions.add(subscription.cancel);
+                // The concept of location service doesn't exist on the web
+                // platform
+                if (!kIsWeb) {
+                  final subscription = Geolocator.getServiceStatusStream()
+                      .listen((serviceStatus) {
+                    if (serviceStatus == ServiceStatus.enabled) {
+                      streamController.sink.add(null);
+                    } else {
+                      streamController.sink
+                          .addError(const ServiceDisabledException());
+                    }
+                  });
+                  cancelFunctions.add(subscription.cancel);
+                }
               } on Exception catch (_) {}
               try {
                 final lastKnown = await Geolocator.getLastKnownPosition();
