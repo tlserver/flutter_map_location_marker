@@ -102,11 +102,15 @@ class LocationMarkerDataStreamFactory {
                 }
               } on Exception catch (_) {}
               try {
-                final position = await Geolocator.getCurrentPosition();
-                if (streamController.isClosed) {
-                  break;
+                final serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (serviceEnabled) {
+                  final position = await Geolocator.getCurrentPosition();
+                  if (streamController.isClosed) {
+                    break;
+                  }
+                  streamController.sink.add(position);
                 }
-                streamController.sink.add(position);
               } on Exception catch (_) {}
               final subscription =
                   Geolocator.getPositionStream().listen((position) {
