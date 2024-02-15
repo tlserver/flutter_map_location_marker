@@ -382,7 +382,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptPositionStream() {
     _positionStreamSubscription = widget.positionStream.listen(
       (position) {
-        if (!context.mounted) {
+        if (!mounted) {
           return;
         }
         if (position == null) {
@@ -440,7 +440,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptHeadingStream() {
     _headingStreamSubscription = widget.headingStream.listen(
       (heading) {
-        if (!context.mounted) {
+        if (!mounted) {
           return;
         }
         if (heading == null) {
@@ -483,7 +483,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     }
     _alignPositionStreamSubscription =
         widget.alignPositionStream?.listen((zoom) {
-      if (!context.mounted) {
+      if (!mounted) {
         return;
       }
       if (_currentPosition != null) {
@@ -502,7 +502,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     }
     _alignDirectionStreamSubscription =
         widget.alignDirectionStream?.listen((_) {
-      if (!context.mounted) {
+      if (!mounted) {
         return;
       }
       if (_currentHeading != null) {
