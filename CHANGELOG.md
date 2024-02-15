@@ -1,3 +1,10 @@
+## [8.0.5] - Fix Bug
+
+* Fix the use of unmounted widget's context (#103)
+* Fix repeated requests to enable location service (#77, #102)
+* Fix error of Geolocator.getServiceStatusStream() on web (#101)
+* Update dependencies
+ 
 ## [8.0.4] - Fix Bug
 
 * Fix error about AnimationController be disposed more than once (#96)
