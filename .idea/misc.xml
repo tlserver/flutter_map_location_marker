@@ -1,0 +1,9 @@
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <type id="android" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" />
+  <component name="ProjectType">
+    <option name="id" value="io.flutter" />
+  </component>
+</project>
