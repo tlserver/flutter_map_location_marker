@@ -92,7 +92,7 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
 1. [Marker Customization](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/customize_marker_example.dart) :
    Change the marker to any widget you want.
 
-2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/follow_fab_example.dart) :
+2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/center_fab_example.dart) :
    Use a floating action button to move and zoom the map to the current location.
 
 3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart) :
@@ -121,8 +121,8 @@ the [positionStream](https://pub.dev/documentation/flutter_map_location_marker/5
 , [headingStream](https://pub.dev/documentation/flutter_map_location_marker/5.1.0/flutter_map_location_marker/CurrentLocationLayer/headingStream.html)
 or their origin streams from a CurrentLocationLayer widget?
 
-*A*: No, you should not get these streams from a CurrentLocationLayer widget. Instead, create you
-own streams with the the same types and also pass it to all the widgets which need them.
+*A*: No, you should not get these streams from a CurrentLocationLayer widget. Instead, create your
+own streams with the same types and also pass it to all the widgets which need them.
 CurrentLocationLayer doesn't own the streams; it just listens to them. You can use any
 implementation of position and heading streams, as long as the stream types are
 Stream&lt;Position&gt; and Stream&lt;double&gt;, respectively. You may
