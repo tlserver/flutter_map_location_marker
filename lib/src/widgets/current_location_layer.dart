@@ -440,7 +440,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptHeadingStream() {
     _headingStreamSubscription = widget.headingStream.listen(
       (heading) {
-        if (!context.mounted) {
+        if (!mounted) {
           return;
         }
         if (heading == null) {
