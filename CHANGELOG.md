@@ -1,3 +1,11 @@
+## [8.0.6] - Fix Bug
+
+* Fix unnecessary re-subscription on widget update (#106)
+* Fix the use of unmounted widget's context (#103, #104)
+* Update dependencies
+
+Thank to stefcon & pgebert
+
 ## [8.0.5] - Fix Bug
 
 * Fix the use of unmounted widget's context (#103)
