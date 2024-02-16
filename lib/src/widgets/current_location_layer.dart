@@ -21,6 +21,18 @@ import 'location_marker_layer.dart';
 
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
+  static Stream<LocationMarkerPosition?>? _defaultPositionStream;
+
+  static Stream<LocationMarkerPosition?> get defaultPositionStream =>
+      _defaultPositionStream ??= const LocationMarkerDataStreamFactory()
+          .fromGeolocatorPositionStream();
+
+  static Stream<LocationMarkerHeading?>? _defaultHeadingStream;
+
+  static Stream<LocationMarkerHeading?> get defaultHeadingStream =>
+      _defaultHeadingStream ??=
+          const LocationMarkerDataStreamFactory().fromCompassHeadingStream();
+
   /// The style to use for this location marker.
   final LocationMarkerStyle style;
 
@@ -136,11 +148,8 @@ class CurrentLocationLayer extends StatefulWidget {
     Duration turnAnimationDuration = const Duration(milliseconds: 50),
     @Deprecated("Use 'alignDirectionAnimationCurve' instead.")
     Curve turnAnimationCurve = Curves.easeInOut,
-  })  : positionStream = positionStream ??
-            const LocationMarkerDataStreamFactory()
-                .fromGeolocatorPositionStream(),
-        headingStream = headingStream ??
-            const LocationMarkerDataStreamFactory().fromCompassHeadingStream(),
+  })  : positionStream = positionStream ?? defaultPositionStream,
+        headingStream = headingStream ?? defaultHeadingStream,
         focalPoint = focalPoint ??
             FocalPoint(
               ratio: followScreenPoint ?? const Point<double>(0, 0),
