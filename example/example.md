@@ -15,21 +15,27 @@ void main() {
 class MinimumExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        center: LatLng(0, 0),
-        zoom: 1,
-        maxZoom: 19,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Minimum Example'),
       ),
-      children: [
-        TileLayerWidget(
-          options: TileLayerOptions(
+      body: FlutterMap(
+        options: const MapOptions(
+          initialCenter: LatLng(0, 0),
+          initialZoom: 1,
+          minZoom: 0,
+          maxZoom: 19,
+        ),
+        children: [
+          TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName:
+            'net.tlserver6y.flutter_map_location_marker.example',
             maxZoom: 19,
           ),
-        ),
-        LocationMarkerLayerWidget(),
-      ],
+          CurrentLocationLayer(),
+        ],
+      ),
     );
   }
 }
