@@ -1,3 +1,7 @@
+## [8.0.7] - Fix Bug
+
+* Fix error of Geolocator.getLastKnownPosition() on web (#108)
+
 ## [8.0.6] - Fix Bug
 
 * Fix unnecessary re-subscription on widget update (#106)
