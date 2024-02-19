@@ -93,12 +93,15 @@ class LocationMarkerDataStreamFactory {
                 }
               } on Exception catch (_) {}
               try {
-                final lastKnown = await Geolocator.getLastKnownPosition();
-                if (streamController.isClosed) {
-                  break;
-                }
-                if (lastKnown != null) {
-                  streamController.sink.add(lastKnown);
+                // getLastKnownPosition is not supported on the web platform
+                if (!kIsWeb) {
+                  final lastKnown = await Geolocator.getLastKnownPosition();
+                  if (streamController.isClosed) {
+                    break;
+                  }
+                  if (lastKnown != null) {
+                    streamController.sink.add(lastKnown);
+                  }
                 }
               } on Exception catch (_) {}
               try {
