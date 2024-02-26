@@ -21,28 +21,16 @@ import 'location_marker_layer.dart';
 
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
-  static Stream<LocationMarkerPosition?>? _defaultPositionStream;
-
-  static Stream<LocationMarkerPosition?> get defaultPositionStream =>
-      _defaultPositionStream ??= const LocationMarkerDataStreamFactory()
-          .fromGeolocatorPositionStream();
-
-  static Stream<LocationMarkerHeading?>? _defaultHeadingStream;
-
-  static Stream<LocationMarkerHeading?> get defaultHeadingStream =>
-      _defaultHeadingStream ??=
-          const LocationMarkerDataStreamFactory().fromCompassHeadingStream();
-
   /// The style to use for this location marker.
   final LocationMarkerStyle style;
 
   /// A stream that provide position data for this marker. Defaults to
   /// [LocationMarkerDataStreamFactory.fromGeolocatorPositionStream].
-  final Stream<LocationMarkerPosition?> positionStream;
+  final Stream<LocationMarkerPosition?>? positionStream;
 
   /// A stream that provide heading data for this marker. Defaults to
   /// [LocationMarkerDataStreamFactory.fromCompassHeadingStream].
-  final Stream<LocationMarkerHeading?> headingStream;
+  final Stream<LocationMarkerHeading?>? headingStream;
 
   /// A screen point to align the marker when an 'align position event' is
   /// emitted. An 'align position event' is emitted under the following
@@ -113,8 +101,8 @@ class CurrentLocationLayer extends StatefulWidget {
   CurrentLocationLayer({
     super.key,
     this.style = const LocationMarkerStyle(),
-    Stream<LocationMarkerPosition?>? positionStream,
-    Stream<LocationMarkerHeading?>? headingStream,
+    this.positionStream,
+    this.headingStream,
     FocalPoint? focalPoint,
     Stream<double?>? alignPositionStream,
     AlignOnUpdate? alignPositionOnUpdate,
@@ -148,9 +136,7 @@ class CurrentLocationLayer extends StatefulWidget {
     Duration turnAnimationDuration = const Duration(milliseconds: 50),
     @Deprecated("Use 'alignDirectionAnimationCurve' instead.")
     Curve turnAnimationCurve = Curves.easeInOut,
-  })  : positionStream = positionStream ?? defaultPositionStream,
-        headingStream = headingStream ?? defaultHeadingStream,
-        focalPoint = focalPoint ??
+  })  : focalPoint = focalPoint ??
             FocalPoint(
               ratio: followScreenPoint ?? const Point<double>(0, 0),
               offset: followScreenPointOffset ?? const Point<double>(0, 0),
@@ -389,7 +375,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptPositionStream() {
-    _positionStreamSubscription = widget.positionStream.listen(
+    final positionStream = widget.positionStream ??
+        const LocationMarkerDataStreamFactory().fromGeolocatorPositionStream();
+    _positionStreamSubscription = positionStream.listen(
       (position) {
         if (!mounted) {
           return;
@@ -447,7 +435,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptHeadingStream() {
-    _headingStreamSubscription = widget.headingStream.listen(
+    final headingStream = widget.headingStream ??
+        const LocationMarkerDataStreamFactory().fromCompassHeadingStream();
+    _headingStreamSubscription = headingStream.listen(
       (heading) {
         if (!mounted) {
           return;
