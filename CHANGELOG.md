@@ -1,3 +1,7 @@
+## [8.0.8] - Fix Bug
+
+* Fix widget reusability to allow multiple initializations (#109)
+
 ## [8.0.7] - Fix Bug
 
 * Fix error of Geolocator.getLastKnownPosition() on web (#108)
