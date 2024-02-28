@@ -10,7 +10,7 @@ customizable location marker to your map.
 <br>
 <img src="https://github.com/tlserver/flutter_map_location_marker/raw/main/assets/interface.jpg" alt="Interface preview" width="400">
 
-Join [flutter_map Discord server](https://discord.gg/egEGeByf4q) to talk
+Join [flutter_map Discord server](https://discord.gg/BwpEsjqMAH) to talk
 about `flutter_map_location_marker`, get help and help others in the #plugins channel.
 
 ## Features
