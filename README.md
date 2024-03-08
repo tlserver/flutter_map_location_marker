@@ -37,7 +37,7 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
 1. Add `flutter_map_location_marker` to your `pubspec.yaml`:
    ```yaml
    dependencies:
-     flutter_map_location_marker: any # or latest verion
+     flutter_map_location_marker: any # or latest version
    ```
 
 2. Add permission by following the instructions from
