@@ -23,8 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdkVersion 33
-    // compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -46,8 +45,7 @@ android {
 
     defaultConfig {
         applicationId "net.tlserver6y.flutter_map_location_marker.example"
-        minSdkVersion 23
-        // minSdkVersion flutter.minSdkVersion
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
