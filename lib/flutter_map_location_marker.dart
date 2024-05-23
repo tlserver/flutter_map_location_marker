@@ -9,6 +9,7 @@ export 'src/exceptions/incorrect_setup_exception.dart';
 export 'src/exceptions/permission_denied_exception.dart';
 export 'src/exceptions/permission_requesting_exception.dart';
 export 'src/exceptions/service_disabled_exception.dart';
+export 'src/extension/point_extension.dart';
 export 'src/options/align_on_update.dart';
 export 'src/options/focal_point.dart';
 export 'src/options/indicators.dart';
