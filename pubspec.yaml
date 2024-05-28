@@ -20,7 +20,7 @@ dependencies:
   flutter_compass: ^0.8.0
   flutter_map: ^7.0.0
   geolocator: ^12.0.0
-  latlong2: ^0.9.0
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_lints: ^4.0.0
