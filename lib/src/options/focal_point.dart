@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter_map/flutter_map.dart';
-
 const _originPoint = Point<double>(0, 0);
 
 /// The [FocalPoint] class defines a screen point to align a marker on the map
@@ -43,5 +41,8 @@ class FocalPoint {
   /// resulting [Point] represents the absolute pixel coordinates on the map
   /// widget where the marker should be aligned.
   Point<double> project(Point<double> size) =>
-      (size * 0.5).scaleBy(ratio) + offset;
+      Point<double>(
+          size.x * ratio.x / 2 + offset.x,
+          size.y * ratio.y / 2 + offset.y,
+      );
 }
