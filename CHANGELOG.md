@@ -1,3 +1,7 @@
+## [9.0.0] - Migrate to Flutter Map v7
+
+* Migrate to `flutter_map` v7
+
 ## [8.1.0] - Improve Behavior
 
 * Export [IncorrectSetupException](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/IncorrectSetupException-class.html),
