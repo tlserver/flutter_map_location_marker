@@ -1,3 +1,10 @@
+## [8.1.0] - Improve Behavior
+
+* Export [IncorrectSetupException](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/IncorrectSetupException-class.html),
+  [PermissionDeniedException](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/PermissionDeniedException-class.html),
+  [PermissionRequestingException](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/PermissionRequestingException-class.html),
+  [ServiceDisabledException](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/ServiceDisabledException-class.html) (#111)
+
 ## [8.0.8] - Fix Bug
 
 * Fix widget reusability to allow multiple initializations (#109)
