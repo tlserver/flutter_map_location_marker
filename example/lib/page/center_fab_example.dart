@@ -41,7 +41,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
           maxZoom: 19,
           // Stop aligning the location marker to the center of the map widget
           // if user interacted with the map.
-          onPositionChanged: (MapPosition position, bool hasGesture) {
+          onPositionChanged: (MapCamera camera, bool hasGesture) {
             if (hasGesture && _alignPositionOnUpdate != AlignOnUpdate.never) {
               setState(
                 () => _alignPositionOnUpdate = AlignOnUpdate.never,
