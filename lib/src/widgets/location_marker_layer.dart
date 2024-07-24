@@ -66,6 +66,7 @@ class LocationMarkerLayer extends StatelessWidget {
               point: position.latLng,
               width: style.markerSize.width,
               height: style.markerSize.height,
+              alignment: style.markerAlignment,
               child: switch (style.markerDirection) {
                 MarkerDirection.north => style.marker,
                 MarkerDirection.top => Transform.rotate(
