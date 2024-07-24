@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import '../drawings/default_location_marker.dart';
 import 'marker_direction.dart';
@@ -11,6 +12,10 @@ class LocationMarkerStyle {
 
   /// The size of main marker widget. Default to 20px * 20px.
   final Size markerSize;
+
+  /// The alignment of the marker widget. Default to [Alignment.center]. The
+  /// value is passed into [Marker.alignment] internally.
+  final Alignment markerAlignment;
 
   /// The direction of the marker while map is rotated. Default to
   /// [MarkerDirection.top].
@@ -37,6 +42,7 @@ class LocationMarkerStyle {
   const LocationMarkerStyle({
     this.marker = const DefaultLocationMarker(),
     this.markerSize = const Size.square(20),
+    this.markerAlignment = Alignment.center,
     this.markerDirection = MarkerDirection.top,
     this.showAccuracyCircle = true,
     this.accuracyCircleColor = const Color(0x182196F3),
