@@ -33,6 +33,16 @@ class LocationMarkerStyle {
   /// The color of the heading sector. Default to ARGB(0xCC2196F3).
   final Color headingSectorColor;
 
+  /// Alignment of the marker relative to the normal center at the marker location
+  ///
+  /// For example, [Alignment.topCenter] will mean the entire marker widget is
+  /// located above the markker location.
+  ///
+  /// The center of rotation (anchor) will be opposite this.
+  ///
+  /// Defaults to [Alignment.center] if also unset.
+  final Alignment markerAlignment;
+
   /// Create a LocationMarkerStyle.
   const LocationMarkerStyle({
     this.marker = const DefaultLocationMarker(),
@@ -43,5 +53,6 @@ class LocationMarkerStyle {
     this.showHeadingSector = true,
     this.headingSectorRadius = 60,
     this.headingSectorColor = const Color(0xCC2196F3),
+    this.markerAlignment = Alignment.center,
   });
 }
