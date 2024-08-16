@@ -1,4 +1,5 @@
 # Default ignored files
+/caches/
 /libraries/
 /shelf/
 /workspace.xml
