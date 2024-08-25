@@ -1,3 +1,10 @@
+## [9.1.0] - Improve Behavior
+
+* Improve performance by reducing unnecessary rebuilt (#123)
+* Add [LocationMarkerStyle.alignment](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerStyle/markerAlignment.html) option (#124)
+
+Thank to codeOfJannik
+
 ## [9.0.0] - Migrate to Flutter Map v7
 
 * Migrate to `flutter_map` v7
