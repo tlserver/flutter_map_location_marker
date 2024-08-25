@@ -210,6 +210,9 @@ class CurrentLocationLayer extends StatefulWidget {
 
 class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     with TickerProviderStateMixin {
+  static const _positionThreshold = 2;
+  static const _headingThreshold = pi / 100;
+
   _Status _status = _Status.initialing;
   LocationMarkerPosition? _currentPosition;
   LocationMarkerHeading? _currentHeading;
@@ -510,34 +513,88 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     });
   }
 
+  bool _inBounds(LocationMarkerPosition? position) {
+    if (position == null) return false;
+
+    const distance = Distance();
+    final camera = MapCamera.of(context);
+
+    final sp = camera.latLngToScreenPoint(position.latLng);
+    final a = camera.getOffsetFromOrigin(position.latLng);
+    final b = camera.getOffsetFromOrigin(
+      distance.offset(position.latLng, position.accuracy, 180),
+    );
+
+    final style = widget.style;
+    final markerRadius = style.markerSize.longestSide / 2;
+    final headingSectorRadius =
+        style.showHeadingSector ? style.headingSectorRadius : 0.0;
+    final accuracyCircleRadius =
+        style.showAccuracyCircle ? (a - b).distance : 0.0;
+    final maxRadius =
+        max(max(markerRadius, headingSectorRadius), accuracyCircleRadius);
+
+    final r = Point(maxRadius, maxRadius);
+    print([camera.nonRotatedSize, Bounds(sp - r, sp + r)]);
+    return Bounds(const Point(0, 0), camera.nonRotatedSize)
+        .containsPartialBounds(
+      Bounds(sp - r, sp + r),
+    );
+  }
+
+  double _currentPositionDistanceTo(LocationMarkerPosition? newPosition) {
+    final oldPosition = _currentPosition;
+    if (oldPosition == null || newPosition == null) return double.infinity;
+
+    final camera = MapCamera.of(context);
+    final oldPoint = camera.latLngToScreenPoint(oldPosition.latLng);
+    final newPoint = camera.latLngToScreenPoint(newPosition.latLng);
+    return (newPoint - oldPoint).magnitude;
+  }
+
+  double _currentHeadingDifferentTo(LocationMarkerHeading? newHeading) {
+    final oldHeading = _currentHeading;
+    if (oldHeading == null || newHeading == null) return double.infinity;
+
+    return (newHeading.heading - oldHeading.heading).abs();
+  }
+
   TickerFuture _moveMarker(LocationMarkerPosition position) {
     _moveMarkerAnimationController?.dispose();
-    _moveMarkerAnimationController = AnimationController(
-      duration: widget.moveAnimationDuration,
-      vsync: this,
-    );
-    final animation = CurvedAnimation(
-      parent: _moveMarkerAnimationController!,
-      curve: widget.moveAnimationCurve,
-    );
-    final positionTween = LocationMarkerPositionTween(
-      begin: _currentPosition ?? position,
-      end: position,
-    );
+    _moveMarkerAnimationController = null;
+    if (_currentPositionDistanceTo(position) > _positionThreshold) {
+      if (_inBounds(position) || _inBounds(_currentPosition)) {
+        _moveMarkerAnimationController = AnimationController(
+          duration: widget.moveAnimationDuration,
+          vsync: this,
+        );
+        final animation = CurvedAnimation(
+          parent: _moveMarkerAnimationController!,
+          curve: widget.moveAnimationCurve,
+        );
+        final positionTween = LocationMarkerPositionTween(
+          begin: _currentPosition ?? position,
+          end: position,
+        );
 
-    _moveMarkerAnimationController!.addListener(() {
-      setState(() => _currentPosition = positionTween.evaluate(animation));
-    });
+        _moveMarkerAnimationController!.addListener(() {
+          setState(() => _currentPosition = positionTween.evaluate(animation));
+        });
 
-    _moveMarkerAnimationController!.addStatusListener((status) {
-      if (status == AnimationStatus.completed ||
-          status == AnimationStatus.dismissed) {
-        _moveMarkerAnimationController!.dispose();
-        _moveMarkerAnimationController = null;
+        _moveMarkerAnimationController!.addStatusListener((status) {
+          if (status == AnimationStatus.completed ||
+              status == AnimationStatus.dismissed) {
+            _moveMarkerAnimationController!.dispose();
+            _moveMarkerAnimationController = null;
+          }
+        });
+
+        return _moveMarkerAnimationController!.forward();
+      } else {
+        setState(() => _currentPosition = position);
       }
-    });
-
-    return _moveMarkerAnimationController!.forward();
+    }
+    return TickerFuture.complete();
   }
 
   TickerFuture _moveMap(LatLng latLng, [double? zoom]) {
@@ -618,34 +675,43 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   TickerFuture _rotateMarker(LocationMarkerHeading heading) {
     _rotateMarkerAnimationController?.dispose();
-    _rotateMarkerAnimationController = AnimationController(
-      duration: widget.rotateAnimationDuration,
-      vsync: this,
-    );
-    final animation = CurvedAnimation(
-      parent: _rotateMarkerAnimationController!,
-      curve: widget.rotateAnimationCurve,
-    );
-    final headingTween = LocationMarkerHeadingTween(
-      begin: _currentHeading ?? heading,
-      end: heading,
-    );
+    _rotateMarkerAnimationController = null;
+    if (_currentHeadingDifferentTo(heading) > _headingThreshold) {
+      if (_inBounds(_currentPosition)) {
+        print(heading.heading);
+        _rotateMarkerAnimationController = AnimationController(
+          duration: widget.rotateAnimationDuration,
+          vsync: this,
+        );
+        final animation = CurvedAnimation(
+          parent: _rotateMarkerAnimationController!,
+          curve: widget.rotateAnimationCurve,
+        );
+        final headingTween = LocationMarkerHeadingTween(
+          begin: _currentHeading ?? heading,
+          end: heading,
+        );
 
-    _rotateMarkerAnimationController!.addListener(() {
-      if (_status == _Status.ready) {
-        setState(() => _currentHeading = headingTween.evaluate(animation));
+        _rotateMarkerAnimationController!.addListener(() {
+          if (_status == _Status.ready) {
+            setState(() => _currentHeading = headingTween.evaluate(animation));
+          }
+        });
+
+        _rotateMarkerAnimationController!.addStatusListener((status) {
+          if (status == AnimationStatus.completed ||
+              status == AnimationStatus.dismissed) {
+            _rotateMarkerAnimationController!.dispose();
+            _rotateMarkerAnimationController = null;
+          }
+        });
+
+        return _rotateMarkerAnimationController!.forward();
+      } else {
+        setState(() => _currentHeading = heading);
       }
-    });
-
-    _rotateMarkerAnimationController!.addStatusListener((status) {
-      if (status == AnimationStatus.completed ||
-          status == AnimationStatus.dismissed) {
-        _rotateMarkerAnimationController!.dispose();
-        _rotateMarkerAnimationController = null;
-      }
-    });
-
-    return _rotateMarkerAnimationController!.forward();
+    }
+    return TickerFuture.complete();
   }
 
   TickerFuture _rotateMap(double angle) {
