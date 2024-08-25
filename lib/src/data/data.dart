@@ -15,7 +15,7 @@ class LocationMarkerPosition {
   final double accuracy;
 
   /// Create a LocationMarkerPosition.
-  LocationMarkerPosition({
+  const LocationMarkerPosition({
     required this.latitude,
     required this.longitude,
     required this.accuracy,
@@ -42,7 +42,7 @@ class LocationMarkerHeading {
   final double accuracy;
 
   /// Create a LocationMarkerHeading.
-  LocationMarkerHeading({
+  const LocationMarkerHeading({
     required this.heading,
     required this.accuracy,
   });
