@@ -11,12 +11,12 @@ class AnimationDebugger extends StatefulWidget {
 }
 
 class _AnimationDebuggerState extends State<AnimationDebugger> {
-  LocationMarkerPosition _locationMarkerPosition = LocationMarkerPosition(
+  LocationMarkerPosition _locationMarkerPosition = const LocationMarkerPosition(
     latitude: 0,
     longitude: 0,
     accuracy: 20000,
   );
-  LocationMarkerHeading _locationMarkerHeading = LocationMarkerHeading(
+  LocationMarkerHeading _locationMarkerHeading = const LocationMarkerHeading(
     heading: 0,
     accuracy: 1,
   );
