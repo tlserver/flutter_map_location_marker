@@ -535,7 +535,6 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         max(max(markerRadius, headingSectorRadius), accuracyCircleRadius);
 
     final r = Point(maxRadius, maxRadius);
-    print([camera.nonRotatedSize, Bounds(sp - r, sp + r)]);
     return Bounds(const Point(0, 0), camera.nonRotatedSize)
         .containsPartialBounds(
       Bounds(sp - r, sp + r),
@@ -678,7 +677,6 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _rotateMarkerAnimationController = null;
     if (_currentHeadingDifferentTo(heading) > _headingThreshold) {
       if (_inBounds(_currentPosition)) {
-        print(heading.heading);
         _rotateMarkerAnimationController = AnimationController(
           duration: widget.rotateAnimationDuration,
           vsync: this,
