@@ -1,3 +1,7 @@
+## [9.1.1] - Fix Bug
+
+* Remove debug prints (#128)
+
 ## [9.1.0] - Improve Behavior
 
 * Improve performance by reducing unnecessary rebuilt (#123)
