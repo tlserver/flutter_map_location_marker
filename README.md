@@ -1,6 +1,6 @@
 # flutter_map_location_marker
 
-[![pub package](https://img.shields.io/pub/v/flutter_map_location_marker)](https://pub.dartlang.org/packages/flutter_map_location_marker)
+[![pub package](https://img.shields.io/pub/v/flutter_map_location_marker)](https://pub.dev/packages/flutter_map_location_marker)
 [![github tag](https://img.shields.io/github/v/tag/tlserver/flutter_map_location_marker?include_prereleases&sort=semver)](https://github.com/tlserver/flutter_map_location_marker)
 [![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/master/LICENSE)
 
@@ -15,21 +15,21 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
 
 ## Features
 
-* **Simple**: The only thing you need to do is to add a `CurrentLocationLayer()` in to your map
+- **Simple**: The only thing you need to do is to add a `CurrentLocationLayer()` in to your map
   because all parameters have good default values.
 
-* **Flexible**: The default implementation receives the device's position from
+- **Flexible**: The default implementation receives the device's position from
   the [geolocator](https://pub.dev/packages/geolocator) package and the device's heading from
   the [flutter_compass](https://pub.dev/packages/flutter_compass) package, but with type conversion,
   streams from other sources are also supported.
 
-* **Auto-following**: The map follows the new location when location is updated. This feature is
+- **Auto-following**: The map follows the new location when location is updated. This feature is
   disabled by default.
 
-* **Auto-rotating**: The map can be rotated automatically as navigation mode. This feature is
+- **Auto-rotating**: The map can be rotated automatically as navigation mode. This feature is
   disabled by default.
 
-* **Customization**: The location marker can be fully customized, including the colors of the
+- **Customization**: The location marker can be fully customized, including the colors of the
   accuracy circle and header.
 
 ## Usage
