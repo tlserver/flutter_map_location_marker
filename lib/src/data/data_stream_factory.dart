@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_rotation_sensor/flutter_rotation_sensor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -135,28 +135,24 @@ class LocationMarkerDataStreamFactory {
   }
 
   /// Cast to a heading stream from
-  /// [flutter_compass](https://pub.dev/packages/flutter_compass) stream.
-  Stream<LocationMarkerHeading?> fromCompassHeadingStream({
-    Stream<CompassEvent?>? stream,
+  /// [flutter_rotation_sensor](https://pub.dev/packages/flutter_rotation_sensor) stream.
+  Stream<LocationMarkerHeading?> fromRotationSensorHeadingStream({
+    Stream<OrientationEvent>? stream,
     double minAccuracy = pi * 0.1,
     double defAccuracy = pi * 0.3,
     double maxAccuracy = pi * 0.4,
   }) =>
-      (stream ?? defaultHeadingStreamSource())
-          .where((e) => e == null || e.heading != null)
-          .map(
-            (e) => e != null
-                ? LocationMarkerHeading(
-                    heading: degToRadian(e.heading!),
-                    accuracy: e.accuracy != null
-                        ? degToRadian(e.accuracy!)
-                            .clamp(minAccuracy, maxAccuracy)
-                        : defAccuracy,
-                  )
-                : null,
-          );
+      (stream ?? defaultHeadingStreamSource()).map(
+        (e) => LocationMarkerHeading(
+          heading: e.eulerAngles.azimuth,
+          accuracy: e.accuracy >= 0
+              ? degToRadian(e.accuracy).clamp(minAccuracy, maxAccuracy)
+              : defAccuracy,
+        ),
+      );
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
-  Stream<CompassEvent?> defaultHeadingStreamSource() => FlutterCompass.events!;
+  Stream<OrientationEvent> defaultHeadingStreamSource() =>
+      RotationSensor.orientationStream;
 }
