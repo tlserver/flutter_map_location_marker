@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_compass: any
+  dchs_flutter_compass: any
   flutter_joystick: ^0.0.4
   flutter_map: any
   flutter_map_location_marker:

@@ -1,3 +1,8 @@
+## [9.1.2] - Changed compass package
+
+* update to use dchs_flutter_compass instead of flutter_compass
+* update the example with latests packages
+
 ## [9.1.1] - Fix Bug
 
 * Remove debug prints (#128)

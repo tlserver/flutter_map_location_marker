@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  dchs_flutter_compass:
+    dependency: "direct main"
+    description:
+      name: dchs_flutter_compass
+      sha256: "79300c71af543b88d18ef5918a1fc3b97d47fba220bb38eb91e3e9990fa7b69d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -78,14 +86,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_compass:
-    dependency: "direct main"
-    description:
-      name: flutter_compass
-      sha256: be642484f9f6975c1c6edff568281b001f2f1e604de27ecea18d97eebbdef22f
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.0"
   flutter_joystick:
     dependency: "direct main"
     description:
@@ -108,7 +108,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "9.1.1"
+    version: "9.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -408,10 +408,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc
+      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.4"
+    version: "14.2.5"
   web:
     dependency: transitive
     description:
@@ -429,5 +429,5 @@ packages:
     source: hosted
     version: "2.0.0"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
+  dart: ">=3.5.3 <4.0.0"
   flutter: ">=3.18.0-18.0.pre.54"
