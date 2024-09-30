@@ -1,0 +1,34 @@
+PODS:
+  - dchs_flutter_compass (1.0.0):
+    - Flutter
+  - Flutter (1.0.0)
+  - flutter_compass (0.0.1):
+    - Flutter
+  - geolocator_apple (1.2.0):
+    - Flutter
+
+DEPENDENCIES:
+  - dchs_flutter_compass (from `.symlinks/plugins/dchs_flutter_compass/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_compass (from `.symlinks/plugins/flutter_compass/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
+
+EXTERNAL SOURCES:
+  dchs_flutter_compass:
+    :path: ".symlinks/plugins/dchs_flutter_compass/ios"
+  Flutter:
+    :path: Flutter
+  flutter_compass:
+    :path: ".symlinks/plugins/flutter_compass/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
+
+SPEC CHECKSUMS:
+  dchs_flutter_compass: a6a6e8bcf0565a2f596ad987ed3a6d16fb282cd7
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_compass: cbbd285cea1584c7ac9c4e0c3e1f17cbea55e855
+  geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450
+
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+
+COCOAPODS: 1.15.2

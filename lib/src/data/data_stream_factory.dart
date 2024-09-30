@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:dchs_flutter_compass/dchs_flutter_compass.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
