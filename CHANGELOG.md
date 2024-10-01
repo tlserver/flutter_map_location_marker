@@ -1,3 +1,8 @@
+## [10.0.0-beta.0] - RotationSensor as heading provider
+
+* __BRAKING CHANGE__ Remove flutter_compass dependency, replaced
+  by [flutter_rotation_sensor](https://pub.dev/packages/flutter_rotation_sensor)
+
 ## [9.1.1] - Fix Bug
 
 * Remove debug prints (#128)
