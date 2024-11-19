@@ -92,7 +92,7 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
 1. [Marker Customization](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/customize_marker_example.dart) :
    Change the marker to any widget you want.
 
-2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/follow_fab_example.dart) :
+2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/center_fab_example.dart) :
    Use a floating action button to move and zoom the map to the current location.
 
 3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart) :
