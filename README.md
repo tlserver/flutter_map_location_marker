@@ -2,7 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_map_location_marker)](https://pub.dev/packages/flutter_map_location_marker)
 [![github tag](https://img.shields.io/github/v/tag/tlserver/flutter_map_location_marker?include_prereleases&sort=semver)](https://github.com/tlserver/flutter_map_location_marker)
-[![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/main/LICENSE)
 
 `flutter_map_location_marker` is a [flutter_map](https://pub.dev/packages/flutter_map) plugin for
 displaying device's current location on a map. It provides a simple and flexible way to add a 
@@ -89,29 +89,29 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
 
 ## Examples
 
-1. [Marker Customization](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/customize_marker_example.dart) :
+1. [Marker Customization](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/customize_marker_example.dart) :
    Change the marker to any widget you want.
 
 2. [Floating Action Button to Follow Current Location](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/center_fab_example.dart) :
    Use a floating action button to move and zoom the map to the current location.
 
-3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/geolocator_settings_example.dart) :
+3. [Change Geolocator Settings](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/geolocator_settings_example.dart) :
    Define Geolocator settings yourself.
 
-4. [Selectable Distance Filter](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/selectable_distance_filter_example.dart) :
+4. [Selectable Distance Filter](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/selectable_distance_filter_example.dart) :
    Change Geolocator settings at the runtime.
 
-5. [Custom Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/custom_stream_example.dart) :
+5. [Custom Stream](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/custom_stream_example.dart) :
    Use your own stream, such as position stream from another library or predefined route, as the
    source.
 
-6. [No Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/no_stream_example.dart) :
+6. [No Stream](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/no_stream_example.dart) :
    Use Flutter `setState()` to update position and heading.
 
-7. [Navigation Mode](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/navigation_example.dart) :
+7. [Navigation Mode](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/navigation_example.dart) :
    Rotate the map to keep heading pointing upward.
 
-8. [Default Stream](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart) :
+8. [Default Stream](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/default_stream_example.dart) :
    Share the default streams between your app and this plugin.
 
 ## FAQ
@@ -125,6 +125,7 @@ or their origin streams from a CurrentLocationLayer widget?
 own streams with the the same types and also pass it to all the widgets which need them.
 CurrentLocationLayer doesn't own the streams; it just listens to them. You can use any
 implementation of position and heading streams, as long as the stream types are
-Stream&lt;Position&gt; and Stream&lt;double&gt;, respectively. You may
-see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/master/example/lib/page/default_stream_example.dart)
+Stream&lt;LocationMarkerPosition?&gt; and Stream&lt;LocationMarkerHeading?&gt;, respectively. You
+may
+see [this example](https://github.com/tlserver/flutter_map_location_marker/blob/main/example/lib/page/default_stream_example.dart)
 to know about how to do this.
