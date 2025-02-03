@@ -117,9 +117,8 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 50),
     this.rotateAnimationCurve = Curves.easeInOut,
     this.indicators = const LocationMarkerIndicators(),
-    @Deprecated("Use 'focalPoint' instead.") Point<double>? followScreenPoint,
-    @Deprecated("Use 'focalPoint' instead.")
-    Point<double>? followScreenPointOffset,
+    @Deprecated("Use 'focalPoint' instead.") Offset? followScreenPoint,
+    @Deprecated("Use 'focalPoint' instead.") Offset? followScreenPointOffset,
     @Deprecated("Use 'alignPositionStream' instead.")
     Stream<double?>? followCurrentLocationStream,
     @Deprecated("Use 'alignDirectionStream' instead.")
@@ -138,8 +137,8 @@ class CurrentLocationLayer extends StatefulWidget {
     Curve turnAnimationCurve = Curves.easeInOut,
   })  : focalPoint = focalPoint ??
             FocalPoint(
-              ratio: followScreenPoint ?? const Point<double>(0, 0),
-              offset: followScreenPointOffset ?? const Point<double>(0, 0),
+              ratio: followScreenPoint ?? Offset.zero,
+              offset: followScreenPointOffset ?? Offset.zero,
             ),
         alignPositionStream =
             alignPositionStream ?? followCurrentLocationStream,
@@ -520,7 +519,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     const distance = Distance();
     final camera = MapCamera.of(context);
 
-    final sp = camera.latLngToScreenPoint(position.latLng);
+    final so = camera.latLngToScreenOffset(position.latLng);
     final a = camera.getOffsetFromOrigin(position.latLng);
     final b = camera.getOffsetFromOrigin(
       distance.offset(position.latLng, position.accuracy, 180),
@@ -535,11 +534,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     final maxRadius =
         max(max(markerRadius, headingSectorRadius), accuracyCircleRadius);
 
-    final r = Point(maxRadius, maxRadius);
-    return Bounds(const Point(0, 0), camera.nonRotatedSize)
-        .containsPartialBounds(
-      Bounds(sp - r, sp + r),
-    );
+    return (Offset.zero & camera.nonRotatedSize)
+        .overlaps(Rect.fromCircle(center: so, radius: maxRadius));
   }
 
   double _currentPositionDistanceTo(LocationMarkerPosition? newPosition) {
@@ -547,9 +543,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     if (oldPosition == null || newPosition == null) return double.infinity;
 
     final camera = MapCamera.of(context);
-    final oldPoint = camera.latLngToScreenPoint(oldPosition.latLng);
-    final newPoint = camera.latLngToScreenPoint(newPosition.latLng);
-    return (newPoint - oldPoint).magnitude;
+    final oldOffset = camera.latLngToScreenOffset(oldPosition.latLng);
+    final newOffset = camera.latLngToScreenOffset(newPosition.latLng);
+    return (newOffset - oldOffset).distance;
   }
 
   double _currentHeadingDifferentTo(LocationMarkerHeading? newHeading) {
@@ -610,10 +606,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       beginLatLng = camera.center;
     } else {
       final crs = options.crs;
-      final mapCenter = crs.latLngToPoint(camera.center, camera.zoom);
+      final mapCenter = crs.latLngToOffset(camera.center, camera.zoom);
       final followPoint =
           camera.rotatePoint(mapCenter, mapCenter + projectedFocalPoint);
-      beginLatLng = crs.pointToLatLng(followPoint, camera.zoom);
+      beginLatLng = crs.offsetToLatLng(followPoint, camera.zoom);
     }
 
     _moveMapAnimationController?.dispose();
@@ -657,7 +653,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         MapController.of(context).move(
           evaluatedLatLng,
           evaluatedZoom,
-          offset: projectedFocalPoint.toOffset(),
+          offset: projectedFocalPoint,
         );
       }
     });
@@ -745,7 +741,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       } else {
         MapController.of(context).rotateAroundPoint(
           evaluatedAngle,
-          offset: projectedFocalPoint.toOffset(),
+          offset: projectedFocalPoint,
         );
       }
     });

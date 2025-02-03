@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -63,8 +62,8 @@ class _NavigationExampleState extends State<NavigationExample> {
           ),
           CurrentLocationLayer(
             focalPoint: const FocalPoint(
-              ratio: Point(0.0, 1.0),
-              offset: Point(0.0, -60.0),
+              ratio: Offset(0.0, 1.0),
+              offset: Offset(0.0, -60.0),
             ),
             alignPositionStream: _alignPositionStreamController.stream,
             alignDirectionStream: _alignDirectionStreamController.stream,

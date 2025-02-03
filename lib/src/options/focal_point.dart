@@ -1,6 +1,4 @@
-import 'dart:math';
-
-const _originPoint = Point<double>(0, 0);
+import 'dart:ui';
 
 /// The [FocalPoint] class defines a screen point to align a marker on the map
 /// during a focus event. It uses a combination of a normalized coordinate ratio
@@ -18,7 +16,7 @@ class FocalPoint {
   /// The ratio is used to scale the marker's position proportionally to the
   /// size of the map widget, allowing for responsive design across different
   /// screen sizes.
-  final Point<double> ratio;
+  final Offset ratio;
 
   /// The pixel-based [offset] is applied after the [ratio] calculation to
   /// fine-tune the marker's position. This allows for precise adjustments to
@@ -28,20 +26,18 @@ class FocalPoint {
   /// For example, an offset of (10, 20) pixels would move the marker 10 pixels
   /// to the right and 20 pixels downward from the position calculated with the
   /// [ratio].
-  final Point<double> offset;
+  final Offset offset;
 
   /// Constructs a [FocalPoint] with an optional [ratio] and [offset], both
   /// defaulting to the origin point if not provided.
   const FocalPoint({
-    this.ratio = _originPoint,
-    this.offset = _originPoint,
+    this.ratio = Offset.zero,
+    this.offset = Offset.zero,
   });
 
   /// Projects the [FocalPoint] onto the map widget given its [size]. The
-  /// resulting [Point] represents the absolute pixel coordinates on the map
+  /// resulting [Offset] represents the absolute pixel coordinates on the map
   /// widget where the marker should be aligned.
-  Point<double> project(Point<double> size) => Point<double>(
-        size.x * ratio.x / 2 + offset.x,
-        size.y * ratio.y / 2 + offset.y,
-      );
+  Offset project(Size size) =>
+      size.bottomRight(Offset.zero).scale(ratio.dx, ratio.dy) / 2 + offset;
 }
