@@ -98,62 +98,26 @@ class CurrentLocationLayer extends StatefulWidget {
   final LocationMarkerIndicators indicators;
 
   /// Create a CurrentLocationLayer.
-  CurrentLocationLayer({
+  const CurrentLocationLayer({
     super.key,
     this.style = const LocationMarkerStyle(),
     this.positionStream,
     this.headingStream,
-    FocalPoint? focalPoint,
-    Stream<double?>? alignPositionStream,
-    AlignOnUpdate? alignPositionOnUpdate,
-    Stream<void>? alignDirectionStream,
-    AlignOnUpdate? alignDirectionOnUpdate,
-    Duration? alignPositionAnimationDuration,
-    Curve? alignPositionAnimationCurve,
-    Duration? alignDirectionAnimationDuration,
-    Curve? alignDirectionAnimationCurve,
+    this.focalPoint = const FocalPoint(),
+    this.alignPositionStream,
+    this.alignPositionOnUpdate = AlignOnUpdate.never,
+    this.alignDirectionStream,
+    this.alignDirectionOnUpdate = AlignOnUpdate.never,
+    this.alignPositionAnimationDuration = const Duration(milliseconds: 200),
+    this.alignPositionAnimationCurve = Curves.fastOutSlowIn,
+    this.alignDirectionAnimationDuration = const Duration(milliseconds: 50),
+    this.alignDirectionAnimationCurve = Curves.easeInOut,
     this.moveAnimationDuration = const Duration(milliseconds: 200),
     this.moveAnimationCurve = Curves.fastOutSlowIn,
     this.rotateAnimationDuration = const Duration(milliseconds: 50),
     this.rotateAnimationCurve = Curves.easeInOut,
     this.indicators = const LocationMarkerIndicators(),
-    @Deprecated("Use 'focalPoint' instead.") Offset? followScreenPoint,
-    @Deprecated("Use 'focalPoint' instead.") Offset? followScreenPointOffset,
-    @Deprecated("Use 'alignPositionStream' instead.")
-    Stream<double?>? followCurrentLocationStream,
-    @Deprecated("Use 'alignDirectionStream' instead.")
-    Stream<void>? turnHeadingUpLocationStream,
-    @Deprecated("Use 'alignPositionOnUpdate' instead.")
-    AlignOnUpdate followOnLocationUpdate = AlignOnUpdate.never,
-    @Deprecated("Use 'alignDirectionOnUpdate' instead.")
-    AlignOnUpdate turnOnHeadingUpdate = AlignOnUpdate.never,
-    @Deprecated("Use 'alignPositionAnimationDuration' instead.")
-    Duration followAnimationDuration = const Duration(milliseconds: 200),
-    @Deprecated("Use 'alignPositionAnimationCurve' instead.")
-    Curve followAnimationCurve = Curves.fastOutSlowIn,
-    @Deprecated("Use 'alignDirectionAnimationDuration' instead.")
-    Duration turnAnimationDuration = const Duration(milliseconds: 50),
-    @Deprecated("Use 'alignDirectionAnimationCurve' instead.")
-    Curve turnAnimationCurve = Curves.easeInOut,
-  })  : focalPoint = focalPoint ??
-            FocalPoint(
-              ratio: followScreenPoint ?? Offset.zero,
-              offset: followScreenPointOffset ?? Offset.zero,
-            ),
-        alignPositionStream =
-            alignPositionStream ?? followCurrentLocationStream,
-        alignPositionOnUpdate = alignPositionOnUpdate ?? followOnLocationUpdate,
-        alignPositionAnimationDuration =
-            alignPositionAnimationDuration ?? followAnimationDuration,
-        alignPositionAnimationCurve =
-            alignPositionAnimationCurve ?? followAnimationCurve,
-        alignDirectionStream =
-            alignDirectionStream ?? turnHeadingUpLocationStream,
-        alignDirectionOnUpdate = alignDirectionOnUpdate ?? turnOnHeadingUpdate,
-        alignDirectionAnimationDuration =
-            alignDirectionAnimationDuration ?? turnAnimationDuration,
-        alignDirectionAnimationCurve =
-            alignDirectionAnimationCurve ?? turnAnimationCurve;
+  });
 
   @override
   State<CurrentLocationLayer> createState() => _CurrentLocationLayerState();

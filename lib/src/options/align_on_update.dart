@@ -11,8 +11,3 @@ enum AlignOnUpdate {
   /// Always emit align events.
   always,
 }
-
-@Deprecated("Use 'AlignOnUpdate' instead")
-typedef FollowOnLocationUpdate = AlignOnUpdate;
-@Deprecated("Use 'AlignOnUpdate' instead")
-typedef TurnOnHeadingUpdate = AlignOnUpdate;
