@@ -1,3 +1,18 @@
+## [10.0.0] - Migrate to Flutter Map v8
+
+* Migrate to `flutter_map` v8
+* __BRAKING CHANGE__ Remove flutter_compass dependency, replaced
+  by [flutter_rotation_sensor](https://pub.dev/packages/flutter_rotation_sensor)
+* __BRAKING CHANGE__ Remove deprecated code
+  * [FollowOnLocationUpdate](https://pub.dev/documentation/flutter_map_location_marker/9.1.1/flutter_map_location_marker/FollowOnLocationUpdate.html)
+    and
+    [TurnOnHeadingUpdate](https://pub.dev/documentation/flutter_map_location_marker/9.1.1/flutter_map_location_marker/TurnOnHeadingUpdate.html)
+    is removed, in favor of [AlignOnUpdate](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AlignOnUpdate.html)
+  * Some parameters in
+    [CurrentLocationLayer()](https://pub.dev/documentation/flutter_map_location_marker/9.1.1/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
+    have been removed
+* Correct calculation of map rotation around focal point
+
 ## [10.0.0-beta.0] - RotationSensor as heading provider
 
 * __BRAKING CHANGE__ Remove flutter_compass dependency, replaced
