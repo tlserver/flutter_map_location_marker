@@ -562,11 +562,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     final options = MapOptions.of(context);
     zoom ??= camera.zoom;
 
-    final halfMapSize = camera.nonRotatedSize * 0.5;
-    final projectedFocalPoint = widget.focalPoint.project(halfMapSize);
+    final projectedFocalPoint =
+        widget.focalPoint.project(camera.nonRotatedSize);
 
     final LatLng beginLatLng;
-    if (projectedFocalPoint == halfMapSize) {
+    if (projectedFocalPoint == Offset.zero) {
       beginLatLng = camera.center;
     } else {
       final crs = options.crs;
@@ -605,21 +605,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       );
       final evaluatedZoom = zoomTween.evaluate(animation);
 
-      final halfMapSize = camera.nonRotatedSize * 0.5;
-      final projectedFocalPoint = widget.focalPoint.project(halfMapSize);
-
-      if (projectedFocalPoint == halfMapSize) {
-        MapController.of(context).move(
-          evaluatedLatLng,
-          evaluatedZoom,
-        );
-      } else {
-        MapController.of(context).move(
-          evaluatedLatLng,
-          evaluatedZoom,
-          offset: projectedFocalPoint,
-        );
-      }
+      MapController.of(context).move(
+        evaluatedLatLng,
+        evaluatedZoom,
+        offset: projectedFocalPoint,
+      );
     });
 
     _moveMapAnimationController!.addStatusListener((status) {
@@ -674,7 +664,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   TickerFuture _rotateMap(double angle) {
-    final camera = MapCamera.maybeOf(context)!;
+    final camera = MapCamera.of(context);
 
     _rotateMapAnimationController?.dispose();
     if ((camera.rotationRad - angle).abs() < 0.006) {
@@ -694,13 +684,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       end: angle,
     );
 
+    final projectedFocalPoint =
+        widget.focalPoint.project(camera.nonRotatedSize);
+
     _rotateMapAnimationController!.addListener(() {
       final evaluatedAngle = angleTween.evaluate(animation) / pi * 180;
 
-      final halfMapSize = camera.nonRotatedSize * 0.5;
-      final projectedFocalPoint = widget.focalPoint.project(halfMapSize);
-
-      if (projectedFocalPoint == halfMapSize) {
+      if (projectedFocalPoint == Offset.zero) {
         MapController.of(context).rotate(evaluatedAngle);
       } else {
         MapController.of(context).rotateAroundPoint(
