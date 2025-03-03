@@ -31,7 +31,8 @@ class _DefaultStreamExampleState extends State<DefaultStreamExample> {
     const factory = LocationMarkerDataStreamFactory();
     _positionStream =
         factory.fromGeolocatorPositionStream().asBroadcastStream();
-    _headingStream = factory.fromRotationSensorHeadingStream().asBroadcastStream();
+    _headingStream =
+        factory.fromRotationSensorHeadingStream().asBroadcastStream();
 
     // Get streams with default settings.
 /*    _geolocatorStream = factory.defaultPositionStreamSource().asBroadcastStream();
@@ -60,7 +61,6 @@ class _DefaultStreamExampleState extends State<DefaultStreamExample> {
       stream: _rotationSensorStream,
     );
 */
-
   }
 
   @override
@@ -227,7 +227,7 @@ class _PulseAnimationBoxState extends State<PulseAnimationBox>
                     spreadRadius: 10,
                   ),
                   BoxShadow(
-                    color: Colors.blue.withOpacity(_opacityAni.value),
+                    color: Colors.blue.withValues(alpha: _opacityAni.value),
                     blurRadius: 10,
                     spreadRadius: _sizeAni.value,
                   ),

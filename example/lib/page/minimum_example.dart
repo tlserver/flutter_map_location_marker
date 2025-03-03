@@ -24,7 +24,7 @@ class MinimumExample extends StatelessWidget {
                 'net.tlserver6y.flutter_map_location_marker.example',
             maxZoom: 19,
           ),
-          CurrentLocationLayer(),
+          const CurrentLocationLayer(),
         ],
       ),
     );

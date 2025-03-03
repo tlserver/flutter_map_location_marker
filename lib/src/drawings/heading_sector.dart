@@ -37,11 +37,11 @@ class HeadingSector extends CustomPainter {
       Paint()
         ..shader = RadialGradient(
           colors: [
-            color.withOpacity(color.opacity * 1.0),
-            color.withOpacity(color.opacity * 0.6),
-            color.withOpacity(color.opacity * 0.3),
-            color.withOpacity(color.opacity * 0.1),
-            color.withOpacity(color.opacity * 0.0),
+            color.withValues(alpha: color.a * 1.0),
+            color.withValues(alpha: color.a * 0.6),
+            color.withValues(alpha: color.a * 0.3),
+            color.withValues(alpha: color.a * 0.1),
+            color.withValues(alpha: color.a * 0.0),
           ],
         ).createShader(rect),
     );

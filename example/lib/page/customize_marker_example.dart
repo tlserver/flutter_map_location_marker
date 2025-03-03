@@ -34,8 +34,8 @@ class CustomizeMarkerExample extends StatelessWidget {
                 ),
               ),
               markerSize: const Size.square(40),
-              accuracyCircleColor: Colors.green.withOpacity(0.1),
-              headingSectorColor: Colors.green.withOpacity(0.8),
+              accuracyCircleColor: Colors.green.withValues(alpha: 0.1),
+              headingSectorColor: Colors.green.withValues(alpha: 0.8),
               headingSectorRadius: 120,
             ),
             moveAnimationDuration: Duration.zero, // disable animation

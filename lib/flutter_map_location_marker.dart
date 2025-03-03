@@ -1,5 +1,5 @@
 /// A flutter_map plugin for displaying device current location.
-library flutter_map_location_marker;
+library;
 
 export 'src/data/data.dart';
 export 'src/data/data_stream_factory.dart';
