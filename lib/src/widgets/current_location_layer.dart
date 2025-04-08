@@ -516,7 +516,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     final oldHeading = _currentHeading;
     if (oldHeading == null || newHeading == null) return double.infinity;
 
-    return (newHeading.heading - oldHeading.heading).abs();
+    var difference = (newHeading.heading - oldHeading.heading).abs();
+    return min(difference, pi * 2 - difference);
   }
 
   TickerFuture _moveMarker(LocationMarkerPosition position) {
