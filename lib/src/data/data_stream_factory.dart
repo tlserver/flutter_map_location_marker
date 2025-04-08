@@ -153,6 +153,8 @@ class LocationMarkerDataStreamFactory {
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
-  Stream<OrientationEvent> defaultHeadingStreamSource() =>
-      RotationSensor.orientationStream;
+  Stream<OrientationEvent> defaultHeadingStreamSource() {
+    RotationSensor.samplingPeriod = SensorInterval.uiInterval;
+    return RotationSensor.orientationStream;
+  }
 }
