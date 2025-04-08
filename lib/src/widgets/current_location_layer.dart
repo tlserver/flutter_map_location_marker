@@ -177,8 +177,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   static const _headingThreshold = pi / 100;
 
   _Status _status = _Status.initialing;
-  LocationMarkerPosition? _currentPosition;
-  LocationMarkerHeading? _currentHeading;
+  LocationMarkerPosition? _animatingPosition;
+  LocationMarkerHeading? _animatingHeading;
+  LocationMarkerPosition? _markerPosition;
+  LocationMarkerHeading? _markerHeading;
+  LatLng? _mapPosition;
+  double? _mapHeading;
   double? _followingZoom;
 
   late bool _isFirstLocationUpdate;
@@ -204,6 +208,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     super.initState();
     _isFirstLocationUpdate = true;
     _isFirstHeadingUpdate = true;
+    _subscriptMapEventStream();
     _subscriptPositionStream();
   }
 
@@ -236,10 +241,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       case _Status.initialing:
         return const SizedBox.shrink();
       case _Status.ready:
-        if (_currentPosition != null) {
+        if (_animatingPosition != null) {
           return LocationMarkerLayer(
-            position: _currentPosition!,
-            heading: _currentHeading,
+            position: _animatingPosition!,
+            heading: _animatingHeading,
             style: widget.style,
           );
         } else {
@@ -340,6 +345,24 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     super.dispose();
   }
 
+  void _subscriptMapEventStream() {
+    Future.microtask(() {
+      if (mounted) {
+        final controller = MapController.of(context);
+        controller.mapEventStream.listen((event) {
+          if (event.source != MapEventSource.mapController) {
+            switch (event) {
+              case MapEventMove _:
+                _mapPosition = null;
+              case MapEventRotate _:
+                _mapHeading = null;
+            }
+          }
+        });
+      }
+    });
+  }
+
   void _subscriptPositionStream() {
     final positionStream = widget.positionStream ??
         const LocationMarkerDataStreamFactory().fromGeolocatorPositionStream();
@@ -352,7 +375,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           if (_status != _Status.initialing) {
             setState(() {
               _status = _Status.initialing;
-              _currentPosition = null;
+              _animatingPosition = null;
+              _markerPosition = null;
             });
           }
         } else {
@@ -410,8 +434,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           return;
         }
         if (heading == null) {
-          if (_currentHeading != null) {
-            setState(() => _currentHeading = null);
+          if (_animatingHeading != null) {
+            setState(() => _animatingHeading = null);
           }
         } else {
           if (_status == _Status.ready) {
@@ -431,13 +455,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
               _rotateMap(-heading.heading % (2 * pi));
             }
           } else {
-            _currentHeading = heading;
+            _animatingHeading = heading;
           }
         }
       },
       onError: (_) {
-        if (_currentHeading != null) {
-          setState(() => _currentHeading = null);
+        if (_animatingHeading != null) {
+          setState(() => _animatingHeading = null);
         }
       },
     );
@@ -452,10 +476,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       if (!mounted) {
         return;
       }
-      if (_currentPosition != null) {
+      if (_animatingPosition != null) {
         _followingZoom = zoom;
         _moveMap(
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          LatLng(_animatingPosition!.latitude, _animatingPosition!.longitude),
           zoom,
         ).whenComplete(() => _followingZoom = null);
       }
@@ -471,8 +495,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       if (!mounted) {
         return;
       }
-      if (_currentHeading != null) {
-        _rotateMap(-_currentHeading!.heading % (2 * pi));
+      if (_animatingHeading != null) {
+        _rotateMap(-_animatingHeading!.heading % (2 * pi));
       }
     });
   }
@@ -502,29 +526,27 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         .overlaps(Rect.fromCircle(center: so, radius: maxRadius));
   }
 
-  double _currentPositionDistanceTo(LocationMarkerPosition? newPosition) {
-    final oldPosition = _currentPosition;
+  double _positionDistance(LatLng? oldPosition, LatLng? newPosition) {
     if (oldPosition == null || newPosition == null) return double.infinity;
-
     final camera = MapCamera.of(context);
-    final oldOffset = camera.latLngToScreenOffset(oldPosition.latLng);
-    final newOffset = camera.latLngToScreenOffset(newPosition.latLng);
+    final oldOffset = camera.latLngToScreenOffset(oldPosition);
+    final newOffset = camera.latLngToScreenOffset(newPosition);
     return (newOffset - oldOffset).distance;
   }
 
-  double _currentHeadingDifferentTo(LocationMarkerHeading? newHeading) {
-    final oldHeading = _currentHeading;
+  double _headingDifferent(double? oldHeading, double? newHeading) {
     if (oldHeading == null || newHeading == null) return double.infinity;
-
-    var difference = (newHeading.heading - oldHeading.heading).abs();
+    var difference = (newHeading - oldHeading).abs();
     return min(difference, pi * 2 - difference);
   }
 
   TickerFuture _moveMarker(LocationMarkerPosition position) {
-    _moveMarkerAnimationController?.dispose();
-    _moveMarkerAnimationController = null;
-    if (_currentPositionDistanceTo(position) > _positionThreshold) {
-      if (_inBounds(position) || _inBounds(_currentPosition)) {
+    if (_positionDistance(_markerPosition?.latLng, position.latLng) >
+        _positionThreshold) {
+      _markerPosition = position;
+      _moveMarkerAnimationController?.dispose();
+      _moveMarkerAnimationController = null;
+      if (_inBounds(position) || _inBounds(_animatingPosition)) {
         _moveMarkerAnimationController = AnimationController(
           duration: widget.moveAnimationDuration,
           vsync: this,
@@ -534,12 +556,14 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           curve: widget.moveAnimationCurve,
         );
         final positionTween = LocationMarkerPositionTween(
-          begin: _currentPosition ?? position,
+          begin: _animatingPosition ?? position,
           end: position,
         );
 
         _moveMarkerAnimationController!.addListener(() {
-          setState(() => _currentPosition = positionTween.evaluate(animation));
+          setState(
+            () => _animatingPosition = positionTween.evaluate(animation),
+          );
         });
 
         _moveMarkerAnimationController!.addStatusListener((status) {
@@ -552,7 +576,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
         return _moveMarkerAnimationController!.forward();
       } else {
-        setState(() => _currentPosition = position);
+        setState(() => _animatingPosition = position);
       }
     }
     return TickerFuture.complete();
@@ -577,58 +601,65 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       beginLatLng = crs.offsetToLatLng(followPoint, camera.zoom);
     }
 
-    _moveMapAnimationController?.dispose();
-    _moveMapAnimationController = AnimationController(
-      duration: widget.alignPositionAnimationDuration,
-      vsync: this,
-    );
-    final animation = CurvedAnimation(
-      parent: _moveMapAnimationController!,
-      curve: widget.alignPositionAnimationCurve,
-    );
-    final latTween = Tween(
-      begin: beginLatLng.latitude,
-      end: latLng.latitude,
-    );
-    final lngTween = Tween(
-      begin: beginLatLng.longitude,
-      end: latLng.longitude,
-    );
-    final zoomTween = Tween(
-      begin: camera.zoom,
-      end: zoom,
-    );
-
-    _moveMapAnimationController!.addListener(() {
-      final evaluatedLatLng = LatLng(
-        latTween.evaluate(animation),
-        lngTween.evaluate(animation),
+    if ((camera.zoom - zoom).abs() > 0.01 ||
+        _positionDistance(_mapPosition, latLng) > _positionThreshold) {
+      _mapPosition = latLng;
+      _moveMapAnimationController?.dispose();
+      _moveMapAnimationController = AnimationController(
+        duration: widget.alignPositionAnimationDuration,
+        vsync: this,
       );
-      final evaluatedZoom = zoomTween.evaluate(animation);
-
-      MapController.of(context).move(
-        evaluatedLatLng,
-        evaluatedZoom,
-        offset: projectedFocalPoint,
+      final animation = CurvedAnimation(
+        parent: _moveMapAnimationController!,
+        curve: widget.alignPositionAnimationCurve,
       );
-    });
+      final latTween = Tween(
+        begin: beginLatLng.latitude,
+        end: latLng.latitude,
+      );
+      final lngTween = Tween(
+        begin: beginLatLng.longitude,
+        end: latLng.longitude,
+      );
+      final zoomTween = Tween(
+        begin: camera.zoom,
+        end: zoom,
+      );
 
-    _moveMapAnimationController!.addStatusListener((status) {
-      if (status == AnimationStatus.completed ||
-          status == AnimationStatus.dismissed) {
-        _moveMapAnimationController!.dispose();
-        _moveMapAnimationController = null;
-      }
-    });
+      _moveMapAnimationController!.addListener(() {
+        final evaluatedLatLng = LatLng(
+          latTween.evaluate(animation),
+          lngTween.evaluate(animation),
+        );
+        final evaluatedZoom = zoomTween.evaluate(animation);
 
-    return _moveMapAnimationController!.forward();
+        MapController.of(context).move(
+          evaluatedLatLng,
+          evaluatedZoom,
+          offset: projectedFocalPoint,
+        );
+      });
+
+      _moveMapAnimationController!.addStatusListener((status) {
+        if (status == AnimationStatus.completed ||
+            status == AnimationStatus.dismissed) {
+          _moveMapAnimationController!.dispose();
+          _moveMapAnimationController = null;
+        }
+      });
+
+      return _moveMapAnimationController!.forward();
+    }
+    return TickerFuture.complete();
   }
 
   TickerFuture _rotateMarker(LocationMarkerHeading heading) {
-    _rotateMarkerAnimationController?.dispose();
-    _rotateMarkerAnimationController = null;
-    if (_currentHeadingDifferentTo(heading) > _headingThreshold) {
-      if (_inBounds(_currentPosition)) {
+    if (_headingDifferent(_markerHeading?.heading, heading.heading) >
+        _headingThreshold) {
+      _markerHeading = heading;
+      _rotateMarkerAnimationController?.dispose();
+      _rotateMarkerAnimationController = null;
+      if (_inBounds(_animatingPosition)) {
         _rotateMarkerAnimationController = AnimationController(
           duration: widget.rotateAnimationDuration,
           vsync: this,
@@ -638,13 +669,15 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           curve: widget.rotateAnimationCurve,
         );
         final headingTween = LocationMarkerHeadingTween(
-          begin: _currentHeading ?? heading,
+          begin: _animatingHeading ?? heading,
           end: heading,
         );
 
         _rotateMarkerAnimationController!.addListener(() {
           if (_status == _Status.ready) {
-            setState(() => _currentHeading = headingTween.evaluate(animation));
+            setState(
+              () => _animatingHeading = headingTween.evaluate(animation),
+            );
           }
         });
 
@@ -658,7 +691,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
         return _rotateMarkerAnimationController!.forward();
       } else {
-        setState(() => _currentHeading = heading);
+        setState(() => _animatingHeading = heading);
       }
     }
     return TickerFuture.complete();
@@ -666,50 +699,49 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   TickerFuture _rotateMap(double angle) {
     final camera = MapCamera.of(context);
+    if (_headingDifferent(_mapHeading, angle) > _headingThreshold) {
+      _mapHeading = angle;
+      _rotateMapAnimationController?.dispose();
+      _rotateMapAnimationController = AnimationController(
+        duration: widget.alignDirectionAnimationDuration,
+        vsync: this,
+      );
+      final animation = CurvedAnimation(
+        parent: _rotateMapAnimationController!,
+        curve: widget.alignDirectionAnimationCurve,
+      );
+      final angleTween = RadiusTween(
+        begin: camera.rotationRad,
+        end: angle,
+      );
 
-    _rotateMapAnimationController?.dispose();
-    if ((camera.rotationRad - angle).abs() < 0.006) {
-      _rotateMapAnimationController = null;
-      return TickerFuture.complete();
+      final projectedFocalPoint =
+          widget.focalPoint.project(camera.nonRotatedSize);
+
+      _rotateMapAnimationController!.addListener(() {
+        final evaluatedAngle = angleTween.evaluate(animation) / pi * 180;
+
+        if (projectedFocalPoint == Offset.zero) {
+          MapController.of(context).rotate(evaluatedAngle);
+        } else {
+          MapController.of(context).rotateAroundPoint(
+            evaluatedAngle,
+            offset: projectedFocalPoint,
+          );
+        }
+      });
+
+      _rotateMapAnimationController!.addStatusListener((status) {
+        if (status == AnimationStatus.completed ||
+            status == AnimationStatus.dismissed) {
+          _rotateMapAnimationController!.dispose();
+          _rotateMapAnimationController = null;
+        }
+      });
+
+      return _rotateMapAnimationController!.forward();
     }
-    _rotateMapAnimationController = AnimationController(
-      duration: widget.alignDirectionAnimationDuration,
-      vsync: this,
-    );
-    final animation = CurvedAnimation(
-      parent: _rotateMapAnimationController!,
-      curve: widget.alignDirectionAnimationCurve,
-    );
-    final angleTween = RadiusTween(
-      begin: camera.rotationRad,
-      end: angle,
-    );
-
-    final projectedFocalPoint =
-        widget.focalPoint.project(camera.nonRotatedSize);
-
-    _rotateMapAnimationController!.addListener(() {
-      final evaluatedAngle = angleTween.evaluate(animation) / pi * 180;
-
-      if (projectedFocalPoint == Offset.zero) {
-        MapController.of(context).rotate(evaluatedAngle);
-      } else {
-        MapController.of(context).rotateAroundPoint(
-          evaluatedAngle,
-          offset: projectedFocalPoint,
-        );
-      }
-    });
-
-    _rotateMapAnimationController!.addStatusListener((status) {
-      if (status == AnimationStatus.completed ||
-          status == AnimationStatus.dismissed) {
-        _rotateMapAnimationController!.dispose();
-        _rotateMapAnimationController = null;
-      }
-    });
-
-    return _rotateMapAnimationController!.forward();
+    return TickerFuture.complete();
   }
 
   @override
@@ -717,8 +749,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     super.debugFillProperties(properties);
     properties
       ..add(EnumProperty('_status', _status))
-      ..add(DiagnosticsProperty('_currentPosition', _currentPosition))
-      ..add(DiagnosticsProperty('_currentHeading', _currentHeading))
+      ..add(DiagnosticsProperty('_currentPosition', _animatingPosition))
+      ..add(DiagnosticsProperty('_currentHeading', _animatingHeading))
       ..add(DoubleProperty('_followingZoom', _followingZoom))
       ..add(
         DiagnosticsProperty(
