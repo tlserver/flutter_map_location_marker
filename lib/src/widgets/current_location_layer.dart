@@ -110,12 +110,12 @@ class CurrentLocationLayer extends StatefulWidget {
     this.alignDirectionOnUpdate = AlignOnUpdate.never,
     this.alignPositionAnimationDuration = const Duration(milliseconds: 200),
     this.alignPositionAnimationCurve = Curves.fastOutSlowIn,
-    this.alignDirectionAnimationDuration = const Duration(milliseconds: 50),
-    this.alignDirectionAnimationCurve = Curves.easeInOut,
+    this.alignDirectionAnimationDuration = const Duration(milliseconds: 120),
+    this.alignDirectionAnimationCurve = Curves.easeOut,
     this.moveAnimationDuration = const Duration(milliseconds: 200),
     this.moveAnimationCurve = Curves.fastOutSlowIn,
-    this.rotateAnimationDuration = const Duration(milliseconds: 50),
-    this.rotateAnimationCurve = Curves.easeInOut,
+    this.rotateAnimationDuration = const Duration(milliseconds: 120),
+    this.rotateAnimationCurve = Curves.easeOut,
     this.indicators = const LocationMarkerIndicators(),
   });
 
