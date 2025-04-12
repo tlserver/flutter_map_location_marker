@@ -1,3 +1,10 @@
+## [10.0.2] - Fix Bug
+
+* Fix rotate animation skipping condition
+* Fine-tune rotation animation default duration
+* Faster default sampling period for RotationSensor
+* Improve performance by reducing unnecessary rebuilt
+
 ## [10.0.0] - Migrate to Flutter Map v8
 
 * Migrate to `flutter_map` v8
