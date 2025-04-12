@@ -117,7 +117,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   // Disable align position and align direction temporarily when user is
   // manipulating the map.
-  void _onPointerDown(e, l) {
+  void _onPointerDown(PointerEvent event, LatLng latLng) {
     _pointerCount++;
     setState(() {
       _alignPositionOnUpdate = AlignOnUpdate.never;
@@ -127,7 +127,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   // Enable align position and align direction again when user manipulation
   // ended.
-  void _onPointerUp(e, l) {
+  void _onPointerUp(PointerEvent event, LatLng latLng) {
     if (--_pointerCount == 0 && _navigationMode) {
       setState(() {
         _alignPositionOnUpdate = AlignOnUpdate.always;
