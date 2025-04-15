@@ -1,3 +1,7 @@
+## [10.1.0] - Migrate to Geolocator 14.0.0
+
+* Migrate to `geolocator` v14
+
 ## [10.0.2] - Fix Bug
 
 * Fix rotate animation skipping condition
