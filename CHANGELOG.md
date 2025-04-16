@@ -1,3 +1,7 @@
+## [10.1.0] - Update Dependencies
+
+* Update dependencies
+
 ## [10.0.2] - Fix Bug
 
 * Fix rotate animation skipping condition
