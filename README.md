@@ -65,8 +65,8 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
    ```dart
    Widget build() {
      return CurrentLocationLayer(
-       followOnLocationUpdate: FollowOnLocationUpdate.always,
-       turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+       alignPositionOnUpdate: AlignOnUpdate.always,
+       alignDirectionOnUpdate: AlignOnUpdate.never,
        style: LocationMarkerStyle(
          marker: const DefaultLocationMarker(
            child: Icon(
