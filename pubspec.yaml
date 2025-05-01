@@ -11,7 +11,7 @@ platforms:
   windows:
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ^3.7.2
   flutter: ">=3.29.0"
 
 dependencies:
@@ -23,7 +23,7 @@ dependencies:
   latlong2: ^0.9.1
 
 dev_dependencies:
-  flutter_lints: ">=4.0.0 <6.0.0"
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
   lint: ^2.3.0
