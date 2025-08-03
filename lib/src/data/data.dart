@@ -25,7 +25,8 @@ class LocationMarkerPosition {
   LatLng get latLng => LatLng(latitude, longitude);
 
   @override
-  String toString() => 'LocationMarkerPosition('
+  String toString() =>
+      'LocationMarkerPosition('
       'latitude: $latitude, '
       'longitude: $longitude, '
       'accuracy: $accuracy)';
@@ -42,13 +43,11 @@ class LocationMarkerHeading {
   final double accuracy;
 
   /// Create a LocationMarkerHeading.
-  const LocationMarkerHeading({
-    required this.heading,
-    required this.accuracy,
-  });
+  const LocationMarkerHeading({required this.heading, required this.accuracy});
 
   @override
-  String toString() => 'LocationMarkerHeading('
+  String toString() =>
+      'LocationMarkerHeading('
       'heading: $heading, '
       'accuracy: $accuracy)';
 }

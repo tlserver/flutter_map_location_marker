@@ -46,44 +46,27 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TweenAnimationBuilder(
-        tween: LocationMarkerPositionTween(
-          begin: position,
-          end: position,
-        ),
-        curve: moveAnimationCurve,
-        duration: moveAnimationDuration,
-        builder: (
-          context,
-          position,
-          child,
-        ) {
-          if (heading != null) {
-            return TweenAnimationBuilder(
-              tween: LocationMarkerHeadingTween(
-                begin: heading,
-                end: heading,
-              ),
-              curve: rotateAnimationCurve,
-              duration: rotateAnimationDuration,
-              builder: (
-                context,
-                heading,
-                child,
-              ) =>
-                  LocationMarkerLayer(
+    tween: LocationMarkerPositionTween(begin: position, end: position),
+    curve: moveAnimationCurve,
+    duration: moveAnimationDuration,
+    builder: (context, position, child) {
+      if (heading != null) {
+        return TweenAnimationBuilder(
+          tween: LocationMarkerHeadingTween(begin: heading, end: heading),
+          curve: rotateAnimationCurve,
+          duration: rotateAnimationDuration,
+          builder:
+              (context, heading, child) => LocationMarkerLayer(
                 position: position,
                 heading: heading,
                 style: style,
               ),
-            );
-          } else {
-            return LocationMarkerLayer(
-              position: position,
-              style: style,
-            );
-          }
-        },
-      );
+        );
+      } else {
+        return LocationMarkerLayer(position: position, style: style);
+      }
+    },
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -95,10 +78,7 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
       ..add(DiagnosticsProperty('moveAnimationDuration', moveAnimationDuration))
       ..add(DiagnosticsProperty('moveAnimationCurve', moveAnimationCurve))
       ..add(
-        DiagnosticsProperty(
-          'rotateAnimationDuration',
-          rotateAnimationDuration,
-        ),
+        DiagnosticsProperty('rotateAnimationDuration', rotateAnimationDuration),
       )
       ..add(DiagnosticsProperty('rotateAnimationCurve', rotateAnimationCurve));
   }

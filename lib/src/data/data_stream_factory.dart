@@ -25,16 +25,16 @@ class LocationMarkerDataStreamFactory {
   /// [geolocator](https://pub.dev/packages/geolocator) stream.
   Stream<LocationMarkerPosition?> fromGeolocatorPositionStream({
     Stream<Position?>? stream,
-  }) =>
-      (stream ?? defaultPositionStreamSource()).map(
-        (position) => position != null
+  }) => (stream ?? defaultPositionStreamSource()).map(
+    (position) =>
+        position != null
             ? LocationMarkerPosition(
-                latitude: position.latitude,
-                longitude: position.longitude,
-                accuracy: position.accuracy,
-              )
+              latitude: position.latitude,
+              longitude: position.longitude,
+              accuracy: position.accuracy,
+            )
             : null,
-      );
+  );
 
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
@@ -50,8 +50,9 @@ class LocationMarkerDataStreamFactory {
           var permission = await Geolocator.checkPermission();
           if (permission == LocationPermission.denied &&
               requestPermissionCallback != null) {
-            streamController.sink
-                .addError(const lm.PermissionRequestingException());
+            streamController.sink.addError(
+              const lm.PermissionRequestingException(),
+            );
             permission = await requestPermissionCallback();
           }
           switch (permission) {
@@ -60,8 +61,9 @@ class LocationMarkerDataStreamFactory {
               if (streamController.isClosed) {
                 break;
               }
-              streamController.sink
-                  .addError(const lm.PermissionDeniedException());
+              streamController.sink.addError(
+                const lm.PermissionDeniedException(),
+              );
               await streamController.close();
             case LocationPermission.whileInUse:
             case LocationPermission.always:
@@ -72,8 +74,9 @@ class LocationMarkerDataStreamFactory {
                   break;
                 }
                 if (!serviceEnabled) {
-                  streamController.sink
-                      .addError(const ServiceDisabledException());
+                  streamController.sink.addError(
+                    const ServiceDisabledException(),
+                  );
                 }
               } on Exception catch (_) {}
               try {
@@ -82,13 +85,14 @@ class LocationMarkerDataStreamFactory {
                 if (!kIsWeb) {
                   final subscription = Geolocator.getServiceStatusStream()
                       .listen((serviceStatus) {
-                    if (serviceStatus == ServiceStatus.enabled) {
-                      streamController.sink.add(null);
-                    } else {
-                      streamController.sink
-                          .addError(const ServiceDisabledException());
-                    }
-                  });
+                        if (serviceStatus == ServiceStatus.enabled) {
+                          streamController.sink.add(null);
+                        } else {
+                          streamController.sink.addError(
+                            const ServiceDisabledException(),
+                          );
+                        }
+                      });
                   cancelFunctions.add(subscription.cancel);
                 }
               } on Exception catch (_) {}
@@ -115,8 +119,9 @@ class LocationMarkerDataStreamFactory {
                   streamController.sink.add(position);
                 }
               } on Exception catch (_) {}
-              final subscription =
-                  Geolocator.getPositionStream().listen((position) {
+              final subscription = Geolocator.getPositionStream().listen((
+                position,
+              ) {
                 streamController.sink.add(position);
               });
               cancelFunctions.add(subscription.cancel);
@@ -141,15 +146,15 @@ class LocationMarkerDataStreamFactory {
     double minAccuracy = pi * 0.1,
     double defAccuracy = pi * 0.3,
     double maxAccuracy = pi * 0.4,
-  }) =>
-      (stream ?? defaultHeadingStreamSource()).map(
-        (e) => LocationMarkerHeading(
-          heading: e.eulerAngles.azimuth,
-          accuracy: e.accuracy >= 0
+  }) => (stream ?? defaultHeadingStreamSource()).map(
+    (e) => LocationMarkerHeading(
+      heading: e.eulerAngles.azimuth,
+      accuracy:
+          e.accuracy >= 0
               ? degToRadian(e.accuracy).clamp(minAccuracy, maxAccuracy)
               : defAccuracy,
-        ),
-      );
+    ),
+  );
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
