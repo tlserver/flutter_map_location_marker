@@ -119,11 +119,11 @@ class LocationMarkerDataStreamFactory {
                   streamController.sink.add(position);
                 }
               } on Exception catch (_) {}
-              final subscription = Geolocator.getPositionStream().listen((
-                position,
-              ) {
-                streamController.sink.add(position);
-              });
+              final subscription = Geolocator.getPositionStream().listen(
+                streamController.sink.add,
+                onError: streamController.sink.addError,
+                onDone: streamController.close,
+              );
               cancelFunctions.add(subscription.cancel);
             case LocationPermission.unableToDetermine:
               break;
