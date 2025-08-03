@@ -109,6 +109,14 @@ class _DpsSourceCreator {
     }
   }
 
+  Future<bool> _checkServiceEnabled() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      _tryAddError(const ServiceDisabledException());
+    }
+    return serviceEnabled;
+  }
+
   Future<LocationPermission> _requestPermission() async {
     var permission = await Geolocator.checkPermission();
     var requestPermissionCallback = this.requestPermissionCallback;
@@ -129,12 +137,10 @@ class _DpsSourceCreator {
 
   Future<void> _addCurrentPosition() async {
     try {
-      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final serviceEnabled = await _checkServiceEnabled();
       if (serviceEnabled) {
         final position = await Geolocator.getCurrentPosition();
         _tryAddData(position);
-      } else {
-        _tryAddError(const ServiceDisabledException());
       }
     } on Exception catch (_) {}
   }
@@ -155,11 +161,22 @@ class _DpsSourceCreator {
   }
 
   void _subscriptPositionChanges() {
-    final subscription = Geolocator.getPositionStream().listen((
-        position,
-        ) {
-      streamController.sink.add(position);
-    });
+    final subscription = Geolocator.getPositionStream().listen(
+      streamController.sink.add,
+      onError: (e) async {
+        final serviceEnabled = await _checkServiceEnabled();
+        if (serviceEnabled) {
+          final permission = await _requestPermission();
+          if (permission == LocationPermission.denied ||
+              permission == LocationPermission.deniedForever) {
+            _tryAddError(const lm.PermissionDeniedException());
+          } else {
+            _tryAddError(e);
+          }
+        }
+      },
+      onDone: streamController.close,
+    );
     cancelFunctions.add(subscription.cancel);
   }
 
