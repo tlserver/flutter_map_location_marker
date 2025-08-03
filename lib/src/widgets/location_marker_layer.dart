@@ -51,9 +51,7 @@ class LocationMarkerLayer extends StatelessWidget {
                 height: style.headingSectorRadius * 2,
                 child: IgnorePointer(
                   child: CustomPaint(
-                    size: Size.fromRadius(
-                      style.headingSectorRadius,
-                    ),
+                    size: Size.fromRadius(style.headingSectorRadius),
                     painter: HeadingSector(
                       style.headingSectorColor,
                       heading!.heading,
@@ -70,13 +68,13 @@ class LocationMarkerLayer extends StatelessWidget {
               child: switch (style.markerDirection) {
                 MarkerDirection.north => style.marker,
                 MarkerDirection.top => Transform.rotate(
-                    angle: -camera.rotationRad,
-                    child: style.marker,
-                  ),
+                  angle: -camera.rotationRad,
+                  child: style.marker,
+                ),
                 MarkerDirection.heading => Transform.rotate(
-                    angle: heading?.heading ?? -camera.rotationRad,
-                    child: style.marker,
-                  ),
+                  angle: heading?.heading ?? -camera.rotationRad,
+                  child: style.marker,
+                ),
               },
             ),
           ],

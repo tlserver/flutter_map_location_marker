@@ -20,21 +20,18 @@ class DefaultLocationMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          shape: BoxShape.circle,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
-            child: child,
-          ),
-        ),
-      );
+    decoration: const BoxDecoration(
+      color: Color(0xFFFFFFFF),
+      shape: BoxShape.circle,
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(2),
+      child: DecoratedBox(
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        child: child,
+      ),
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
