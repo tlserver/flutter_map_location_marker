@@ -8,10 +8,7 @@ import 'data.dart';
 /// `LocationMarkerPosition`.
 class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
   /// Creates a tween.
-  LocationMarkerPositionTween({
-    required super.begin,
-    required super.end,
-  });
+  LocationMarkerPositionTween({required super.begin, required super.end});
 
   @override
   LocationMarkerPosition lerp(double t) {
@@ -29,10 +26,7 @@ class LocationMarkerPositionTween extends Tween<LocationMarkerPosition> {
 /// `LocationMarkerHeading`.
 class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
   /// Creates a tween.
-  LocationMarkerHeadingTween({
-    required super.begin,
-    required super.end,
-  });
+  LocationMarkerHeadingTween({required super.begin, required super.end});
 
   @override
   LocationMarkerHeading lerp(double t) {
@@ -50,13 +44,8 @@ class LocationMarkerHeadingTween extends Tween<LocationMarkerHeading> {
 /// shorter direction.
 class DegreeTween extends Tween<double> {
   /// Creates a tween.
-  DegreeTween({
-    required double begin,
-    required double end,
-  }) : super(
-          begin: begin % 360,
-          end: end % 360,
-        );
+  DegreeTween({required double begin, required double end})
+    : super(begin: begin % 360, end: end % 360);
 
   @override
   double lerp(double t) => _degreeLerp(begin!, end!, t);
@@ -67,13 +56,8 @@ class DegreeTween extends Tween<double> {
 /// shorter direction.
 class RadiusTween extends Tween<double> {
   /// Creates a tween.
-  RadiusTween({
-    required double begin,
-    required double end,
-  }) : super(
-          begin: begin % (2 * pi),
-          end: end % (2 * pi),
-        );
+  RadiusTween({required double begin, required double end})
+    : super(begin: begin % (2 * pi), end: end % (2 * pi));
 
   @override
   double lerp(double t) => _radiusLerp(begin!, end!, t);
@@ -90,7 +74,8 @@ double _circularLerp(double begin, double end, double t, double oneCircle) {
   end = end % oneCircle;
 
   final compareResult = (end - begin).abs().compareTo(halfCircle);
-  final crossZero = compareResult == 1 ||
+  final crossZero =
+      compareResult == 1 ||
       (compareResult == 0 && begin != end && begin >= halfCircle);
   if (crossZero) {
     double opposite(double value) => (value + halfCircle) % oneCircle;

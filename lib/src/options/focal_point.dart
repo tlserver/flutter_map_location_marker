@@ -30,10 +30,7 @@ class FocalPoint {
 
   /// Constructs a [FocalPoint] with an optional [ratio] and [offset], both
   /// defaulting to the origin point if not provided.
-  const FocalPoint({
-    this.ratio = Offset.zero,
-    this.offset = Offset.zero,
-  });
+  const FocalPoint({this.ratio = Offset.zero, this.offset = Offset.zero});
 
   /// Projects the [FocalPoint] onto the map widget given its [size]. The
   /// resulting [Offset] represents the absolute pixel coordinates on the map

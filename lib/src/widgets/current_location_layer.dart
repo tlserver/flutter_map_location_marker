@@ -161,10 +161,7 @@ class CurrentLocationLayer extends StatefulWidget {
       ..add(DiagnosticsProperty('moveAnimationDuration', moveAnimationDuration))
       ..add(DiagnosticsProperty('moveAnimationCurve', moveAnimationCurve))
       ..add(
-        DiagnosticsProperty(
-          'rotateAnimationDuration',
-          rotateAnimationDuration,
-        ),
+        DiagnosticsProperty('rotateAnimationDuration', rotateAnimationDuration),
       )
       ..add(DiagnosticsProperty('rotateAnimationCurve', rotateAnimationCurve))
       ..add(DiagnosticsProperty('indicators', indicators));
@@ -364,7 +361,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptPositionStream() {
-    final positionStream = widget.positionStream ??
+    final positionStream =
+        widget.positionStream ??
         const LocationMarkerDataStreamFactory().fromGeolocatorPositionStream();
     _positionStreamSubscription = positionStream.listen(
       (position) {
@@ -401,10 +399,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
               alignPosition = false;
           }
           if (alignPosition) {
-            _moveMap(
-              position.latLng,
-              _followingZoom,
-            );
+            _moveMap(position.latLng, _followingZoom);
           }
         }
       },
@@ -425,7 +420,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptHeadingStream() {
-    final headingStream = widget.headingStream ??
+    final headingStream =
+        widget.headingStream ??
         const LocationMarkerDataStreamFactory()
             .fromRotationSensorHeadingStream();
     _headingStreamSubscription = headingStream.listen(
@@ -471,8 +467,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     if (_alignPositionStreamSubscription != null) {
       return;
     }
-    _alignPositionStreamSubscription =
-        widget.alignPositionStream?.listen((zoom) {
+    _alignPositionStreamSubscription = widget.alignPositionStream?.listen((
+      zoom,
+    ) {
       if (!mounted) {
         return;
       }
@@ -490,8 +487,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     if (_alignDirectionStreamSubscription != null) {
       return;
     }
-    _alignDirectionStreamSubscription =
-        widget.alignDirectionStream?.listen((_) {
+    _alignDirectionStreamSubscription = widget.alignDirectionStream?.listen((
+      _,
+    ) {
       if (!mounted) {
         return;
       }
@@ -519,11 +517,14 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         style.showHeadingSector ? style.headingSectorRadius : 0.0;
     final accuracyCircleRadius =
         style.showAccuracyCircle ? (a - b).distance : 0.0;
-    final maxRadius =
-        max(max(markerRadius, headingSectorRadius), accuracyCircleRadius);
+    final maxRadius = max(
+      max(markerRadius, headingSectorRadius),
+      accuracyCircleRadius,
+    );
 
-    return (Offset.zero & camera.nonRotatedSize)
-        .overlaps(Rect.fromCircle(center: so, radius: maxRadius));
+    return (Offset.zero & camera.nonRotatedSize).overlaps(
+      Rect.fromCircle(center: so, radius: maxRadius),
+    );
   }
 
   double _positionDistance(LatLng? oldPosition, LatLng? newPosition) {
@@ -587,8 +588,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     final options = MapOptions.of(context);
     zoom ??= camera.zoom;
 
-    final projectedFocalPoint =
-        widget.focalPoint.project(camera.nonRotatedSize);
+    final projectedFocalPoint = widget.focalPoint.project(
+      camera.nonRotatedSize,
+    );
 
     final LatLng beginLatLng;
     if (projectedFocalPoint == Offset.zero) {
@@ -596,8 +598,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     } else {
       final crs = options.crs;
       final mapCenter = crs.latLngToOffset(camera.center, camera.zoom);
-      final followPoint =
-          camera.rotatePoint(mapCenter, mapCenter + projectedFocalPoint);
+      final followPoint = camera.rotatePoint(
+        mapCenter,
+        mapCenter + projectedFocalPoint,
+      );
       beginLatLng = crs.offsetToLatLng(followPoint, camera.zoom);
     }
 
@@ -613,18 +617,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         parent: _moveMapAnimationController!,
         curve: widget.alignPositionAnimationCurve,
       );
-      final latTween = Tween(
-        begin: beginLatLng.latitude,
-        end: latLng.latitude,
-      );
+      final latTween = Tween(begin: beginLatLng.latitude, end: latLng.latitude);
       final lngTween = Tween(
         begin: beginLatLng.longitude,
         end: latLng.longitude,
       );
-      final zoomTween = Tween(
-        begin: camera.zoom,
-        end: zoom,
-      );
+      final zoomTween = Tween(begin: camera.zoom, end: zoom);
 
       _moveMapAnimationController!.addListener(() {
         final evaluatedLatLng = LatLng(
@@ -633,11 +631,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         );
         final evaluatedZoom = zoomTween.evaluate(animation);
 
-        MapController.of(context).move(
-          evaluatedLatLng,
-          evaluatedZoom,
-          offset: projectedFocalPoint,
-        );
+        MapController.of(
+          context,
+        ).move(evaluatedLatLng, evaluatedZoom, offset: projectedFocalPoint);
       });
 
       _moveMapAnimationController!.addStatusListener((status) {
@@ -710,13 +706,11 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         parent: _rotateMapAnimationController!,
         curve: widget.alignDirectionAnimationCurve,
       );
-      final angleTween = RadiusTween(
-        begin: camera.rotationRad,
-        end: angle,
-      );
+      final angleTween = RadiusTween(begin: camera.rotationRad, end: angle);
 
-      final projectedFocalPoint =
-          widget.focalPoint.project(camera.nonRotatedSize);
+      final projectedFocalPoint = widget.focalPoint.project(
+        camera.nonRotatedSize,
+      );
 
       _rotateMapAnimationController!.addListener(() {
         final evaluatedAngle = angleTween.evaluate(animation) / pi * 180;
@@ -724,10 +718,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         if (projectedFocalPoint == Offset.zero) {
           MapController.of(context).rotate(evaluatedAngle);
         } else {
-          MapController.of(context).rotateAroundPoint(
-            evaluatedAngle,
-            offset: projectedFocalPoint,
-          );
+          MapController.of(
+            context,
+          ).rotateAroundPoint(evaluatedAngle, offset: projectedFocalPoint);
         }
       });
 
@@ -753,10 +746,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       ..add(DiagnosticsProperty('_currentHeading', _animatingHeading))
       ..add(DoubleProperty('_followingZoom', _followingZoom))
       ..add(
-        DiagnosticsProperty(
-          '_isFirstLocationUpdate',
-          _isFirstLocationUpdate,
-        ),
+        DiagnosticsProperty('_isFirstLocationUpdate', _isFirstLocationUpdate),
       )
       ..add(DiagnosticsProperty('_isFirstHeadingUpdate', _isFirstHeadingUpdate))
       ..add(
