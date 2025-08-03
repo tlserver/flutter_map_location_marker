@@ -185,15 +185,15 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   late bool _isFirstLocationUpdate;
   late bool _isFirstHeadingUpdate;
 
-  late StreamSubscription<LocationMarkerPosition?> _positionStreamSubscription;
-  StreamSubscription<LocationMarkerHeading?>? _headingStreamSubscription;
+  late StreamSubscription<LocationMarkerPosition?> _positionSubscription;
+  StreamSubscription<LocationMarkerHeading?>? _headingSubscription;
 
   /// Subscription to a stream for following single that also include a zoom
   /// level.
-  StreamSubscription<double?>? _alignPositionStreamSubscription;
+  StreamSubscription<double?>? _alignPositionSubscription;
 
   /// Subscription to a stream for single indicate turning the heading up.
-  StreamSubscription<void>? _alignDirectionStreamSubscription;
+  StreamSubscription<void>? _alignDirectionSubscription;
 
   AnimationController? _moveMapAnimationController;
   AnimationController? _moveMarkerAnimationController;
@@ -213,20 +213,20 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void didUpdateWidget(CurrentLocationLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.positionStream != oldWidget.positionStream) {
-      _positionStreamSubscription.cancel();
+      _positionSubscription.cancel();
       _subscriptPositionStream();
     }
     if (_status == _Status.ready) {
       if (widget.headingStream != oldWidget.headingStream) {
-        _headingStreamSubscription?.cancel();
+        _headingSubscription?.cancel();
         _subscriptHeadingStream();
       }
       if (widget.alignPositionStream != oldWidget.alignPositionStream) {
-        _alignPositionStreamSubscription?.cancel();
+        _alignPositionSubscription?.cancel();
         _subscriptAlignPositionStream();
       }
       if (widget.alignDirectionStream != oldWidget.alignDirectionStream) {
-        _alignDirectionStreamSubscription?.cancel();
+        _alignDirectionSubscription?.cancel();
         _subscriptAlignDirectionStream();
       }
     }
@@ -327,10 +327,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   @override
   void dispose() {
-    _positionStreamSubscription.cancel();
-    _headingStreamSubscription?.cancel();
-    _alignPositionStreamSubscription?.cancel();
-    _alignDirectionStreamSubscription?.cancel();
+    _positionSubscription.cancel();
+    _headingSubscription?.cancel();
+    _alignPositionSubscription?.cancel();
+    _alignDirectionSubscription?.cancel();
     _moveMapAnimationController?.dispose();
     _moveMapAnimationController = null;
     _moveMarkerAnimationController?.dispose();
@@ -364,7 +364,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     final positionStream =
         widget.positionStream ??
         const LocationMarkerDataStreamFactory().fromGeolocatorPositionStream();
-    _positionStreamSubscription = positionStream.listen(
+    _positionSubscription = positionStream.listen(
       (position) {
         if (!mounted) {
           return;
@@ -414,7 +414,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           case ServiceDisabledException _:
             setState(() => _status = _Status.serviceDisabled);
         }
-        _headingStreamSubscription?.cancel();
+        _headingSubscription?.cancel();
       },
     );
   }
@@ -424,7 +424,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         widget.headingStream ??
         const LocationMarkerDataStreamFactory()
             .fromRotationSensorHeadingStream();
-    _headingStreamSubscription = headingStream.listen(
+    _headingSubscription = headingStream.listen(
       (heading) {
         if (!mounted) {
           return;
@@ -464,12 +464,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptAlignPositionStream() {
-    if (_alignPositionStreamSubscription != null) {
+    if (_alignPositionSubscription != null) {
       return;
     }
-    _alignPositionStreamSubscription = widget.alignPositionStream?.listen((
-      zoom,
-    ) {
+    _alignPositionSubscription = widget.alignPositionStream?.listen((zoom) {
       if (!mounted) {
         return;
       }
@@ -484,12 +482,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptAlignDirectionStream() {
-    if (_alignDirectionStreamSubscription != null) {
+    if (_alignDirectionSubscription != null) {
       return;
     }
-    _alignDirectionStreamSubscription = widget.alignDirectionStream?.listen((
-      _,
-    ) {
+    _alignDirectionSubscription = widget.alignDirectionStream?.listen((_) {
       if (!mounted) {
         return;
       }
@@ -749,28 +745,18 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         DiagnosticsProperty('_isFirstLocationUpdate', _isFirstLocationUpdate),
       )
       ..add(DiagnosticsProperty('_isFirstHeadingUpdate', _isFirstHeadingUpdate))
+      ..add(DiagnosticsProperty('_positionSubscription', _positionSubscription))
+      ..add(DiagnosticsProperty('_headingSubscription', _headingSubscription))
       ..add(
         DiagnosticsProperty(
-          '_positionStreamSubscription',
-          _positionStreamSubscription,
+          '_alignPositionSubscription',
+          _alignPositionSubscription,
         ),
       )
       ..add(
         DiagnosticsProperty(
-          '_headingStreamSubscription',
-          _headingStreamSubscription,
-        ),
-      )
-      ..add(
-        DiagnosticsProperty(
-          '_alignPositionStreamSubscription',
-          _alignPositionStreamSubscription,
-        ),
-      )
-      ..add(
-        DiagnosticsProperty(
-          '_alignDirectionStreamSubscription',
-          _alignDirectionStreamSubscription,
+          '_alignDirectionSubscription',
+          _alignDirectionSubscription,
         ),
       )
       ..add(
