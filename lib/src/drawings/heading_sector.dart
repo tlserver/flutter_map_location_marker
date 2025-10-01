@@ -43,6 +43,7 @@ class HeadingSector extends CustomPainter {
             color.withValues(alpha: color.a * 0.1),
             color.withValues(alpha: color.a * 0.0),
           ],
+          stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
         ).createShader(rect),
     );
   }
