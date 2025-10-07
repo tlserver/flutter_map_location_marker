@@ -76,7 +76,7 @@ class _DpsSourceCreator {
   Stream<Position?> get stream => streamController.stream;
 
   _DpsSourceCreator(this.requestPermissionCallback)
-    : cancelFunctions = const <AsyncCallback>[],
+    : cancelFunctions = <AsyncCallback>[],
       streamController = StreamController<Position?>.broadcast() {
     streamController
       ..onListen = _onListen
