@@ -25,15 +25,20 @@ class HeadingSector extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final radius = size.shortestSide / 2;
-    final rect = Rect.fromCircle(
-      center: Offset(radius, radius),
-      radius: radius,
-    );
-    canvas.drawArc(
-      rect,
-      pi * 3 / 2 + heading - accuracy,
-      accuracy * 2,
-      true,
+    final center = Offset(radius, radius);
+    final rect = Rect.fromCircle(center: center, radius: radius);
+
+    final startAngle = pi * 3 / 2 + heading - accuracy;
+    final sweepAngle = accuracy * 2;
+
+    final path =
+        Path()
+          ..moveTo(center.dx, center.dy)
+          ..arcTo(rect, startAngle, sweepAngle, false)
+          ..close();
+
+    canvas.drawPath(
+      path,
       Paint()
         ..shader = RadialGradient(
           colors: [
