@@ -13,6 +13,7 @@ import '../exceptions/incorrect_setup_exception.dart';
 import '../exceptions/permission_denied_exception.dart';
 import '../exceptions/permission_requesting_exception.dart';
 import '../exceptions/service_disabled_exception.dart';
+import '../exceptions/unsupported_exception.dart';
 import '../options/align_on_update.dart';
 import '../options/focal_point.dart';
 import '../options/indicators.dart';
@@ -413,6 +414,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             setState(() => _status = _Status.permissionDenied);
           case ServiceDisabledException _:
             setState(() => _status = _Status.serviceDisabled);
+          case UnsupportedException unsupportedException:
+            if (kDebugMode) {
+              print(unsupportedException);
+            }
         }
         _headingSubscription?.cancel();
       },
@@ -455,7 +460,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           }
         }
       },
-      onError: (_) {
+      onError: (error) {
+        if (error is UnsupportedException) {
+          if (kDebugMode) {
+            print(error);
+          }
+        }
         if (_animatingHeading != null) {
           setState(() => _animatingHeading = null);
         }
