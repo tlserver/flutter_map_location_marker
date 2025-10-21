@@ -9,6 +9,7 @@ import '../exceptions/incorrect_setup_exception.dart';
 import '../exceptions/permission_denied_exception.dart' as lm;
 import '../exceptions/permission_requesting_exception.dart' as lm;
 import '../exceptions/service_disabled_exception.dart';
+import '../exceptions/unsupported_exception.dart';
 import '../widgets/current_location_layer.dart';
 import 'data.dart';
 
@@ -63,8 +64,12 @@ class LocationMarkerDataStreamFactory {
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].
   Stream<OrientationEvent> defaultHeadingStreamSource() {
-    RotationSensor.samplingPeriod = SensorInterval.uiInterval;
-    return RotationSensor.orientationStream;
+    if (RotationSensor.isPlatformSupported) {
+      RotationSensor.samplingPeriod = SensorInterval.uiInterval;
+      return RotationSensor.orientationStream;
+    } else {
+      return Stream.error(UnsupportedException('RotationSensor'));
+    }
   }
 }
 

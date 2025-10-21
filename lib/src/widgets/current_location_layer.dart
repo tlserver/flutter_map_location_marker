@@ -13,6 +13,7 @@ import '../exceptions/incorrect_setup_exception.dart';
 import '../exceptions/permission_denied_exception.dart';
 import '../exceptions/permission_requesting_exception.dart';
 import '../exceptions/service_disabled_exception.dart';
+import '../exceptions/unsupported_exception.dart';
 import '../options/align_on_update.dart';
 import '../options/focal_point.dart';
 import '../options/indicators.dart';
@@ -265,6 +266,22 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         } else {
           return const SizedBox.shrink();
         }
+      case _Status.unsupported:
+        if (kDebugMode) {
+          return const Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Text(
+                'Unsupported Platform\n'
+                    '(Debug Mode Only)',
+                textAlign: TextAlign.right,
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
       case _Status.permissionRequesting:
         if (widget.indicators.permissionRequesting != null) {
           return widget.indicators.permissionRequesting!;
@@ -407,6 +424,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         switch (error) {
           case IncorrectSetupException _:
             setState(() => _status = _Status.incorrectSetup);
+          case UnsupportedException _:
+            setState(() => _status = _Status.unsupported);
           case PermissionRequestingException _:
             setState(() => _status = _Status.permissionRequesting);
           case PermissionDeniedException _:
@@ -455,7 +474,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           }
         }
       },
-      onError: (_) {
+      onError: (error) {
+        if (error is UnsupportedException) {
+          if (kDebugMode) {
+            print(error);
+          }
+        }
         if (_animatingHeading != null) {
           setState(() => _animatingHeading = null);
         }
@@ -789,6 +813,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 enum _Status {
   initialing,
   incorrectSetup,
+  unsupported,
   serviceDisabled,
   permissionRequesting,
   permissionDenied,
