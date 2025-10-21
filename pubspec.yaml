@@ -11,14 +11,14 @@ platforms:
   windows:
 
 environment:
-  sdk: ^3.7.2
+  sdk: ^3.8.0
   flutter: ">=3.29.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_map: ^8.1.0
-  flutter_rotation_sensor: ^0.1.0
+  flutter_rotation_sensor: ^0.2.0
   geolocator: ^14.0.0
   latlong2: ^0.9.1
 
