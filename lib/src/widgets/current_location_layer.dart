@@ -20,6 +20,10 @@ import '../options/indicators.dart';
 import '../options/style.dart';
 import 'location_marker_layer.dart';
 
+typedef ExceptionCallback = Exception? Function(Exception exception);
+
+Exception? defaultExceptionCallback(Exception exception) => exception;
+
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
   /// The style to use for this location marker.
@@ -98,6 +102,9 @@ class CurrentLocationLayer extends StatefulWidget {
   /// The indicators which will display when in special status.
   final LocationMarkerIndicators indicators;
 
+  ///
+  final ExceptionCallback errorHandler;
+
   /// Create a CurrentLocationLayer.
   const CurrentLocationLayer({
     super.key,
@@ -118,6 +125,7 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 120),
     this.rotateAnimationCurve = Curves.easeOut,
     this.indicators = const LocationMarkerIndicators(),
+    this.errorHandler = defaultExceptionCallback,
   });
 
   @override
@@ -165,7 +173,13 @@ class CurrentLocationLayer extends StatefulWidget {
         DiagnosticsProperty('rotateAnimationDuration', rotateAnimationDuration),
       )
       ..add(DiagnosticsProperty('rotateAnimationCurve', rotateAnimationCurve))
-      ..add(DiagnosticsProperty('indicators', indicators));
+      ..add(DiagnosticsProperty('indicators', indicators))
+      ..add(
+        ObjectFlagProperty<ExceptionCallback>.has(
+          'exceptionCallback',
+          errorHandler,
+        ),
+      );
   }
 }
 
@@ -421,7 +435,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       },
       onError: (error) {
-        switch (error) {
+        switch (widget.errorHandler(error)) {
           case IncorrectSetupException _:
             setState(() => _status = _Status.incorrectSetup);
           case UnsupportedException _:
