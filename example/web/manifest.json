@@ -1,11 +1,11 @@
 {
-    "name": "example",
-    "short_name": "example",
+    "name": "flutter_map_location_marker_example",
+    "short_name": "flutter_map_location_marker_example",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Example of FlutterMapLocationMarkerPlugin",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

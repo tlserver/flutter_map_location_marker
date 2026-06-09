@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/github/license/tlserver/flutter_map_location_marker)](https://github.com/tlserver/flutter_map_location_marker/blob/main/LICENSE)
 
 `flutter_map_location_marker` is a [flutter_map](https://pub.dev/packages/flutter_map) plugin for
-displaying device's current location on a map. It provides a simple and flexible way to add a 
+displaying device's current location on a map. It provides a simple and flexible way to add a
 customizable location marker to your map.
 <br>
 <img src="https://github.com/tlserver/flutter_map_location_marker/raw/main/assets/interface.jpg" alt="Interface preview" width="400">
@@ -81,7 +81,7 @@ about `flutter_map_location_marker`, get help and help others in the #plugins ch
    }
    ```
 
-5. Consider using either 
+5. Consider using either
    the [AnimatedLocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/AnimatedLocationMarkerLayer-class.html)
    or
    the [LocationMarkerLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/LocationMarkerLayer-class.html)
