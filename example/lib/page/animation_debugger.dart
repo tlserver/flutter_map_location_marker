@@ -11,15 +11,14 @@ class AnimationDebugger extends StatefulWidget {
 }
 
 class _AnimationDebuggerState extends State<AnimationDebugger> {
-  LocationMarkerPosition _locationMarkerPosition = const LocationMarkerPosition(
-    latitude: 0,
-    longitude: 0,
-    accuracy: 20000,
-  );
-  LocationMarkerHeading _locationMarkerHeading = const LocationMarkerHeading(
-    heading: 0,
-    accuracy: 1,
-  );
+  LocationMarkerPosition _locationMarkerPosition =
+      const LocationMarkerPosition.unchecked(
+        latitude: 0,
+        longitude: 0,
+        accuracy: 20000,
+      );
+  LocationMarkerHeading _locationMarkerHeading =
+      const LocationMarkerHeading.unchecked(heading: 0, accuracy: 1);
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +48,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   FloatingActionButton(
                     onPressed: () {

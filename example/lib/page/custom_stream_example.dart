@@ -33,7 +33,9 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
         ),
       );
     _headingStreamController = StreamController()
-      ..add(const LocationMarkerHeading(heading: 0, accuracy: pi * 0.2));
+      ..add(
+        const LocationMarkerHeading.unchecked(heading: 0, accuracy: pi * 0.2),
+      );
   }
 
   @override
@@ -78,7 +80,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
                 _currentLat -= details.y;
                 _currentLat = _currentLat.clamp(-85, 85);
                 _currentLng += details.x;
-                _currentLng = _currentLng.clamp(-180, 180);
+                _currentLng = _currentLng.clamp(-179.999999999, 180);
                 _positionStreamController.add(
                   LocationMarkerPosition(
                     latitude: _currentLat,

@@ -15,12 +15,13 @@ class NoStreamExample extends StatefulWidget {
 }
 
 class _NoStreamExampleState extends State<NoStreamExample> {
-  LocationMarkerPosition _currentPosition = const LocationMarkerPosition(
-    latitude: 0,
-    longitude: 0,
-    accuracy: 0,
-  );
-  LocationMarkerHeading _currentHeading = const LocationMarkerHeading(
+  LocationMarkerPosition _currentPosition =
+      const LocationMarkerPosition.unchecked(
+        latitude: 0,
+        longitude: 0,
+        accuracy: 0,
+      );
+  LocationMarkerHeading _currentHeading = const LocationMarkerHeading.unchecked(
     heading: 0,
     accuracy: pi * 0.2,
   );
@@ -64,7 +65,7 @@ class _NoStreamExampleState extends State<NoStreamExample> {
                       85,
                     ),
                     longitude: (_currentPosition.longitude + details.x).clamp(
-                      -180,
+                      -179.999999999,
                       180,
                     ),
                     accuracy: 0,

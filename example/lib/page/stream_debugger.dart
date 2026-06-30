@@ -12,11 +12,12 @@ class StreamDebugger extends StatefulWidget {
 
 class _StreamDebuggerState extends State<StreamDebugger> {
   late Stream<LocationMarkerPosition> _stream;
-  LocationMarkerPosition _locationMarkerPosition = const LocationMarkerPosition(
-    latitude: 0,
-    longitude: 0,
-    accuracy: 20000,
-  );
+  LocationMarkerPosition _locationMarkerPosition =
+      const LocationMarkerPosition.unchecked(
+        latitude: 0,
+        longitude: 0,
+        accuracy: 20000,
+      );
 
   @override
   void initState() {

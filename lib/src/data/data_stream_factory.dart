@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_rotation_sensor/flutter_rotation_sensor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../exceptions/argument_exception.dart';
 import '../exceptions/incorrect_setup_exception.dart';
 import '../exceptions/permission_denied_exception.dart' as lm;
 import '../exceptions/permission_requesting_exception.dart' as lm;
@@ -26,15 +28,25 @@ class LocationMarkerDataStreamFactory {
   /// [geolocator](https://pub.dev/packages/geolocator) stream.
   Stream<LocationMarkerPosition?> fromGeolocatorPositionStream({
     Stream<Position?>? stream,
-  }) => (stream ?? defaultPositionStreamSource()).map(
-    (position) => position != null
-        ? LocationMarkerPosition(
-            latitude: position.latitude,
-            longitude: position.longitude,
-            accuracy: position.accuracy,
-          )
-        : null,
-  );
+  }) => (stream ?? defaultPositionStreamSource()).map((position) {
+    try {
+      return position != null
+          ? LocationMarkerPosition(
+              latitude: position.latitude,
+              longitude: position.longitude,
+              accuracy: position.accuracy == 0 ? double.nan : position.accuracy,
+            )
+          : null;
+    } on ArgumentException catch (error, stack) {
+      log(
+        'Invalid LocationMarkerPosition',
+        level: 900,
+        error: error,
+        stackTrace: stack,
+      );
+      return null;
+    }
+  });
 
   /// Create a position stream which is used as default value of
   /// [CurrentLocationLayer.positionStream].
@@ -50,14 +62,24 @@ class LocationMarkerDataStreamFactory {
     double minAccuracy = pi * 0.1,
     double defAccuracy = pi * 0.3,
     double maxAccuracy = pi * 0.4,
-  }) => (stream ?? defaultHeadingStreamSource()).map(
-    (e) => LocationMarkerHeading(
-      heading: e.eulerAngles.azimuth,
-      accuracy: e.accuracy >= 0
-          ? degToRadian(e.accuracy).clamp(minAccuracy, maxAccuracy)
-          : defAccuracy,
-    ),
-  );
+  }) => (stream ?? defaultHeadingStreamSource()).map((e) {
+    try {
+      return LocationMarkerHeading(
+        heading: e.eulerAngles.azimuth,
+        accuracy: e.accuracy >= 0
+            ? degToRadian(e.accuracy).clamp(minAccuracy, maxAccuracy)
+            : defAccuracy,
+      );
+    } on ArgumentException catch (error, stack) {
+      log(
+        'Invalid LocationMarkerHeading',
+        level: 900,
+        error: error,
+        stackTrace: stack,
+      );
+      return null;
+    }
+  });
 
   /// Create a heading stream which is used as default value of
   /// [CurrentLocationLayer.headingStream].

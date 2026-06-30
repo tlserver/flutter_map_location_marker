@@ -1,5 +1,7 @@
 import 'package:latlong2/latlong.dart';
 
+import '_argument_validator.dart';
+
 /// A position with accuracy for marker rendering.
 class LocationMarkerPosition {
   /// The latitude, in degrees. The range should be -90 (inclusive) to +90
@@ -11,11 +13,22 @@ class LocationMarkerPosition {
   final double longitude;
 
   /// The estimated horizontal accuracy of this location, radial, in meters. The
-  /// smaller value, the better accuracy.
+  /// smaller value, the better accuracy. Set to NaN if unavailable.
   final double accuracy;
 
   /// Create a LocationMarkerPosition.
-  const LocationMarkerPosition({
+  LocationMarkerPosition({
+    required this.latitude,
+    required this.longitude,
+    required this.accuracy,
+  }) {
+    validateDouble(latitude, 'latitude', ge: -90, le: 90);
+    validateDouble(longitude, 'longitude', gt: -180, le: 180);
+    validateDouble(accuracy, 'accuracy', ge: 0, nan: true);
+  }
+
+  /// Create a LocationMarkerPosition without validation.
+  const LocationMarkerPosition.unchecked({
     required this.latitude,
     required this.longitude,
     required this.accuracy,
@@ -43,7 +56,16 @@ class LocationMarkerHeading {
   final double accuracy;
 
   /// Create a LocationMarkerHeading.
-  const LocationMarkerHeading({required this.heading, required this.accuracy});
+  LocationMarkerHeading({required this.heading, required this.accuracy}) {
+    validateDouble(heading, 'heading', ge: 0, lt: 2 * pi);
+    validateDouble(accuracy, 'accuracy', ge: 0, lt: pi, nan: true);
+  }
+
+  /// Create a LocationMarkerHeading without validation.
+  const LocationMarkerHeading.unchecked({
+    required this.heading,
+    required this.accuracy,
+  });
 
   @override
   String toString() =>
