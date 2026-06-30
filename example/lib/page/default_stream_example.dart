@@ -20,55 +20,47 @@ class _DefaultStreamExampleState extends State<DefaultStreamExample> {
   late final Stream<LocationMarkerPosition?> _positionStream;
   late final Stream<LocationMarkerHeading?> _headingStream;
 
-/*
-  late final Stream<Position?> _geolocatorStream;
-  late final Stream<OrientationEvent> _rotationSensorStream;
-*/
+  /*late final Stream<Position?> _geolocatorStream;*/
+  /*late final Stream<OrientationEvent> _rotationSensorStream;*/
 
   @override
   void initState() {
     super.initState();
     const factory = LocationMarkerDataStreamFactory();
-    _positionStream =
-        factory.fromGeolocatorPositionStream().asBroadcastStream();
-    _headingStream =
-        factory.fromRotationSensorHeadingStream().asBroadcastStream();
+    _positionStream = factory
+        .fromGeolocatorPositionStream()
+        .asBroadcastStream();
+    _headingStream = factory
+        .fromRotationSensorHeadingStream()
+        .asBroadcastStream();
 
     // Get streams with default settings.
-/*    _geolocatorStream = factory.defaultPositionStreamSource().asBroadcastStream();
-    _rotationSensorStream = factory.defaultHeadingStreamSource().asBroadcastStream();*/
+    /*_geolocatorStream = factory.defaultPositionStreamSource().asBroadcastStream();*/
+    /*_rotationSensorStream = factory.defaultHeadingStreamSource().asBroadcastStream();*/
 
     // Or get streams with your own settings.
-/*
-    _geolocatorStream = Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(),
-    ).asBroadcastStream();
-    _rotationSensorStream = RotationSensor.orientationStream.asBroadcastStream();
-*/
+    /*_geolocatorStream = Geolocator.getPositionStream(*/
+    /*  locationSettings: const LocationSettings(),*/
+    /*).asBroadcastStream();*/
+    /*_rotationSensorStream = RotationSensor.orientationStream.asBroadcastStream();*/
 
     // Or even use other library.
-/*
-    _flutterCompassStream = FlutterCompass.events!.asBroadcastStream();
-*/
+    /*_flutterCompassStream = FlutterCompass.events!.asBroadcastStream();*/
 
     // Use helper function in factory to cast the streams.
-/*
-    const factory = LocationMarkerDataStreamFactory();
-    _positionStream = factory.fromGeolocatorPositionStream(
-      stream: _geolocatorStream,
-    );
-    _headingStream = factory.fromRotationSensorHeadingStream(
-      stream: _rotationSensorStream,
-    );
-*/
+    /*const factory = LocationMarkerDataStreamFactory();*/
+    /*_positionStream = factory.fromGeolocatorPositionStream(*/
+    /*  stream: _geolocatorStream,*/
+    /*);*/
+    /*_headingStream = factory.fromRotationSensorHeadingStream(*/
+    /*  stream: _rotationSensorStream,*/
+    /*);*/
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Default Stream Example'),
-      ),
+      appBar: AppBar(title: const Text('Default Stream Example')),
       body: Column(
         children: [
           Expanded(
@@ -100,21 +92,11 @@ class _DefaultStreamExampleState extends State<DefaultStreamExample> {
               children: [
                 PulseAnimationBox(
                   stream: _positionStream,
-                  child: const Text(
-                    'P',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: const Text('P', style: TextStyle(color: Colors.white)),
                 ),
                 PulseAnimationBox(
                   stream: _headingStream,
-                  child: const Text(
-                    'H',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: const Text('H', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -155,45 +137,25 @@ class _PulseAnimationBoxState extends State<PulseAnimationBox>
       duration: const Duration(milliseconds: 600),
       value: 1.0,
     );
-    _sizeAni = Tween(
-      begin: 20.0,
-      end: 60.0,
-    ).animate(
+    _sizeAni = Tween(begin: 20.0, end: 60.0).animate(
       CurvedAnimation(
         parent: _aniController,
-        curve: const Interval(
-          0,
-          0.8,
-          curve: Curves.ease,
-        ),
+        curve: const Interval(0, 0.8, curve: Curves.ease),
       ),
     );
-    _opacityAni = Tween(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(
+    _opacityAni = Tween(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _aniController,
-        curve: const Interval(
-          0,
-          0.8,
-          curve: Curves.ease,
-        ),
+        curve: const Interval(0, 0.8, curve: Curves.ease),
       ),
     );
-    _colorAni = ColorTween(
-      begin: Colors.blue,
-      end: Colors.grey.shade300,
-    ).animate(
-      CurvedAnimation(
-        parent: _aniController,
-        curve: const Interval(
-          0.5,
-          1,
-          curve: Curves.ease,
-        ),
-      ),
-    );
+    _colorAni = ColorTween(begin: Colors.blue, end: Colors.grey.shade300)
+        .animate(
+          CurvedAnimation(
+            parent: _aniController,
+            curve: const Interval(0.5, 1, curve: Curves.ease),
+          ),
+        );
     _subscript();
   }
 
@@ -233,9 +195,7 @@ class _PulseAnimationBoxState extends State<PulseAnimationBox>
                   ),
                 ],
               ),
-              child: Center(
-                child: widget.child,
-              ),
+              child: Center(child: widget.child),
             ),
           ),
         );

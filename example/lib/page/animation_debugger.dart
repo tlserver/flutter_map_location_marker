@@ -24,9 +24,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Animation Debugger'),
-      ),
+      appBar: AppBar(title: const Text('Animation Debugger')),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(0, 0),
@@ -64,14 +62,9 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
                       });
                     },
                     heroTag: null,
-                    child: const Icon(
-                      Icons.my_location,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.my_location, color: Colors.white),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   FloatingActionButton(
                     onPressed: () {
                       final random = Random();
@@ -83,10 +76,7 @@ class _AnimationDebuggerState extends State<AnimationDebugger> {
                       });
                     },
                     heroTag: null,
-                    child: const Icon(
-                      Icons.navigation,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.navigation, color: Colors.white),
                   ),
                 ],
               ),

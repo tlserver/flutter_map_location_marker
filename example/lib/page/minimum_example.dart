@@ -7,9 +7,7 @@ class MinimumExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Minimum Example'),
-      ),
+      appBar: AppBar(title: const Text('Minimum Example')),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(0, 0),

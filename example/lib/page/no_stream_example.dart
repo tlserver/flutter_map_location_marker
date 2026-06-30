@@ -28,9 +28,7 @@ class _NoStreamExampleState extends State<NoStreamExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('No Stream Example'),
-      ),
+      appBar: AppBar(title: const Text('No Stream Example')),
       body: Stack(
         children: [
           FlutterMap(
@@ -61,10 +59,14 @@ class _NoStreamExampleState extends State<NoStreamExample> {
               listener: (details) {
                 setState(() {
                   _currentPosition = LocationMarkerPosition(
-                    latitude:
-                        (_currentPosition.latitude - details.y).clamp(-85, 85),
-                    longitude: (_currentPosition.longitude + details.x)
-                        .clamp(-180, 180),
+                    latitude: (_currentPosition.latitude - details.y).clamp(
+                      -85,
+                      85,
+                    ),
+                    longitude: (_currentPosition.longitude + details.x).clamp(
+                      -180,
+                      180,
+                    ),
                     accuracy: 0,
                   );
                   if (details.x != 0 || details.y != 0) {

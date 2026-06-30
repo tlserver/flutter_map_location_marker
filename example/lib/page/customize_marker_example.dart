@@ -7,9 +7,7 @@ class CustomizeMarkerExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Customize Marker Example'),
-      ),
+      appBar: AppBar(title: const Text('Customize Marker Example')),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(0, 0),
@@ -28,10 +26,7 @@ class CustomizeMarkerExample extends StatelessWidget {
             style: LocationMarkerStyle(
               marker: const DefaultLocationMarker(
                 color: Colors.green,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
+                child: Icon(Icons.person, color: Colors.white),
               ),
               markerSize: const Size.square(40),
               accuracyCircleColor: Colors.green.withValues(alpha: 0.1),

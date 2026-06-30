@@ -288,7 +288,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
               padding: EdgeInsets.all(12),
               child: Text(
                 'Unsupported Platform\n'
-                    '(Debug Mode Only)',
+                '(Debug Mode Only)',
                 textAlign: TextAlign.right,
               ),
             ),
@@ -547,10 +547,12 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
     final style = widget.style;
     final markerRadius = style.markerSize.longestSide / 2;
-    final headingSectorRadius =
-        style.showHeadingSector ? style.headingSectorRadius : 0.0;
-    final accuracyCircleRadius =
-        style.showAccuracyCircle ? (a - b).distance : 0.0;
+    final headingSectorRadius = style.showHeadingSector
+        ? style.headingSectorRadius
+        : 0.0;
+    final accuracyCircleRadius = style.showAccuracyCircle
+        ? (a - b).distance
+        : 0.0;
     final maxRadius = max(
       max(markerRadius, headingSectorRadius),
       accuracyCircleRadius,

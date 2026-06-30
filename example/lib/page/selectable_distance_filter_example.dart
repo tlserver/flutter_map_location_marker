@@ -37,9 +37,7 @@ class _SelectableDistanceFilterExampleState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Selectable Distance Filter Example'),
-      ),
+      appBar: AppBar(title: const Text('Selectable Distance Filter Example')),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(0, 0),
@@ -54,9 +52,7 @@ class _SelectableDistanceFilterExampleState
                 'net.tlserver6y.flutter_map_location_marker.example',
             maxZoom: 19,
           ),
-          CurrentLocationLayer(
-            positionStream: _positionStream.stream,
-          ),
+          CurrentLocationLayer(positionStream: _positionStream.stream),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -93,16 +89,14 @@ class _SelectableDistanceFilterExampleState
   void _subscriptPositionStream() {
     _streamSubscription = const LocationMarkerDataStreamFactory()
         .fromGeolocatorPositionStream(
-      stream: Geolocator.getPositionStream(
-        locationSettings: LocationSettings(
-          distanceFilter: _distanceFilters[_selectedIndex],
-        ),
-      ),
-    )
-        .listen(
-      (position) {
-        _positionStream.add(position);
-      },
-    );
+          stream: Geolocator.getPositionStream(
+            locationSettings: LocationSettings(
+              distanceFilter: _distanceFilters[_selectedIndex],
+            ),
+          ),
+        )
+        .listen((position) {
+          _positionStream.add(position);
+        });
   }
 }

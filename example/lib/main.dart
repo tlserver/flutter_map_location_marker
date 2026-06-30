@@ -15,11 +15,7 @@ import 'page/selectable_distance_filter_example.dart';
 // import 'page/stream_debugger.dart';
 
 void main() {
-  runApp(
-    MaterialApp(
-      home: Home(),
-    ),
-  );
+  runApp(MaterialApp(home: Home()));
 }
 
 class Home extends StatelessWidget {

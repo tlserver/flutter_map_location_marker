@@ -16,8 +16,9 @@ class IndicatorsExample extends StatelessWidget {
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 content: const Text(
-                    'Try to disable the location service, and you will see an '
-                    'indicator on the top of the map.'),
+                  'Try to disable the location service, and you will see an '
+                  'indicator on the top of the map.',
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'OK'),

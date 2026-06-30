@@ -30,9 +30,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Center FAB Example'),
-      ),
+      appBar: AppBar(title: const Text('Center FAB Example')),
       body: FlutterMap(
         options: MapOptions(
           initialCenter: const LatLng(0, 0),
@@ -43,9 +41,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
           // if user interacted with the map.
           onPositionChanged: (MapCamera camera, bool hasGesture) {
             if (hasGesture && _alignPositionOnUpdate != AlignOnUpdate.never) {
-              setState(
-                () => _alignPositionOnUpdate = AlignOnUpdate.never,
-              );
+              setState(() => _alignPositionOnUpdate = AlignOnUpdate.never);
             }
           },
         ),
@@ -69,17 +65,12 @@ class _CenterFabExampleState extends State<CenterFabExample> {
                 onPressed: () {
                   // Align the location marker to the center of the map widget
                   // on location update until user interact with the map.
-                  setState(
-                    () => _alignPositionOnUpdate = AlignOnUpdate.always,
-                  );
+                  setState(() => _alignPositionOnUpdate = AlignOnUpdate.always);
                   // Align the location marker to the center of the map widget
                   // and zoom the map to level 18.
                   _alignPositionStreamController.add(18);
                 },
-                child: const Icon(
-                  Icons.my_location,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.my_location, color: Colors.white),
               ),
             ),
           ),

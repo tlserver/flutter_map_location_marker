@@ -27,9 +27,7 @@ class _StreamDebuggerState extends State<StreamDebugger> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Stream Debugger'),
-      ),
+      appBar: AppBar(title: const Text('Stream Debugger')),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(0, 0),
@@ -58,14 +56,15 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                     onPressed: () {
                       final random = Random();
                       setState(() {
-                        _stream =
-                            Stream.periodic(const Duration(seconds: 1), (_) {
+                        const period = Duration(seconds: 1);
+                        _stream = Stream.periodic(period, (_) {
                           return _locationMarkerPosition =
                               LocationMarkerPosition(
-                            latitude: _locationMarkerPosition.latitude - 0.05,
-                            longitude: _locationMarkerPosition.longitude,
-                            accuracy: random.nextDouble() * 80000 + 20000,
-                          );
+                                latitude:
+                                    _locationMarkerPosition.latitude - 0.05,
+                                longitude: _locationMarkerPosition.longitude,
+                                accuracy: random.nextDouble() * 80000 + 20000,
+                              );
                         });
                       });
                     },
@@ -75,21 +74,20 @@ class _StreamDebuggerState extends State<StreamDebugger> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   FloatingActionButton(
                     onPressed: () {
                       final random = Random();
                       setState(() {
-                        _stream =
-                            Stream.periodic(const Duration(seconds: 2), (_) {
+                        const period = Duration(seconds: 2);
+                        _stream = Stream.periodic(period, (_) {
                           return _locationMarkerPosition =
                               LocationMarkerPosition(
-                            latitude: _locationMarkerPosition.latitude + 0.1,
-                            longitude: _locationMarkerPosition.longitude,
-                            accuracy: random.nextDouble() * 80000 + 20000,
-                          );
+                                latitude:
+                                    _locationMarkerPosition.latitude + 0.1,
+                                longitude: _locationMarkerPosition.longitude,
+                                accuracy: random.nextDouble() * 80000 + 20000,
+                              );
                         });
                       });
                     },

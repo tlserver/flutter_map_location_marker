@@ -39,9 +39,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Navigation Example'),
-      ),
+      appBar: AppBar(title: const Text('Navigation Example')),
       body: FlutterMap(
         options: MapOptions(
           initialCenter: const LatLng(0, 0),
@@ -71,10 +69,7 @@ class _NavigationExampleState extends State<NavigationExample> {
             alignDirectionOnUpdate: _alignDirectionOnUpdate,
             style: const LocationMarkerStyle(
               marker: DefaultLocationMarker(
-                child: Icon(
-                  Icons.navigation,
-                  color: Colors.white,
-                ),
+                child: Icon(Icons.navigation, color: Colors.white),
               ),
               markerSize: Size(40, 40),
               markerDirection: MarkerDirection.heading,
@@ -88,25 +83,21 @@ class _NavigationExampleState extends State<NavigationExample> {
                 backgroundColor: _navigationMode ? Colors.blue : Colors.grey,
                 foregroundColor: Colors.white,
                 onPressed: () {
-                  setState(
-                    () {
-                      _navigationMode = !_navigationMode;
-                      _alignPositionOnUpdate = _navigationMode
-                          ? AlignOnUpdate.always
-                          : AlignOnUpdate.never;
-                      _alignDirectionOnUpdate = _navigationMode
-                          ? AlignOnUpdate.always
-                          : AlignOnUpdate.never;
-                    },
-                  );
+                  setState(() {
+                    _navigationMode = !_navigationMode;
+                    _alignPositionOnUpdate = _navigationMode
+                        ? AlignOnUpdate.always
+                        : AlignOnUpdate.never;
+                    _alignDirectionOnUpdate = _navigationMode
+                        ? AlignOnUpdate.always
+                        : AlignOnUpdate.never;
+                  });
                   if (_navigationMode) {
                     _alignPositionStreamController.add(18);
                     _alignDirectionStreamController.add(null);
                   }
                 },
-                child: const Icon(
-                  Icons.navigation_outlined,
-                ),
+                child: const Icon(Icons.navigation_outlined),
               ),
             ),
           ),

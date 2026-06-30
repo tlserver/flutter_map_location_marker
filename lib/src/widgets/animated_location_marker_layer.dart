@@ -55,12 +55,11 @@ class AnimatedLocationMarkerLayer extends StatelessWidget {
           tween: LocationMarkerHeadingTween(begin: heading, end: heading),
           curve: rotateAnimationCurve,
           duration: rotateAnimationDuration,
-          builder:
-              (context, heading, child) => LocationMarkerLayer(
-                position: position,
-                heading: heading,
-                style: style,
-              ),
+          builder: (context, heading, child) => LocationMarkerLayer(
+            position: position,
+            heading: heading,
+            style: style,
+          ),
         );
       } else {
         return LocationMarkerLayer(position: position, style: style);

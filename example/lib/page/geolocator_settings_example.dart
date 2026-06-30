@@ -5,23 +5,21 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class GeolocatorSettingsExample extends StatelessWidget {
-  final _positionStream =
-      const LocationMarkerDataStreamFactory().fromGeolocatorPositionStream(
-    stream: Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.medium,
-        distanceFilter: 50,
-        timeLimit: Duration(minutes: 1),
-      ),
-    ),
-  );
+  final _positionStream = const LocationMarkerDataStreamFactory()
+      .fromGeolocatorPositionStream(
+        stream: Geolocator.getPositionStream(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.medium,
+            distanceFilter: 50,
+            timeLimit: Duration(minutes: 1),
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Geolocator Settings Example'),
-      ),
+      appBar: AppBar(title: const Text('Geolocator Settings Example')),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(0, 0),
@@ -36,9 +34,7 @@ class GeolocatorSettingsExample extends StatelessWidget {
                 'net.tlserver6y.flutter_map_location_marker.example',
             maxZoom: 19,
           ),
-          CurrentLocationLayer(
-            positionStream: _positionStream,
-          ),
+          CurrentLocationLayer(positionStream: _positionStream),
         ],
       ),
     );

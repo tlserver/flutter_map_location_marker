@@ -33,12 +33,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
         ),
       );
     _headingStreamController = StreamController()
-      ..add(
-        const LocationMarkerHeading(
-          heading: 0,
-          accuracy: pi * 0.2,
-        ),
-      );
+      ..add(const LocationMarkerHeading(heading: 0, accuracy: pi * 0.2));
   }
 
   @override
@@ -51,9 +46,7 @@ class _CustomStreamExampleState extends State<CustomStreamExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Custom Stream Example'),
-      ),
+      appBar: AppBar(title: const Text('Custom Stream Example')),
       body: Stack(
         children: [
           FlutterMap(
