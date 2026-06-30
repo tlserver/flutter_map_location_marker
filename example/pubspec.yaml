@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_joystick: ^0.0.4
+  flutter_joystick: ^0.2.2
   flutter_map: any
   flutter_map_location_marker:
     path: ../
