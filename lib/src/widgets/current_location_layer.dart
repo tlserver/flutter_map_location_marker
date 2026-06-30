@@ -22,7 +22,9 @@ import 'location_marker_layer.dart';
 
 typedef ExceptionCallback = Exception? Function(Exception exception);
 
-Exception? defaultExceptionCallback(Exception exception) => exception;
+/// A default error handler for [CurrentLocationLayer]. It directly returns the
+/// exception unchanged.
+Exception? defaultErrorHandler(Exception exception) => exception;
 
 /// A layer for current location marker in [FlutterMap].
 class CurrentLocationLayer extends StatefulWidget {
@@ -102,7 +104,16 @@ class CurrentLocationLayer extends StatefulWidget {
   /// The indicators which will display when in special status.
   final LocationMarkerIndicators indicators;
 
+  /// A handler called when an exception is thrown from position stream or
+  /// heading stream. This is for customizing the behavior of the plugin when an
+  /// exception occurs.
   ///
+  /// The handler should return `null` to indicate that the exception is already
+  /// handled, or return an [Exception] (or its subclass) to indicate that the
+  /// exception is not handled. If the returned exception is a plugin-recognized
+  /// exception type, it will be handled by this plugin.
+  ///
+  /// Defaults to [defaultErrorHandler].
   final ExceptionCallback errorHandler;
 
   /// Create a CurrentLocationLayer.
@@ -125,7 +136,7 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 120),
     this.rotateAnimationCurve = Curves.easeOut,
     this.indicators = const LocationMarkerIndicators(),
-    this.errorHandler = defaultExceptionCallback,
+    this.errorHandler = defaultErrorHandler,
   });
 
   @override
@@ -175,10 +186,7 @@ class CurrentLocationLayer extends StatefulWidget {
       ..add(DiagnosticsProperty('rotateAnimationCurve', rotateAnimationCurve))
       ..add(DiagnosticsProperty('indicators', indicators))
       ..add(
-        ObjectFlagProperty<ExceptionCallback>.has(
-          'exceptionCallback',
-          errorHandler,
-        ),
+        ObjectFlagProperty<ExceptionCallback>.has('errorHandler', errorHandler),
       );
   }
 }
@@ -489,6 +497,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       },
       onError: (error) {
+        error = widget.errorHandler(error);
         if (error is UnsupportedException) {
           if (kDebugMode) {
             print(error);
