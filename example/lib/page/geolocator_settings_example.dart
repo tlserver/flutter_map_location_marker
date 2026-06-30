@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class GeolocatorSettingsExample extends StatelessWidget {
-  final _positionStream = const LocationMarkerDataStreamFactory()
+  static final _positionStream = const LocationMarkerDataStreamFactory()
       .fromGeolocatorPositionStream(
         stream: Geolocator.getPositionStream(
           locationSettings: const LocationSettings(
@@ -15,6 +15,8 @@ class GeolocatorSettingsExample extends StatelessWidget {
           ),
         ),
       );
+
+  const GeolocatorSettingsExample({super.key});
 
   @override
   Widget build(BuildContext context) {

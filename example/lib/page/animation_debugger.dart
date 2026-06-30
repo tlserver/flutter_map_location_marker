@@ -6,6 +6,8 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
 class AnimationDebugger extends StatefulWidget {
+  const AnimationDebugger({super.key});
+
   @override
   State<AnimationDebugger> createState() => _AnimationDebuggerState();
 }

@@ -6,8 +6,10 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
 class CenterFabExample extends StatefulWidget {
+  const CenterFabExample({super.key});
+
   @override
-  _CenterFabExampleState createState() => _CenterFabExampleState();
+  State<CenterFabExample> createState() => _CenterFabExampleState();
 }
 
 class _CenterFabExampleState extends State<CenterFabExample> {

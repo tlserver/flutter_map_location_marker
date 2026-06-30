@@ -6,8 +6,10 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
 class NavigationExample extends StatefulWidget {
+  const NavigationExample({super.key});
+
   @override
-  _NavigationExampleState createState() => _NavigationExampleState();
+  State<NavigationExample> createState() => _NavigationExampleState();
 }
 
 class _NavigationExampleState extends State<NavigationExample> {

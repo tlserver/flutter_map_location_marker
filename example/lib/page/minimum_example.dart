@@ -4,6 +4,8 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
 class MinimumExample extends StatelessWidget {
+  const MinimumExample({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

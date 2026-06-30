@@ -12,6 +12,8 @@ import 'package:geolocator/geolocator.dart';
 */
 
 class DefaultStreamExample extends StatefulWidget {
+  const DefaultStreamExample({super.key});
+
   @override
   State<DefaultStreamExample> createState() => _DefaultStreamExampleState();
 }

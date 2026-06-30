@@ -11,8 +11,10 @@ import 'package:latlong2/latlong.dart';
 // location marker is controlled by a joystick instead of the device sensor.
 // This example provide same behavior as Joystick Example.
 class CustomStreamExample extends StatefulWidget {
+  const CustomStreamExample({super.key});
+
   @override
-  _CustomStreamExampleState createState() => _CustomStreamExampleState();
+  State<CustomStreamExample> createState() => _CustomStreamExampleState();
 }
 
 class _CustomStreamExampleState extends State<CustomStreamExample> {

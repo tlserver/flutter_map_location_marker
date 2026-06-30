@@ -7,6 +7,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class SelectableDistanceFilterExample extends StatefulWidget {
+  const SelectableDistanceFilterExample({super.key});
+
   @override
   State<SelectableDistanceFilterExample> createState() =>
       _SelectableDistanceFilterExampleState();

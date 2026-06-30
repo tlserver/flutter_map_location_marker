@@ -6,6 +6,8 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
 class StreamDebugger extends StatefulWidget {
+  const StreamDebugger({super.key});
+
   @override
   State<StreamDebugger> createState() => _StreamDebuggerState();
 }
