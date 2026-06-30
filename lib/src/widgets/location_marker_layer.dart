@@ -12,7 +12,7 @@ class LocationMarkerLayer extends StatelessWidget {
   /// A position with accuracy.
   final LocationMarkerPosition position;
 
-  /// A angle with accuracy.
+  /// An angle with accuracy.
   final LocationMarkerHeading? heading;
 
   /// The style to use for this location marker.

@@ -45,7 +45,7 @@ class LocationMarkerPosition {
       'accuracy: $accuracy)';
 }
 
-/// A angle with accuracy for marker rendering.
+/// An angle with accuracy for marker rendering.
 class LocationMarkerHeading {
   /// The heading, in radius, which 0 radians being the north and positive
   /// angles going clockwise.

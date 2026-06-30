@@ -31,11 +31,11 @@ class CurrentLocationLayer extends StatefulWidget {
   /// The style to use for this location marker.
   final LocationMarkerStyle style;
 
-  /// A stream that provide position data for this marker. Defaults to
+  /// A stream that provides position data for this marker. Defaults to
   /// [LocationMarkerDataStreamFactory.fromGeolocatorPositionStream].
   final Stream<LocationMarkerPosition?>? positionStream;
 
-  /// A stream that provide heading data for this marker. Defaults to
+  /// A stream that provides heading data for this marker. Defaults to
   /// [LocationMarkerDataStreamFactory.fromRotationSensorHeadingStream].
   final Stream<LocationMarkerHeading?>? headingStream;
 
