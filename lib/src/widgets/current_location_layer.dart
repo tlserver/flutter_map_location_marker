@@ -80,11 +80,11 @@ class CurrentLocationLayer extends StatefulWidget {
   final AlignOnUpdate alignDirectionOnUpdate;
 
   /// The duration of the animation of turning the map to align the heading.
-  /// Default to 50ms.
+  /// Default to 120ms.
   final Duration alignDirectionAnimationDuration;
 
   /// The curve of the animation of turning the map to align the heading.
-  /// Default to [Curves.easeInOut].
+  /// Default to [Curves.easeOut].
   final Curve alignDirectionAnimationCurve;
 
   /// The duration of the marker's move animation. Default to 200ms.
@@ -94,11 +94,11 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [Curves.fastOutSlowIn].
   final Curve moveAnimationCurve;
 
-  /// The duration of the heading sector rotate animation. Default to 50ms.
+  /// The duration of the heading sector rotate animation. Default to 120ms.
   final Duration rotateAnimationDuration;
 
   /// The curve of the heading sector rotate animation. Default to
-  /// [Curves.easeInOut].
+  /// [Curves.easeOut].
   final Curve rotateAnimationCurve;
 
   /// Minimum absolute zoom-level difference required to run map align
