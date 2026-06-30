@@ -1,6 +1,18 @@
 version: 2
 updates:
-  - package-ecosystem: "pub"
-    directory: "/"
+
+  - package-ecosystem: pub
+    directory: /
     schedule:
-      interval: "daily"
+      interval: weekly
+    rebase-strategy: disabled
+    commit-message:
+      prefix: chore
+
+  - package-ecosystem: pub
+    directory: /example
+    schedule:
+      interval: weekly
+    rebase-strategy: disabled
+    commit-message:
+      prefix: chore
