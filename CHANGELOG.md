@@ -1,3 +1,13 @@
+## [10.3.0] - Improve Behavior
+
+* Avoid potential "LatLng is not finite" errors (#161)
+* Apply error handler to heading stream too
+* Add configurable threshold support (#160)
+* Add Swift Package Manager support (#164)
+* Migrate to built-in Kotlin with AGP 9 (#163)
+* Update dependencies
+  * The default heading stream now receives the correct heading on iOS
+
 ## [10.2.0] - Improve Behavior
 
 * Add parameter `errorHandler` to [CurrentLocationLayer()](https://pub.dev/documentation/flutter_map_location_marker/10.2.0/flutter_map_location_marker/CurrentLocationLayer/CurrentLocationLayer.html)
