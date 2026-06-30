@@ -101,6 +101,22 @@ class CurrentLocationLayer extends StatefulWidget {
   /// [Curves.easeInOut].
   final Curve rotateAnimationCurve;
 
+  /// Minimum absolute zoom-level difference required to run map align
+  /// animation. If `|currentZoom - targetZoom|` is less than or equal to this
+  /// threshold, zoom change alone will not trigger map movement animation.
+  /// Defaults to `0.01`.
+  final double zoomThreshold;
+
+  /// Minimum screen-space distance (in pixels) required to update position.
+  /// Applied to both marker movement and map alignment movement. Changes less
+  /// than or equal to this threshold are ignored. Defaults to `2.0` pixels.
+  final double positionThreshold;
+
+  /// Minimum angular difference (in radians) required to update heading.
+  /// Applied to both marker rotation and map rotation. Changes less than or
+  /// equal to this threshold are ignored. Defaults to `π / 100` radians.
+  final double headingThreshold;
+
   /// The indicators which will display when in special status.
   final LocationMarkerIndicators indicators;
 
@@ -135,6 +151,9 @@ class CurrentLocationLayer extends StatefulWidget {
     this.moveAnimationCurve = Curves.fastOutSlowIn,
     this.rotateAnimationDuration = const Duration(milliseconds: 120),
     this.rotateAnimationCurve = Curves.easeOut,
+    this.zoomThreshold = 0.01,
+    this.positionThreshold = 2,
+    this.headingThreshold = pi / 100,
     this.indicators = const LocationMarkerIndicators(),
     this.errorHandler = defaultErrorHandler,
   });
@@ -184,6 +203,9 @@ class CurrentLocationLayer extends StatefulWidget {
         DiagnosticsProperty('rotateAnimationDuration', rotateAnimationDuration),
       )
       ..add(DiagnosticsProperty('rotateAnimationCurve', rotateAnimationCurve))
+      ..add(DiagnosticsProperty('zoomThreshold', zoomThreshold))
+      ..add(DiagnosticsProperty('positionThreshold', positionThreshold))
+      ..add(DiagnosticsProperty('headingThreshold', headingThreshold))
       ..add(DiagnosticsProperty('indicators', indicators))
       ..add(
         ObjectFlagProperty<ExceptionCallback>.has('errorHandler', errorHandler),
@@ -193,9 +215,6 @@ class CurrentLocationLayer extends StatefulWidget {
 
 class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     with TickerProviderStateMixin {
-  static const _positionThreshold = 2;
-  static const _headingThreshold = pi / 100;
-
   _Status _status = _Status.initialing;
   LocationMarkerPosition? _animatingPosition;
   LocationMarkerHeading? _animatingHeading;
@@ -588,7 +607,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   TickerFuture _moveMarker(LocationMarkerPosition position) {
     if (_positionDistance(_markerPosition?.latLng, position.latLng) >
-        _positionThreshold) {
+        widget.positionThreshold) {
       _markerPosition = position;
       _moveMarkerAnimationController?.dispose();
       _moveMarkerAnimationController = null;
@@ -650,8 +669,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       beginLatLng = crs.offsetToLatLng(followPoint, camera.zoom);
     }
 
-    if ((camera.zoom - zoom).abs() > 0.01 ||
-        _positionDistance(_mapPosition, latLng) > _positionThreshold) {
+    if ((camera.zoom - zoom).abs() > widget.zoomThreshold ||
+        _positionDistance(_mapPosition, latLng) > widget.positionThreshold) {
       _mapPosition = latLng;
       _moveMapAnimationController?.dispose();
       _moveMapAnimationController = AnimationController(
@@ -696,7 +715,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   TickerFuture _rotateMarker(LocationMarkerHeading heading) {
     if (_headingDifferent(_markerHeading?.heading, heading.heading) >
-        _headingThreshold) {
+        widget.headingThreshold) {
       _markerHeading = heading;
       _rotateMarkerAnimationController?.dispose();
       _rotateMarkerAnimationController = null;
@@ -740,7 +759,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   TickerFuture _rotateMap(double angle) {
     final camera = MapCamera.of(context);
-    if (_headingDifferent(_mapHeading, angle) > _headingThreshold) {
+    if (_headingDifferent(_mapHeading, angle) > widget.headingThreshold) {
       _mapHeading = angle;
       _rotateMapAnimationController?.dispose();
       _rotateMapAnimationController = AnimationController(
