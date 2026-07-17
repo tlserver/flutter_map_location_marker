@@ -31,7 +31,9 @@ class LocationMarkerLayer extends StatelessWidget {
     final camera = MapCamera.maybeOf(context)!;
     return Stack(
       children: [
-        if (style.showAccuracyCircle)
+        // An unavailable accuracy is NaN, which has no radius to draw and
+        // crashes CirclePainter.
+        if (style.showAccuracyCircle && position.accuracy.isFinite)
           CircleLayer(
             circles: [
               CircleMarker(
