@@ -480,6 +480,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   }
 
   void _subscriptHeadingStream() {
+    // A dropout leaves the previous subscription live; reassigning without
+    // cancelling would orphan it and keep the sensor running after dispose.
+    _headingSubscription?.cancel();
     final headingStream =
         widget.headingStream ??
         const LocationMarkerDataStreamFactory()
@@ -516,6 +519,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       },
       onError: (error) {
+        if (!mounted) {
+          return;
+        }
         error = widget.errorHandler(error);
         if (error is UnsupportedException) {
           if (kDebugMode) {
