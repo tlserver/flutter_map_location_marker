@@ -14,7 +14,7 @@ dependencies:
   flutter_map: any
   flutter_map_location_marker:
     path: ../
-  geolocator: any
+  geolocator: 14.1.1
   latlong2: any
 
 dev_dependencies:
