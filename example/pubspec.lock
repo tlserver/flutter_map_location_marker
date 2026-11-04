@@ -138,10 +138,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_joystick
-      sha256: "119f5798305645527dbc0346ce98e9d3d16d4005b041c6b655dca093dc6a9272"
+      sha256: de94a21500663019506a6e162d7dfffc5f5dfe6ed0794bfa8a0aadadfd335197
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.3"
   flutter_lints:
     dependency: "direct dev"
     description:
