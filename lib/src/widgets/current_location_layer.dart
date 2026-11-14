@@ -263,14 +263,17 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     if (_status == _Status.ready) {
       if (widget.headingStream != oldWidget.headingStream) {
         _headingSubscription?.cancel();
+        _headingSubscription = null;
         _subscriptHeadingStream();
       }
       if (widget.alignPositionStream != oldWidget.alignPositionStream) {
         _alignPositionSubscription?.cancel();
+        _alignPositionSubscription = null;
         _subscriptAlignPositionStream();
       }
       if (widget.alignDirectionStream != oldWidget.alignDirectionStream) {
         _alignDirectionSubscription?.cancel();
+        _alignDirectionSubscription = null;
         _subscriptAlignDirectionStream();
       }
     }
@@ -435,6 +438,10 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
               _status = _Status.initialing;
               _animatingPosition = null;
               _markerPosition = null;
+              _headingSubscription?.cancel();
+              _headingSubscription = null;
+              _animatingHeading = null;
+              _markerHeading = null;
             });
           }
         } else {
@@ -480,11 +487,17 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             setState(() => _status = _Status.serviceDisabled);
         }
         _headingSubscription?.cancel();
+        _headingSubscription = null;
+        _animatingHeading = null;
+        _markerHeading = null;
       },
     );
   }
 
   void _subscriptHeadingStream() {
+    if (_headingSubscription != null) {
+      return;
+    }
     final headingStream =
         widget.headingStream ??
         const LocationMarkerDataStreamFactory()
