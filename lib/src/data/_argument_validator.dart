@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import '../exceptions/argument_exception.dart';
 
 @protected
+// ignore: public_member_api_docs
 double validateDouble(
   double value,
   String name, {
@@ -36,6 +37,7 @@ double validateDouble(
 }
 
 @protected
+// ignore: public_member_api_docs
 String doubleToString(double value) {
   if (value.isInfinite) {
     return value.isNegative ? '-∞' : '+∞';

@@ -20,6 +20,10 @@ import '../options/indicators.dart';
 import '../options/style.dart';
 import 'location_marker_layer.dart';
 
+/// A callback function that handles exceptions thrown from position stream or
+/// heading stream. It should return `null` to indicate that the exception is
+/// already handled, or return an [Exception] (or its subclass) to indicate that
+/// the exception is not handled.
 typedef ExceptionCallback = Exception? Function(Exception exception);
 
 /// A default error handler for [CurrentLocationLayer]. It directly returns the
