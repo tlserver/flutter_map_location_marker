@@ -228,8 +228,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   double? _mapHeading;
   double? _followingZoom;
 
-  late bool _isFirstLocationUpdate;
-  late bool _isFirstHeadingUpdate;
+  bool _isFirstLocationUpdate = true;
+  bool _isFirstHeadingUpdate = true;
 
   late StreamSubscription<LocationMarkerPosition?> _positionSubscription;
   StreamSubscription<LocationMarkerHeading?>? _headingSubscription;
@@ -249,8 +249,6 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   @override
   void initState() {
     super.initState();
-    _isFirstLocationUpdate = true;
-    _isFirstHeadingUpdate = true;
     _subscriptMapEventStream();
     _subscriptPositionStream();
   }
