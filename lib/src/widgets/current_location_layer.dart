@@ -466,6 +466,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       },
       onError: (error) {
+        if (!mounted) {
+          return;
+        }
         switch (widget.errorHandler(error)) {
           case IncorrectSetupException _:
             setState(() => _status = _Status.incorrectSetup);
@@ -520,6 +523,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         }
       },
       onError: (error) {
+        if (!mounted) {
+          return;
+        }
         error = widget.errorHandler(error);
         if (error is UnsupportedException) {
           if (kDebugMode) {
