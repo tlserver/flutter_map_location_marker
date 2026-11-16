@@ -823,8 +823,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     super.debugFillProperties(properties);
     properties
       ..add(EnumProperty('_status', _status))
-      ..add(DiagnosticsProperty('_currentPosition', _animatingPosition))
-      ..add(DiagnosticsProperty('_currentHeading', _animatingHeading))
+      ..add(DiagnosticsProperty('_animatingPosition', _animatingPosition))
+      ..add(DiagnosticsProperty('_animatingHeading', _animatingHeading))
       ..add(DoubleProperty('_followingZoom', _followingZoom))
       ..add(
         DiagnosticsProperty('_isFirstLocationUpdate', _isFirstLocationUpdate),
