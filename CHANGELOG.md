@@ -1,3 +1,13 @@
+## [10.4.0] - Improve Error Handling
+
+* Add `errorWidgets` to [CurrentLocationLayer](https://pub.dev/documentation/flutter_map_location_marker/latest/flutter_map_location_marker/CurrentLocationLayer-class.html) for customizing widgets shown for exceptions
+* Deprecate `LocationMarkerIndicators` in favor of `errorWidgets`
+* Fix crash caused by non-finite accuracy values (#169)
+* Fix heading stream subscription leaks after position dropouts and guard against errors after disposal (#170)
+* Update dependencies
+
+Thank to guysaldanha
+
 ## [10.3.0] - Improve Behavior
 
 * Avoid potential "LatLng is not finite" errors (#161)

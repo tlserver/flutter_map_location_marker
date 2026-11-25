@@ -164,15 +164,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "10.3.0"
+    version: "10.4.0"
   flutter_rotation_sensor:
     dependency: transitive
     description:
       name: flutter_rotation_sensor
-      sha256: ab4b7c030c45710a3b20efef4a8ded18c6681ad833b9553a83e4f5601ae89823
+      sha256: cbf5b128a65ac4b347dd75efebb40bbc1c6612d1348f7992f924e11a97af9ef4
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
