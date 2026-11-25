@@ -122,6 +122,7 @@ class CurrentLocationLayer extends StatefulWidget {
   final double headingThreshold;
 
   /// The indicators which will display when in special status.
+  @Deprecated('Use errorWidgets instead.')
   final LocationMarkerIndicators indicators;
 
   /// A handler called when an exception is thrown from position stream or
@@ -135,6 +136,9 @@ class CurrentLocationLayer extends StatefulWidget {
   ///
   /// Defaults to [defaultErrorHandler].
   final ExceptionCallback errorHandler;
+
+  /// The indicators which will display when in special status.
+  final Map<Type, Widget> errorWidgets;
 
   /// Create a CurrentLocationLayer.
   const CurrentLocationLayer({
@@ -158,8 +162,10 @@ class CurrentLocationLayer extends StatefulWidget {
     this.zoomThreshold = 0.01,
     this.positionThreshold = 2,
     this.headingThreshold = pi / 100,
+    @Deprecated('Use errorWidgets instead.')
     this.indicators = const LocationMarkerIndicators(),
     this.errorHandler = defaultErrorHandler,
+    this.errorWidgets = const {},
   });
 
   @override
@@ -210,16 +216,17 @@ class CurrentLocationLayer extends StatefulWidget {
       ..add(DiagnosticsProperty('zoomThreshold', zoomThreshold))
       ..add(DiagnosticsProperty('positionThreshold', positionThreshold))
       ..add(DiagnosticsProperty('headingThreshold', headingThreshold))
+      // ignore: deprecated_member_use_from_same_package
       ..add(DiagnosticsProperty('indicators', indicators))
       ..add(
         ObjectFlagProperty<ExceptionCallback>.has('errorHandler', errorHandler),
-      );
+      )
+      ..add(DiagnosticsProperty('errorWidgets', errorWidgets));
   }
 }
 
 class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     with TickerProviderStateMixin {
-  _Status _status = _Status.initialing;
   LocationMarkerPosition? _animatingPosition;
   LocationMarkerHeading? _animatingHeading;
   LocationMarkerPosition? _markerPosition;
@@ -228,6 +235,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   double? _mapHeading;
   double? _followingZoom;
 
+  bool _ready = false;
+  Exception? _exception;
   bool _isFirstLocationUpdate = true;
   bool _isFirstHeadingUpdate = true;
 
@@ -260,7 +269,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
       _positionSubscription.cancel();
       _subscriptPositionStream();
     }
-    if (_status == _Status.ready) {
+    if (_ready) {
       if (widget.headingStream != oldWidget.headingStream) {
         _headingSubscription?.cancel();
         _headingSubscription = null;
@@ -281,110 +290,45 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   @override
   Widget build(BuildContext context) {
-    switch (_status) {
-      case _Status.initialing:
-        return const SizedBox.shrink();
-      case _Status.ready:
-        if (_animatingPosition != null) {
-          return LocationMarkerLayer(
-            position: _animatingPosition!,
-            heading: _animatingHeading,
-            style: widget.style,
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      case _Status.incorrectSetup:
-        if (kDebugMode) {
-          return SizedBox.expand(
-            child: ColoredBox(
-              color: Colors.red.withAlpha(0x80),
-              child: const Padding(
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  'LocationMarker plugin has not been setup correctly. '
-                  'Please follow the instructions in the documentation.',
-                  style: TextStyle(fontSize: 26),
-                ),
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      case _Status.unsupported:
-        if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Unsupported Platform\n'
-                '(Debug Mode Only)',
-                textAlign: TextAlign.right,
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      case _Status.permissionRequesting:
-        if (widget.indicators.permissionRequesting != null) {
-          return widget.indicators.permissionRequesting!;
-        }
-        if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Location Access Permission Requesting\n'
-                '(Debug Mode Only)',
-                textAlign: TextAlign.right,
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      case _Status.permissionDenied:
-        if (widget.indicators.permissionDenied != null) {
-          return widget.indicators.permissionDenied!;
-        }
-        if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Location Access Permission Denied\n'
-                '(Debug Mode Only)',
-                textAlign: TextAlign.right,
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      case _Status.serviceDisabled:
-        if (widget.indicators.serviceDisabled != null) {
-          return widget.indicators.serviceDisabled!;
-        }
-        if (kDebugMode) {
-          return const Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Location Service Disabled\n'
-                '(Debug Mode Only)',
-                textAlign: TextAlign.right,
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
+    const empty = SizedBox.shrink();
+    final exception = _exception;
+    final animatingPosition = _animatingPosition;
+    if (exception != null) {
+      return widget.errorWidgets[exception.runtimeType] ??
+          switch (exception) {
+            IncorrectSetupException _ =>
+              _buildHighlightedDebugText(
+                    'LocationMarker plugin has not been setup correctly. '
+                    'Please follow the instructions in the documentation.',
+                  ) ??
+                  empty,
+            UnsupportedException _ =>
+              _buildDebugText('Unsupported Platform') ?? empty,
+            PermissionRequestingException _ =>
+              // ignore: deprecated_member_use_from_same_package
+              widget.indicators.permissionRequesting ??
+                  _buildDebugText('Location Access Permission Requesting') ??
+                  empty,
+            PermissionDeniedException _ =>
+              // ignore: deprecated_member_use_from_same_package
+              widget.indicators.permissionDenied ??
+                  _buildDebugText('Location Access Permission Denied') ??
+                  empty,
+            ServiceDisabledException _ =>
+              // ignore: deprecated_member_use_from_same_package
+              widget.indicators.serviceDisabled ??
+                  _buildDebugText('Location Service Disabled') ??
+                  empty,
+            _ => empty,
+          };
+    } else if (animatingPosition != null) {
+      return LocationMarkerLayer(
+        position: animatingPosition,
+        heading: _animatingHeading,
+        style: widget.style,
+      );
+    } else {
+      return empty;
     }
   }
 
@@ -400,6 +344,31 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
     _rotateMarkerAnimationController?.dispose();
     super.dispose();
   }
+
+  Widget? _buildHighlightedDebugText(String message) => kDebugMode
+      ? SizedBox.expand(
+          child: ColoredBox(
+            color: Colors.red.withAlpha(0x80),
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(message, style: TextStyle(fontSize: 26)),
+            ),
+          ),
+        )
+      : null;
+
+  Widget? _buildDebugText(String message) => kDebugMode
+      ? Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Text(
+              '$message\n(Debug Mode Only)',
+              textAlign: TextAlign.right,
+            ),
+          ),
+        )
+      : null;
 
   void _subscriptMapEventStream() {
     Future.microtask(() {
@@ -429,9 +398,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           return;
         }
         if (position == null) {
-          if (_status != _Status.initialing) {
+          if (_ready) {
             setState(() {
-              _status = _Status.initialing;
+              _ready = false;
               _animatingPosition = null;
               _markerPosition = null;
               _headingSubscription?.cancel();
@@ -441,28 +410,18 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             });
           }
         } else {
-          if (_status != _Status.ready) {
+          if (!_ready) {
             _subscriptHeadingStream();
             _subscriptAlignPositionStream();
             _subscriptAlignDirectionStream();
-            setState(() {
-              _status = _Status.ready;
-            });
+            setState(() => _ready = true);
           }
           _moveMarker(position);
 
-          bool alignPosition;
-          switch (widget.alignPositionOnUpdate) {
-            case AlignOnUpdate.always:
-              alignPosition = true;
-            case AlignOnUpdate.once:
-              alignPosition = _isFirstLocationUpdate;
-              _isFirstLocationUpdate = false;
-            case AlignOnUpdate.never:
-              alignPosition = false;
-          }
-          if (alignPosition) {
+          final update = widget.alignPositionOnUpdate;
+          if (update == .always || update == .once && _isFirstLocationUpdate) {
             _moveMap(position.latLng, _followingZoom);
+            _isFirstLocationUpdate = false;
           }
         }
       },
@@ -470,22 +429,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         if (!mounted) {
           return;
         }
-        switch (widget.errorHandler(error)) {
-          case IncorrectSetupException _:
-            setState(() => _status = _Status.incorrectSetup);
-          case UnsupportedException _:
-            setState(() => _status = _Status.unsupported);
-          case PermissionRequestingException _:
-            setState(() => _status = _Status.permissionRequesting);
-          case PermissionDeniedException _:
-            setState(() => _status = _Status.permissionDenied);
-          case ServiceDisabledException _:
-            setState(() => _status = _Status.serviceDisabled);
-        }
-        _headingSubscription?.cancel();
-        _headingSubscription = null;
-        _animatingHeading = null;
-        _markerHeading = null;
+        setState(() {
+          _exception = widget.errorHandler(error);
+          _headingSubscription?.cancel();
+          _headingSubscription = null;
+          _animatingHeading = null;
+          _markerHeading = null;
+        });
       },
     );
   }
@@ -508,21 +458,13 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
             setState(() => _animatingHeading = null);
           }
         } else {
-          if (_status == _Status.ready) {
+          if (_ready) {
             _rotateMarker(heading);
 
-            bool alignDirection;
-            switch (widget.alignDirectionOnUpdate) {
-              case AlignOnUpdate.always:
-                alignDirection = true;
-              case AlignOnUpdate.once:
-                alignDirection = _isFirstHeadingUpdate;
-                _isFirstHeadingUpdate = false;
-              case AlignOnUpdate.never:
-                alignDirection = false;
-            }
-            if (alignDirection) {
+            final update = widget.alignDirectionOnUpdate;
+            if (update == .always || update == .once && _isFirstHeadingUpdate) {
               _rotateMap(-heading.heading % (2 * pi));
+              _isFirstHeadingUpdate = false;
             }
           } else {
             _animatingHeading = heading;
@@ -751,7 +693,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         );
 
         _rotateMarkerAnimationController!.addListener(() {
-          if (_status == _Status.ready) {
+          if (_ready) {
             setState(
               () => _animatingHeading = headingTween.evaluate(animation),
             );
@@ -822,7 +764,8 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty('_status', _status))
+      ..add(DiagnosticsProperty('_ready', _ready))
+      ..add(DiagnosticsProperty('_exception', _exception))
       ..add(DiagnosticsProperty('_animatingPosition', _animatingPosition))
       ..add(DiagnosticsProperty('_animatingHeading', _animatingHeading))
       ..add(DoubleProperty('_followingZoom', _followingZoom))
@@ -869,14 +812,4 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
         ),
       );
   }
-}
-
-enum _Status {
-  initialing,
-  incorrectSetup,
-  unsupported,
-  serviceDisabled,
-  permissionRequesting,
-  permissionDenied,
-  ready,
 }

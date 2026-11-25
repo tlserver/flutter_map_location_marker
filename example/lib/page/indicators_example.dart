@@ -47,8 +47,8 @@ class IndicatorsExample extends StatelessWidget {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            indicators: LocationMarkerIndicators(
-              serviceDisabled: Align(
+            errorWidgets: {
+              ServiceDisabledException: Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
                   width: double.infinity,
@@ -65,7 +65,7 @@ class IndicatorsExample extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            },
           ),
         ],
       ),
