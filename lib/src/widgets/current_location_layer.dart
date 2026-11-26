@@ -241,7 +241,9 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   bool _isFirstHeadingUpdate = true;
 
   late StreamSubscription<LocationMarkerPosition?> _positionSubscription;
+  StreamSubscription<MapEvent>? _mapEventSubscription;
   StreamSubscription<LocationMarkerHeading?>? _headingSubscription;
+  MapController? _mapController;
 
   /// Subscription to a stream for following single that also include a zoom
   /// level.
@@ -258,8 +260,29 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   @override
   void initState() {
     super.initState();
-    _subscriptMapEventStream();
     _subscriptPositionStream();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final controller = MapController.of(context);
+    if (identical(controller, _mapController)) {
+      return;
+    }
+
+    _mapEventSubscription?.cancel();
+    _mapController = controller;
+    _mapEventSubscription = controller.mapEventStream.listen((event) {
+      if (event.source != MapEventSource.mapController) {
+        switch (event) {
+          case MapEventMove _:
+            _mapPosition = null;
+          case MapEventRotate _:
+            _mapHeading = null;
+        }
+      }
+    });
   }
 
   @override
@@ -334,6 +357,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   @override
   void dispose() {
+    _mapEventSubscription?.cancel();
     _positionSubscription.cancel();
     _headingSubscription?.cancel();
     _alignPositionSubscription?.cancel();
@@ -369,24 +393,6 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           ),
         )
       : null;
-
-  void _subscriptMapEventStream() {
-    Future.microtask(() {
-      if (mounted) {
-        final controller = MapController.of(context);
-        controller.mapEventStream.listen((event) {
-          if (event.source != MapEventSource.mapController) {
-            switch (event) {
-              case MapEventMove _:
-                _mapPosition = null;
-              case MapEventRotate _:
-                _mapHeading = null;
-            }
-          }
-        });
-      }
-    });
-  }
 
   void _subscriptPositionStream() {
     final positionStream =
